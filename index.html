@@ -3,26 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ArduinoGo — Aprenda C++ de Robótica</title>
+  <title>ArduinoGo — Plataforma de C++ & Robótica</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <style>
     :root {
-      --bg: #0d1117;
-      --card-bg: #161b22;
-      --card-border: #30363d;
-      --primary: #238636;
-      --primary-hover: #2ea043;
-      --secondary: #38bdf8;
+      --bg-dark: #090d16;
+      --panel-bg: #111827;
+      --panel-border: #1f2937;
+      --panel-hover: #374151;
+      --primary: #10b981;
+      --primary-glow: rgba(16, 185, 129, 0.25);
+      --secondary: #06b6d4;
+      --secondary-glow: rgba(6, 182, 212, 0.25);
       --accent: #f59e0b;
-      --danger: #da3633;
-      --text: #f0f6fc;
-      --text-muted: #8b949e;
-      --code-bg: #010409;
-      --block-bg: #21262d;
-      --block-active: #1f6beb;
+      --danger: #ef4444;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --editor-bg: #030712;
+      --editor-sidebar: #0b0f19;
+      --syntax-keyword: #f472b6;
+      --syntax-func: #38bdf8;
+      --syntax-type: #4ade80;
+      --syntax-num: #fbbf24;
+      --syntax-str: #a78bfa;
+      --syntax-comment: #6b7280;
     }
 
     * {
@@ -31,366 +38,494 @@
       padding: 0;
       font-family: 'Plus Jakarta Sans', sans-serif;
       -webkit-tap-highlight-color: transparent;
-      user-select: none;
     }
 
     body {
-      background-color: var(--bg);
-      color: var(--text);
+      background-color: var(--bg-dark);
+      color: var(--text-main);
       display: flex;
-      flex-direction: column;
       min-height: 100vh;
       overflow-x: hidden;
     }
 
-    /* Top Header Bar */
-    header {
-      background: rgba(22, 27, 34, 0.95);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--card-border);
-      position: sticky;
-      top: 0;
+    /* --- SIDEBAR NAVIGATION --- */
+    aside {
+      width: 260px;
+      background: var(--panel-bg);
+      border-right: 1px solid var(--panel-border);
+      display: flex;
+      flex-direction: column;
+      padding: 20px 14px;
+      position: fixed;
+      top: 0; bottom: 0; left: 0;
       z-index: 50;
-      padding: 12px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      transition: transform 0.3s ease;
     }
 
-    .logo {
-      font-size: 1.3rem;
-      font-weight: 800;
-      color: var(--secondary);
+    .brand {
       display: flex;
       align-items: center;
-      gap: 6px;
-    }
-
-    .stats-bar {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      font-weight: 700;
-      font-size: 0.85rem;
-    }
-
-    .stat-item {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      background: var(--code-bg);
-      padding: 6px 12px;
-      border-radius: 20px;
-      border: 1px solid var(--card-border);
-    }
-
-    main {
-      flex: 1;
-      max-width: 600px;
-      width: 100%;
-      margin: 0 auto;
-      padding: 20px 16px 100px;
-    }
-
-    /* Bottom Navigation Bar */
-    .nav-tabs {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: var(--card-bg);
-      border-top: 1px solid var(--card-border);
-      display: flex;
-      justify-content: space-around;
-      padding: 10px 0;
-      z-index: 40;
-    }
-
-    .tab-btn {
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      font-weight: 700;
-      font-size: 0.8rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      cursor: pointer;
-    }
-
-    .tab-btn.active { color: var(--secondary); }
-    .tab-btn span { font-size: 1.3rem; }
-
-    /* Path & Sections */
-    .section-box { margin-bottom: 24px; }
-    .section-header {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 16px;
-      margin-bottom: 14px;
-    }
-    .section-title { font-size: 1.1rem; font-weight: 800; color: var(--secondary); margin-bottom: 4px; }
-    .section-desc { font-size: 0.85rem; color: var(--text-muted); }
-
-    .lessons-list { display: flex; flex-direction: column; gap: 10px; }
-    .lesson-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 14px;
-      padding: 14px 18px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .lesson-card.unlocked { cursor: pointer; border-color: var(--primary); }
-    .lesson-card.completed { border-color: var(--secondary); background: rgba(56, 189, 248, 0.08); }
-    .lesson-card.locked { opacity: 0.4; filter: grayscale(1); cursor: not-allowed; }
-
-    .lesson-info { display: flex; align-items: center; gap: 12px; }
-    .lesson-icon { font-size: 1.4rem; }
-    .lesson-title { font-weight: 700; font-size: 0.95rem; }
-
-    /* Interactive Lesson Modal (Estilo Mimo Slide por Slide) */
-    .lesson-modal {
-      position: fixed;
-      inset: 0;
-      background: var(--bg);
-      z-index: 100;
-      display: none;
-      flex-direction: column;
-      padding: 20px;
-    }
-    .lesson-modal.active { display: flex; }
-
-    .modal-header {
-      display: flex;
-      align-items: center;
-      gap: 16px;
+      gap: 12px;
+      padding: 0 10px 20px 10px;
+      border-bottom: 1px solid var(--panel-border);
       margin-bottom: 20px;
     }
 
-    .close-btn { background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer; }
-    .progress-bar-bg { flex: 1; height: 10px; background: var(--card-bg); border-radius: 5px; overflow: hidden; border: 1px solid var(--card-border); }
-    .progress-bar-fill { height: 100%; background: var(--primary); width: 0%; transition: width 0.3s ease; }
-
-    /* Slide Types */
-    .slide-container { flex: 1; display: flex; flex-direction: column; gap: 18px; overflow-y: auto; }
-
-    .slide-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(56, 189, 248, 0.15);
-      color: var(--secondary);
-      font-size: 0.8rem;
-      font-weight: 800;
-      padding: 4px 10px;
-      border-radius: 12px;
-      width: fit-content;
-      text-transform: uppercase;
-    }
-
-    .slide-title { font-size: 1.25rem; font-weight: 800; line-height: 1.3; }
-    .slide-text { font-size: 0.95rem; color: var(--text); line-height: 1.6; }
-
-    .code-box {
-      background: var(--code-bg);
-      border: 1px solid var(--card-border);
-      padding: 16px;
-      border-radius: 12px;
-      font-family: 'Fira Code', monospace;
-      font-size: 0.9rem;
-      color: #38bdf8;
-      white-space: pre-wrap;
-      line-height: 1.5;
-    }
-
-    /* Mimo Style Block Construction & Inputs */
-    .answer-zone {
-      min-height: 52px;
-      background: var(--code-bg);
-      border: 2px dashed var(--card-border);
-      border-radius: 12px;
-      padding: 10px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .blocks-palette {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    .code-block-btn {
-      background: var(--block-bg);
-      border: 1px solid var(--card-border);
-      color: var(--text);
-      padding: 10px 14px;
+    .brand-icon {
+      width: 38px; height: 38px;
+      background: linear-gradient(135deg, var(--secondary), var(--primary));
       border-radius: 10px;
-      font-family: 'Fira Code', monospace;
-      font-weight: 600;
-      font-size: 0.9rem;
-      cursor: pointer;
-      box-shadow: 0 3px 0 var(--card-border);
-    }
-    .code-block-btn:active { transform: translateY(2px); box-shadow: none; }
-
-    .options-grid { display: flex; flex-direction: column; gap: 10px; }
-    .option-btn {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      color: var(--text);
-      padding: 14px 16px;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 0.95rem;
-      text-align: left;
-      cursor: pointer;
-    }
-    .option-btn.selected { border-color: var(--secondary); background: rgba(56, 189, 248, 0.15); }
-
-    /* Bottom Sheet Feedback */
-    .feedback-sheet {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 20px;
-      border-top-left-radius: 20px;
-      border-top-right-radius: 20px;
-      display: none;
-      flex-direction: column;
-      gap: 12px;
-      animation: slideUp 0.25s ease;
-      z-index: 110;
+      display: flex; align-items: center; justify-content: center;
+      color: #000; font-weight: 800; font-size: 1.1rem;
+      box-shadow: 0 0 15px var(--secondary-glow);
     }
 
-    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-
-    .feedback-sheet.correct { background: #0d381e; border-top: 3px solid var(--primary); display: flex; }
-    .feedback-sheet.wrong { background: #4a151b; border-top: 3px solid var(--danger); display: flex; }
-
-    .feedback-title { font-weight: 800; font-size: 1.15rem; }
-    .feedback-text { font-size: 0.9rem; opacity: 0.95; line-height: 1.4; }
-
-    .btn-action {
-      background: white;
-      color: black;
-      border: none;
-      padding: 14px;
-      border-radius: 12px;
-      font-weight: 800;
-      cursor: pointer;
-      text-transform: uppercase;
-      margin-top: 6px;
+    .brand-title {
+      font-size: 1.1rem; font-weight: 800; letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #fff, var(--text-muted));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
 
-    .btn-start {
-      background: var(--primary);
-      color: white;
-      border: none;
-      padding: 14px;
-      border-radius: 12px;
-      font-weight: 800;
-      cursor: pointer;
-      box-shadow: 0 4px 0 #1b6629;
+    .nav-list { display: flex; flex-direction: column; gap: 6px; list-style: none; }
+    .nav-item button {
       width: 100%;
-      text-transform: uppercase;
-      margin-top: auto;
+      background: none; border: none;
+      color: var(--text-muted);
+      padding: 12px 14px; border-radius: 10px;
+      font-weight: 600; font-size: 0.9rem;
+      display: flex; align-items: center; gap: 12px;
+      cursor: pointer; transition: all 0.2s ease;
+      text-align: left;
     }
 
-    .badges-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-    .badge-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 14px;
-      padding: 14px;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      opacity: 0.4;
-      filter: grayscale(1);
+    .nav-item button:hover { background: var(--panel-border); color: #fff; }
+    .nav-item button.active {
+      background: rgba(6, 182, 212, 0.12);
+      color: var(--secondary);
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      box-shadow: 0 0 12px var(--secondary-glow);
     }
-    .badge-card.unlocked { opacity: 1; filter: grayscale(0); border-color: var(--accent); }
+
+    /* --- MAIN CONTENT AREA --- */
+    .app-container {
+      flex: 1;
+      margin-left: 260px;
+      display: flex; flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      height: 64px;
+      background: rgba(17, 24, 39, 0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--panel-border);
+      position: sticky; top: 0; z-index: 40;
+      padding: 0 28px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+
+    .header-status { display: flex; align-items: center; gap: 16px; }
+    .status-badge {
+      background: var(--editor-bg);
+      border: 1px solid var(--panel-border);
+      padding: 6px 14px; border-radius: 20px;
+      font-size: 0.85rem; font-weight: 700;
+      display: flex; align-items: center; gap: 6px;
+    }
+
+    .status-badge.xp { color: var(--secondary); border-color: rgba(6, 182, 212, 0.4); }
+    .status-badge.streak { color: var(--accent); border-color: rgba(245, 158, 11, 0.4); }
+    .status-badge.hearts { color: var(--danger); border-color: rgba(239, 68, 68, 0.4); }
+
+    main { padding: 28px; flex: 1; max-width: 1200px; width: 100%; margin: 0 auto; }
+
+    /* --- DASHBOARD STYLES --- */
+    .dash-hero {
+      background: linear-gradient(135deg, rgba(17, 24, 39, 0.9), rgba(9, 13, 22, 0.9)), radial-gradient(circle at top right, rgba(6, 182, 212, 0.15), transparent 60%);
+      border: 1px solid var(--panel-border);
+      border-radius: 16px; padding: 28px;
+      margin-bottom: 28px; position: relative; overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    .dash-hero h1 { font-size: 1.6rem; font-weight: 800; margin-bottom: 6px; }
+    .dash-hero p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px; }
+
+    .overall-progress-bar {
+      height: 10px; background: var(--editor-bg);
+      border-radius: 5px; overflow: hidden;
+      border: 1px solid var(--panel-border);
+      display: flex; margin-bottom: 8px;
+    }
+    .overall-fill { height: 100%; background: linear-gradient(90deg, var(--secondary), var(--primary)); transition: width 0.4s ease; }
+
+    .tracks-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px; margin-bottom: 28px;
+    }
+
+    .track-card {
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: 14px; padding: 20px;
+      transition: all 0.2s ease;
+    }
+    .track-card:hover { border-color: var(--secondary); transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+
+    .track-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .track-icon { width: 36px; height: 36px; border-radius: 8px; background: rgba(6, 182, 212, 0.1); color: var(--secondary); display: flex; align-items: center; justify-content: center; font-weight: 800; }
+    .track-title { font-size: 1rem; font-weight: 700; }
+    .track-meta { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px; }
+
+    /* --- LESSONS TREE --- */
+    .section-title-head { font-size: 1.2rem; font-weight: 800; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+    .lessons-tree { display: flex; flex-direction: column; gap: 12px; }
+
+    .lesson-node {
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: 12px; padding: 16px 20px;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: all 0.2s ease;
+    }
+
+    .lesson-node.unlocked { cursor: pointer; border-color: rgba(16, 185, 129, 0.4); }
+    .lesson-node.unlocked:hover { background: rgba(16, 185, 129, 0.05); transform: translateX(4px); }
+    .lesson-node.completed { border-color: rgba(6, 182, 212, 0.4); background: rgba(6, 182, 212, 0.05); }
+    .lesson-node.locked { opacity: 0.4; filter: grayscale(1); cursor: not-allowed; }
+
+    .node-left { display: flex; align-items: center; gap: 14px; }
+    .node-tag { font-family: 'Fira Code', monospace; font-size: 0.75rem; background: var(--editor-bg); padding: 4px 8px; border-radius: 6px; border: 1px solid var(--panel-border); color: var(--secondary); }
+    .node-title { font-weight: 700; font-size: 0.95rem; }
+
+    /* --- IDE & INTERACTIVE LESSON MODAL --- */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(3, 7, 18, 0.9);
+      backdrop-filter: blur(8px); z-index: 100;
+      display: none; align-items: center; justify-content: center; padding: 20px;
+    }
+    .modal-overlay.active { display: flex; }
+
+    .ide-window {
+      width: 100%; max-width: 1000px; height: 85vh;
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: 16px; display: flex; flex-direction: column;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.6); overflow: hidden;
+    }
+
+    .ide-header {
+      height: 48px; background: var(--editor-sidebar);
+      border-bottom: 1px solid var(--panel-border);
+      padding: 0 18px; display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .ide-dots { display: flex; gap: 8px; }
+    .ide-dot { width: 12px; height: 12px; border-radius: 50%; }
+    .ide-dot.red { background: #ef4444; }
+    .ide-dot.yellow { background: #f59e0b; }
+    .ide-dot.green { background: #10b981; }
+
+    .ide-title { font-family: 'Fira Code', monospace; font-size: 0.85rem; color: var(--text-muted); }
+
+    .ide-body { flex: 1; display: grid; grid-template-columns: 1fr 340px; overflow: hidden; }
+
+    /* Editor Column */
+    .editor-pane { display: flex; flex-direction: column; background: var(--editor-bg); border-right: 1px solid var(--panel-border); }
+    .editor-topbar { padding: 10px 16px; background: #0b0f19; border-bottom: 1px solid var(--panel-border); display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--text-muted); font-family: 'Fira Code', monospace; }
+
+    .code-area-wrapper { flex: 1; display: flex; overflow: auto; padding: 14px 0; font-family: 'Fira Code', monospace; font-size: 0.9rem; line-height: 1.6; }
+    .line-numbers { padding: 0 14px; color: #4b5563; text-align: right; user-select: none; border-right: 1px solid rgba(255,255,255,0.05); }
+    .code-content { flex: 1; padding: 0 16px; color: var(--text-main); white-space: pre-wrap; outline: none; }
+
+    /* Hardware Simulator Pane */
+    .hardware-pane { background: var(--panel-bg); display: flex; flex-direction: column; padding: 20px; overflow-y: auto; gap: 18px; }
+    .sim-card { background: var(--editor-bg); border: 1px solid var(--panel-border); border-radius: 12px; padding: 16px; text-align: center; }
+    
+    /* Virtual Arduino Board SVG Representation */
+    .arduino-board {
+      width: 100%; max-width: 220px; height: auto; margin: 0 auto 12px;
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5));
+    }
+
+    .led-indicator {
+      width: 18px; height: 18px; border-radius: 50%;
+      background: #374151; border: 2px solid #1f2937;
+      margin: 0 auto; transition: all 0.2s ease;
+    }
+    .led-indicator.on {
+      background: #10b981;
+      box-shadow: 0 0 20px #10b981, 0 0 40px #10b981;
+    }
+
+    .terminal-box {
+      background: #000; border: 1px solid var(--panel-border);
+      border-radius: 8px; padding: 12px; font-family: 'Fira Code', monospace;
+      font-size: 0.78rem; color: #4ade80; height: 120px; overflow-y: auto; text-align: left;
+    }
+
+    /* Actions Bottom Bar */
+    .ide-footer {
+      height: 60px; background: var(--editor-sidebar);
+      border-top: 1px solid var(--panel-border);
+      padding: 0 20px; display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .btn-btn {
+      padding: 10px 20px; border-radius: 8px; font-weight: 700; font-size: 0.85rem;
+      border: none; cursor: pointer; display: flex; align-items: center; gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-exec { background: var(--primary); color: #000; box-shadow: 0 0 15px var(--primary-glow); }
+    .btn-exec:hover { filter: brightness(1.1); transform: translateY(-1px); }
+    .btn-sec { background: var(--panel-border); color: var(--text-main); }
+    .btn-sec:hover { background: var(--panel-hover); }
+
+    /* --- PROJECTS GRID --- */
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+    .project-card {
+      background: var(--panel-bg); border: 1px solid var(--panel-border);
+      border-radius: 14px; overflow: hidden; display: flex; flex-direction: column;
+      transition: all 0.2s ease;
+    }
+    .project-card:hover { border-color: var(--secondary); transform: translateY(-4px); }
+    .project-img { height: 140px; background: radial-gradient(circle at center, rgba(6,182,212,0.2), transparent), var(--editor-bg); display: flex; align-items: center; justify-content: center; border-bottom: 1px solid var(--panel-border); }
+    .project-body { padding: 18px; flex: 1; display: flex; flex-direction: column; }
+    .project-title { font-weight: 800; font-size: 1.05rem; margin-bottom: 6px; }
+    .project-desc { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 16px; flex: 1; }
+
+    /* --- RESPONSIVE BOTTOM NAV FOR MOBILE --- */
+    .mobile-nav {
+      display: none; position: fixed; bottom: 0; left: 0; right: 0;
+      height: 60px; background: var(--panel-bg); border-top: 1px solid var(--panel-border);
+      z-index: 50; justify-content: space-around; align-items: center;
+    }
+    .mobile-btn { background: none; border: none; color: var(--text-muted); font-size: 0.75rem; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .mobile-btn.active { color: var(--secondary); }
+
+    @media (max-width: 850px) {
+      aside { display: none; }
+      .app-container { margin-left: 0; padding-bottom: 70px; }
+      main { padding: 16px; }
+      .mobile-nav { display: flex; }
+      .ide-body { grid-template-columns: 1fr; grid-template-rows: 1fr auto; }
+      .hardware-pane { border-top: 1px solid var(--panel-border); }
+    }
 
     .hidden { display: none !important; }
   </style>
 </head>
 <body>
 
-  <header>
-    <div class="logo">🤖 ArduinoGo</div>
-    <div class="stats-bar">
-      <div class="stat-item">⚡ <span id="user-xp">0</span> XP</div>
-      <div class="stat-item">🔥 <span id="user-streak">1</span>d</div>
-      <div class="stat-item">❤️ <span id="user-hearts">5</span></div>
-    </div>
-  </header>
-
-  <main>
-    <div id="view-path">
-      <div id="sections-container"></div>
-    </div>
-
-    <div id="view-infinite" class="hidden">
-      <div class="section-header">
-        <div class="section-title">♾️ Treino Infinito</div>
-        <div class="section-desc">Pratique com questões aleatórias estilo Mimo!</div>
+  <aside>
+    <div class="brand">
+      <div class="brand-icon">⚡</div>
+      <div>
+        <div class="brand-title">ArduinoGo</div>
+        <div style="font-size: 0.7rem; color: var(--text-muted); font-family: 'Fira Code', monospace;">IDE & LAB v2.5</div>
       </div>
-      <button class="btn-start" onclick="startInfinitePractice()">Iniciar Treino 🚀</button>
     </div>
 
-    <div id="view-badges" class="hidden">
-      <div class="section-header">
-        <div class="section-title">🏆 Conquistas</div>
+    <ul class="nav-list">
+      <li class="nav-item"><button class="active" onclick="switchView('dashboard', this)"><span>🏠</span> Início</button></li>
+      <li class="nav-item"><button onclick="switchView('curriculum', this)"><span>💻</span> C++ & Arduino</button></li>
+      <li class="nav-item"><button onclick="switchView('ide', this)"><span>🔧</span> IDE Playground</button></li>
+      <li class="nav-item"><button onclick="switchView('projects', this)"><span>🧩</span> Projetos</button></li>
+      <li class="nav-item"><button onclick="switchView('infinite', this)"><span>📊</span> Treino Infinito</button></li>
+      <li class="nav-item"><button onclick="switchView('badges', this)"><span>🏆</span> Conquistas</button></li>
+    </ul>
+  </aside>
+
+  <div class="app-container">
+    <header>
+      <div style="font-weight: 700; font-size: 0.95rem; color: var(--text-muted);">
+        Plataforma Prática de Hardware & Software
       </div>
-      <div class="badges-grid" id="badges-container"></div>
-    </div>
-  </main>
-
-  <nav class="nav-tabs">
-    <button class="tab-btn active" onclick="switchTab('path', this)">
-      <span>🗺️</span>Trilha
-    </button>
-    <button class="tab-btn" onclick="switchTab('infinite', this)">
-      <span>♾️</span>Infinito
-    </button>
-    <button class="tab-btn" onclick="switchTab('badges', this)">
-      <span>🏆</span>Conquistas
-    </button>
-  </nav>
-
-  <div class="lesson-modal" id="lesson-modal">
-    <div class="modal-header">
-      <button class="close-btn" onclick="closeLessonModal()">✕</button>
-      <div class="progress-bar-bg">
-        <div class="progress-bar-fill" id="slide-progress"></div>
+      <div class="header-status">
+        <div class="status-badge xp">⚡ <span id="user-xp">0</span> XP</div>
+        <div class="status-badge streak">🔥 <span id="user-streak">1</span>d</div>
+        <div class="status-badge hearts">❤️ <span id="user-hearts">5</span></div>
       </div>
-      <div>❤️ <span id="modal-hearts">5</span></div>
-    </div>
+    </header>
 
-    <div class="slide-container" id="slide-container"></div>
+    <main>
+      <section id="view-dashboard">
+        <div class="dash-hero">
+          <h1>Olá, Desenvolvedor 👋</h1>
+          <p>Continue construindo seus projetos de automação e robótica.</p>
+          <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px;">
+            <span>PROGRESSO GERAL</span>
+            <span id="dash-pct-text">0% Concluído</span>
+          </div>
+          <div class="overall-progress-bar">
+            <div class="overall-fill" id="dash-pct-fill" style="width: 0%;"></div>
+          </div>
+        </div>
 
-    <button class="btn-start" id="btn-check" onclick="checkSlideAnswer()">Continuar</button>
+        <div class="tracks-grid">
+          <div class="track-card">
+            <div class="track-head">
+              <div class="track-title">C++ Básico</div>
+              <div class="track-icon">C++</div>
+            </div>
+            <div class="track-meta">Sintaxe, variáveis e estruturas</div>
+            <div style="font-size: 0.8rem; color: var(--primary); font-weight: 700;">100% Compatível com Microcontroladores</div>
+          </div>
+          <div class="track-card">
+            <div class="track-head">
+              <div class="track-title">Arduino Uno</div>
+              <div class="track-icon">MCU</div>
+            </div>
+            <div class="track-meta">Entradas, saídas e PWM</div>
+            <div style="font-size: 0.8rem; color: var(--secondary); font-weight: 700;">Simulação de Circuitos em Tempo Real</div>
+          </div>
+          <div class="track-card">
+            <div class="track-head">
+              <div class="track-title">Robótica & Servos</div>
+              <div class="track-icon">BOT</div>
+            </div>
+            <div class="track-meta">Motores e animatrônicos</div>
+            <div style="font-size: 0.8rem; color: var(--accent); font-weight: 700;">Controle de Ângulo e Posição</div>
+          </div>
+        </div>
 
-    <div class="feedback-sheet" id="feedback-sheet">
-      <div class="feedback-title" id="fb-title"></div>
-      <div class="feedback-text" id="fb-text"></div>
-      <button class="btn-action" onclick="advanceSlide()">Continuar ▶</button>
+        <div class="section-title-head">🚀 Próximas Aulas Recomendadas</div>
+        <div class="lessons-tree" id="dash-lessons-preview"></div>
+      </section>
+
+      <section id="view-curriculum" class="hidden">
+        <div class="section-title-head">🔧 Trilha de Engenharia & Programação</div>
+        <div class="lessons-tree" id="full-curriculum-list"></div>
+      </section>
+
+      <section id="view-ide" class="hidden">
+        <div class="section-title-head">💻 IDE Playground — Ambiente de Testes Livre</div>
+        <div class="ide-window" style="height: 600px;">
+          <div class="ide-header">
+            <div class="ide-dots"><div class="ide-dot red"></div><div class="ide-dot yellow"></div><div class="ide-dot green"></div></div>
+            <div class="ide-title">sketch_playground.ino — C++ Arduino</div>
+            <div></div>
+          </div>
+          <div class="ide-body">
+            <div class="editor-pane">
+              <div class="editor-topbar"><span>Linguagem: C++ (Arduino Uno)</span><span>UTF-8</span></div>
+              <div class="code-area-wrapper">
+                <div class="line-numbers">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9</div>
+                <div class="code-content" contenteditable="true" id="free-ide-code">// Escreva seu código C++ aqui
+void setup() {
+  pinMode(13, OUTPUT);
+}
+
+void loop() {
+  digitalWrite(13, HIGH);
+  delay(1000);
+}</div>
+              </div>
+            </div>
+            <div class="hardware-pane">
+              <div class="sim-card">
+                <div style="font-size:0.8rem; font-weight:700; color:var(--text-muted); margin-bottom:10px;">HARDWARE VIRTUAL</div>
+                <svg class="arduino-board" viewBox="0 0 200 120">
+                  <rect x="5" y="5" width="190" height="110" rx="8" fill="#006699"/>
+                  <rect x="15" y="15" width="30" height="25" fill="#aaa"/>
+                  <rect x="60" y="80" width="80" height="20" fill="#222"/>
+                  <circle id="free-mcu-led" cx="160" cy="30" r="8" fill="#374151" stroke="#1f2937" stroke-width="2"/>
+                  <text x="145" y="50" fill="#fff" font-size="8" font-weight="bold">PIN 13</text>
+                </svg>
+                <div id="free-mcu-status" style="font-size:0.85rem; font-weight:700; color:var(--text-muted);">Estado: Desligado (0V)</div>
+              </div>
+              <div class="terminal-box" id="free-ide-terminal">[SYSTEM]: Pronto para execução...</div>
+            </div>
+          </div>
+          <div class="ide-footer">
+            <button class="btn-btn btn-sec" onclick="resetFreeIDE()">🔄 Resetar</button>
+            <button class="btn-btn btn-exec" onclick="runFreeIDE()">▶ Executar Sketch</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="view-projects" class="hidden">
+        <div class="section-title-head">🧩 Projetos Práticos de Robótica</div>
+        <div class="projects-grid">
+          <div class="project-card">
+            <div class="project-img"><span style="font-size:3rem;">🤖</span></div>
+            <div class="project-body">
+              <div class="project-title">Robô Animatrônico FNAF</div>
+              <div class="project-desc">Controle o Servo Motor para mover a cabeça e pálpebras articuladas.</div>
+              <button class="btn-btn btn-exec" style="width:100%; justify-content:center;" onclick="openProject('p1')">Ver Esquema & Código</button>
+            </div>
+          </div>
+          <div class="project-card">
+            <div class="project-img"><span style="font-size:3rem;">🚦</span></div>
+            <div class="project-body">
+              <div class="project-title">Semáforo Inteligente</div>
+              <div class="project-desc">Crie a sequência lógica de cruzamento com temporização em milissegundos.</div>
+              <button class="btn-btn btn-exec" style="width:100%; justify-content:center;" onclick="openProject('p2')">Ver Esquema & Código</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="view-infinite" class="hidden">
+        <div class="section-title-head">📊 Treino Infinito & Algoritmo de Sintaxe</div>
+        <div class="dash-hero">
+          <h1>Treino de Fixação de Comandos</h1>
+          <p>Pratique infinitamente com problemas de programação e lógica de hardware gerados na hora.</p>
+          <button class="btn-btn btn-exec" onclick="startInfiniteIDE()">Iniciar Desafio Aleatório 🚀</button>
+        </div>
+      </section>
+
+      <section id="view-badges" class="hidden">
+        <div class="section-title-head">🏆 Suas Conquistas na Engenharia</div>
+        <div class="projects-grid" id="badges-container"></div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-overlay" id="ide-modal">
+    <div class="ide-window">
+      <div class="ide-header">
+        <div class="ide-dots"><div class="ide-dot red"></div><div class="ide-dot yellow"></div><div class="ide-dot green"></div></div>
+        <div class="ide-title" id="modal-lesson-title">Aula_01_Arduino.ino</div>
+        <button style="background:none; border:none; color:var(--text-muted); cursor:pointer; font-weight:700;" onclick="closeModal()">✕ Fechar</button>
+      </div>
+      <div class="ide-body">
+        <div class="editor-pane">
+          <div class="editor-topbar">
+            <span>PASSO <span id="step-num">1</span> DE <span id="step-total">3</span></span>
+            <span id="step-badge-type">CONCEITO</span>
+          </div>
+          <div class="code-area-wrapper">
+            <div class="line-numbers">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8</div>
+            <div class="code-content" id="modal-code-display"></div>
+          </div>
+        </div>
+        <div class="hardware-pane">
+          <div class="sim-card">
+            <div style="font-size:0.8rem; font-weight:700; color:var(--text-muted); margin-bottom:8px;">SIMULADOR DE CIRCUITO</div>
+            <div class="led-indicator" id="modal-sim-led"></div>
+            <div id="modal-sim-status" style="font-size:0.8rem; font-weight:700; color:var(--text-muted); margin-top:8px;">Pino 13: LOW</div>
+          </div>
+          <div class="terminal-box" id="modal-terminal">[SYSTEM]: Aguardando execução...</div>
+        </div>
+      </div>
+      <div class="ide-footer">
+        <div style="font-size:0.85rem; color:var(--text-muted);" id="modal-hint">Aperte em Executar para testar o circuito.</div>
+        <button class="btn-btn btn-exec" id="modal-action-btn" onclick="executeModalStep()">▶ Executar Código</button>
+      </div>
     </div>
   </div>
 
+  <nav class="mobile-nav">
+    <button class="mobile-btn active" onclick="switchView('dashboard', this)"><span>🏠</span>Início</button>
+    <button class="mobile-btn" onclick="switchView('curriculum', this)"><span>💻</span>Aulas</button>
+    <button class="mobile-btn" onclick="switchView('ide', this)"><span>🔧</span>IDE</button>
+    <button class="mobile-btn" onclick="switchView('projects', this)"><span>🧩</span>Projetos</button>
+  </nav>
+
   <script>
-    // --- STATE MANAGEMENT ---
+    // --- ESTADO GLOBAL & PERSISTÊNCIA ---
     let state = {
       xp: 0,
       streak: 1,
@@ -399,16 +534,16 @@
       unlockedBadges: ['b1']
     };
 
-    let raw = localStorage.getItem('arduinoGoState');
-    if (raw) {
+    let saved = localStorage.getItem('arduinoGoState');
+    if (saved) {
       try {
-        let p = JSON.parse(raw);
+        let p = JSON.parse(saved);
         state.xp = p.xp || 0;
         state.streak = p.streak || 1;
-        state.hearts = (typeof p.hearts === 'number' && p.hearts > 0) ? p.hearts : 5;
+        state.hearts = typeof p.hearts === 'number' ? p.hearts : 5;
         state.completedLessons = p.completedLessons || [];
         state.unlockedBadges = p.unlockedBadges || ['b1'];
-      } catch (e) {}
+      } catch(e) {}
     }
 
     function saveState() {
@@ -420,468 +555,171 @@
       document.getElementById('user-xp').innerText = state.xp;
       document.getElementById('user-streak').innerText = state.streak;
       document.getElementById('user-hearts').innerText = state.hearts;
-      document.getElementById('modal-hearts').innerText = state.hearts;
-      renderPath();
+      
+      const totalLessons = 15;
+      const pct = Math.round((state.completedLessons.length / totalLessons) * 100);
+      document.getElementById('dash-pct-text').innerText = pct + '% Concluído';
+      document.getElementById('dash-pct-fill').style.width = pct + '%';
+
+      renderLessons();
       renderBadges();
     }
 
-    // --- AUDIO SYNTHESIZER ---
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    function playSound(type) {
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.connect(gain); gain.connect(audioCtx.destination);
-
-      if (type === 'correct') {
-        osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
-        osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1);
-        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-        osc.start(); osc.stop(audioCtx.currentTime + 0.3);
-      } else {
-        osc.frequency.setValueAtTime(220, audioCtx.currentTime);
-        osc.frequency.setValueAtTime(164.81, audioCtx.currentTime + 0.15);
-        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
-        osc.start(); osc.stop(audioCtx.currentTime + 0.4);
-      }
-    }
-
-    // --- CURRÍCULO INTERATIVO SLIDE POR SLIDE (ESTILO MIMO) ---
-    const sections = [
+    // --- CONTEÚDO TÉCNICO DAS AULAS ---
+    const curriculum = [
       {
-        id: 's1',
-        title: 'Sessão 1: Variáveis & Pinos do Robô',
-        desc: 'Aprenda guardando informações e ativando pinos.',
-        lessons: [
-          {
-            id: 's1_l1',
-            title: 'Lição 1: O Que É Uma Variável?',
-            icon: '📦',
-            slides: [
-              {
-                type: 'info',
-                badge: 'Conceito',
-                title: 'Caixas de Memória',
-                text: 'Uma variável é como uma caixa com um nome onde guardamos um dado. No C++ do Arduino, para criar uma caixa de números inteiros usamos a palavra int.',
-                code: 'int pinoLed = 13;'
-              },
-              {
-                type: 'quiz',
-                badge: 'Verificação',
-                title: 'Qual palavra-chave usase para criar uma variável de número inteiro?',
-                options: ['int', 'box', 'number', 'var'],
-                correct: 0,
-                explanation: 'Em C++, a palavra "int" cria uma variável para números inteiros (sem casas decimais).'
-              },
-              {
-                type: 'blocks',
-                badge: 'Montar Código',
-                title: 'Conecte os blocos para criar a variável pinoLed igual a 13:',
-                available: ['13;', '=', 'int', 'pinoLed'],
-                correctOrder: ['int', 'pinoLed', '=', '13;'],
-                explanation: 'A ordem correta é: tipo (int) + nome (pinoLed) + sinal (=) + valor e ponto-e-vírgula (13;).'
-              },
-              {
-                type: 'quiz',
-                badge: 'Sintaxe',
-                title: 'Qual regra de nome de variável está correta no estilo snake_case?',
-                options: ['led vermelho', 'led_vermelho', 'led-vermelho', 'led.vermelho'],
-                correct: 1,
-                explanation: 'Nomes de variáveis não podem ter espaços. Usamos o traço baixo (_) para separar palavras.'
-              }
-            ]
-          },
-          {
-            id: 's1_l2',
-            title: 'Lição 2: Configurando o pinMode()',
-            icon: '🔌',
-            slides: [
-              {
-                type: 'info',
-                badge: 'Entrada e Saída',
-                title: 'Avisando a Placa',
-                text: 'O comando pinMode() avisa se o pino vai enviar energia (OUTPUT) para um LED/motor ou receber dados (INPUT) de um sensor.',
-                code: 'pinMode(13, OUTPUT);'
-              },
-              {
-                type: 'blocks',
-                badge: 'Montar Código',
-                title: 'Monte o comando para configurar o pino 13 como SAÍDA:',
-                available: ['OUTPUT);', '13,', 'pinMode(', 'digitalWrite('],
-                correctOrder: ['pinMode(', '13,', 'OUTPUT);'],
-                explanation: 'Usamos pinMode(pino, OUTPUT); para definir portas de saída de energia.'
-              },
-              {
-                type: 'quiz',
-                badge: 'Quiz Rápido',
-                title: 'Em qual das duas funções obrigatórias colocamos o pinMode()?',
-                options: ['setup()', 'loop()'],
-                correct: 0,
-                explanation: 'Como o pino só precisa ser configurado 1 única vez quando o robô liga, colocamos no setup().'
-              }
-            ]
-          },
-          {
-            id: 's1_l3',
-            title: 'Lição 3: Ligando com digitalWrite()',
-            icon: '💡',
-            slides: [
-              {
-                type: 'info',
-                badge: 'Ativando Energia',
-                text: 'Para ligar um LED mandando 5V de energia, usamos digitalWrite com o valor HIGH. Para desligar (0V), usamos LOW.',
-                code: 'digitalWrite(13, HIGH); // Liga o LED\ndigitalWrite(13, LOW);  // Desliga o LED'
-              },
-              {
-                type: 'quiz',
-                badge: 'Verificação',
-                title: 'Qual valor envia 5V para LIGAR um componente?',
-                options: ['HIGH', 'LOW', 'ON', 'START'],
-                correct: 0,
-                explanation: 'HIGH envia 5 Volt (liga), enquanto LOW corta a voltagem para 0V (desliga).'
-              },
-              {
-                type: 'blocks',
-                badge: 'Prática de Código',
-                title: 'Monte a linha de código para LIGAR o pino 13:',
-                available: ['HIGH);', '13,', 'digitalWrite(', 'LOW);'],
-                correctOrder: ['digitalWrite(', '13,', 'HIGH);'],
-                explanation: 'digitalWrite(13, HIGH); envia o sinal elétrico para acender o componente no pino 13.'
-              }
-            ]
-          },
-          {
-            id: 's1_l4',
-            title: 'Lição 4: Pausando com delay()',
-            icon: '⏱️',
-            slides: [
-              {
-                type: 'info',
-                badge: 'Tempo de Espera',
-                text: 'O comando delay() faz o robô pausar antes da próxima linha de código. O tempo é medido em milissegundos (1000ms = 1 segundo).',
-                code: 'delay(1000); // Pausa por 1 segundo'
-              },
-              {
-                type: 'quiz',
-                badge: 'Cálculo Rápido',
-                title: 'Quanto tempo o comando delay(500) faz o robô esperar?',
-                options: ['Meio segundo (0.5s)', '5 segundos', '50 segundos', '5 milissegundos'],
-                correct: 0,
-                explanation: '500 milissegundos equivalem a meio segundo de pausa.'
-              },
-              {
-                type: 'blocks',
-                badge: 'Prática de Código',
-                title: 'Monte o comando para pausar por 2 segundos exatos (2000ms):',
-                available: ['2000);', 'delay(', 'wait(', '2);'],
-                correctOrder: ['delay(', '2000);'],
-                explanation: 'delay(2000); faz o robô congelar as ações por 2000 milissegundos (2 segundos).'
-              }
-            ]
-          },
-          {
-            id: 's1_l5',
-            title: 'Lição 5: Posicionando o Servo Motor',
-            icon: '⚙️',
-            slides: [
-              {
-                type: 'info',
-                badge: 'Animatrônicos',
-                text: 'Para mover o motor da boca ou dos olhos do robô para um ângulo exato entre 0° e 180°, usamos o comando write() do servo.',
-                code: 'meuServo.write(90); // Roda para o meio (90 graus)'
-              },
-              {
-                type: 'blocks',
-                badge: 'Montar Código',
-                title: 'Monte o comando para mover o servo para os 90 graus:',
-                available: ['write(90);', 'meuServo.', 'rotate(90);', 'move('],
-                correctOrder: ['meuServo.', 'write(90);'],
-                explanation: 'meuServo.write(90); posiciona o eixo do motor exatamente na posição de 90 graus.'
-              }
-            ]
-          }
-        ]
+        id: 'l1', title: '01. A Estrutura Básica setup() e loop()', tag: 'C++ / MCU',
+        code: `void setup() {\n  // Configuração inicial (roda 1 vez)\n  pinMode(13, OUTPUT);\n}\n\nvoid loop() {\n  // Repetição contínua\n  digitalWrite(13, HIGH);\n}`,
+        logs: ['[COMPILER]: Sketch compilado sem erros.', '[HARDWARE]: Pino 13 configurado como OUTPUT.', '[HARDWARE]: Pino 13 setado para HIGH (5.0V).']
+      },
+      {
+        id: 'l2', title: '02. Controle Digital de LEDs com digitalWrite()', tag: 'Eletrônica',
+        code: `void loop() {\n  digitalWrite(13, HIGH); // Liga 5V\n  delay(1000);            // Pausa 1s\n  digitalWrite(13, LOW);  // Desliga 0V\n  delay(1000);\n}`,
+        logs: ['[HARDWARE]: Pino 13 HIGH -> LED LIGADO', '[TIMER]: Aguardando 1000ms...', '[HARDWARE]: Pino 13 LOW -> LED DESLIGADO']
+      },
+      {
+        id: 'l3', title: '03. Posicionamento de Servo Motors SG90', tag: 'Robótica',
+        code: `#include <Servo.h>\nServo meuServo;\n\nvoid setup() {\n  meuServo.attach(9);\n  meuServo.write(90); // Posição Central (90°)\n}`,
+        logs: ['[SERVO]: Biblioteca Servo.h inicializada.', '[PWM]: Pino 9 associado ao motor.', '[SERVO]: Eixo ajustado para exatamente 90°.']
       }
     ];
 
-    // --- ENGINE DE NAVEGAÇÃO DOS SLIDES DA LIÇÃO ---
-    let currentLesson = null;
-    let currentSlideIdx = 0;
-    let selectedOptionIdx = null;
-    let userPlacedBlocks = [];
+    function renderLessons() {
+      const dashList = document.getElementById('dash-lessons-preview');
+      const fullList = document.getElementById('full-curriculum-list');
+      if (!dashList || !fullList) return;
 
-    function renderPath() {
-      const container = document.getElementById('sections-container');
-      if (!container) return;
-      container.innerHTML = '';
+      dashList.innerHTML = '';
+      fullList.innerHTML = '';
 
-      sections.forEach((sec) => {
-        const secBox = document.createElement('div');
-        secBox.className = 'section-box';
+      let prevDone = true;
 
-        let lessonsHTML = '';
-        let prevDone = true;
+      curriculum.forEach((item) => {
+        const isDone = state.completedLessons.includes(item.id);
+        const isUnlocked = isDone || prevDone;
 
-        sec.lessons.forEach((les) => {
-          const isDone = state.completedLessons.includes(les.id);
-          const isUnlocked = isDone || prevDone;
+        let statusClass = 'locked';
+        let statusIcon = '🔒';
 
-          let cardClass = 'locked';
-          let icon = '🔒';
+        if (isDone) { statusClass = 'completed'; statusIcon = '✅'; }
+        else if (isUnlocked) { statusClass = 'unlocked'; statusIcon = '▶ Executar'; }
 
-          if (isDone) { cardClass = 'completed'; icon = '✅'; }
-          else if (isUnlocked) { cardClass = 'unlocked'; icon = '▶'; }
+        const actionAttr = isUnlocked ? `onclick="openModalLesson('${item.id}')"` : '';
 
-          const action = isUnlocked ? `onclick="startLesson('${sec.id}', '${les.id}')"` : '';
-
-          lessonsHTML += `
-            <div class="lesson-card ${cardClass}" ${action}>
-              <div class="lesson-info">
-                <span class="lesson-icon">${les.icon}</span>
-                <span class="lesson-title">${les.title}</span>
-              </div>
-              <span class="lesson-status">${icon}</span>
+        const html = `
+          <div class="lesson-node ${statusClass}" ${actionAttr}>
+            <div class="node-left">
+              <span class="node-tag">${item.tag}</span>
+              <span class="node-title">${item.title}</span>
             </div>
-          `;
-          prevDone = isDone;
-        });
-
-        secBox.innerHTML = `
-          <div class="section-header">
-            <div class="section-title">📍 ${sec.title}</div>
-            <div class="section-desc">${sec.desc}</div>
+            <span style="font-size:0.85rem; font-weight:700;">${statusIcon}</span>
           </div>
-          <div class="lessons-list">${lessonsHTML}</div>
         `;
-        container.appendChild(secBox);
+
+        fullList.innerHTML += html;
+        if (dashList.children.length < 2) dashList.innerHTML += html;
+
+        prevDone = isDone;
       });
     }
 
-    function startLesson(secId, lesId) {
-      const sec = sections.find(s => s.id === secId);
-      if (!sec) return;
-      const les = sec.lessons.find(l => l.id === lesId);
-      if (!les) return;
+    // --- MODAL DE AULA E SIMULADOR INTERATIVO ---
+    let activeLesson = null;
 
-      currentLesson = les;
-      currentSlideIdx = 0;
-      document.getElementById('lesson-modal').classList.add('active');
-      showSlide();
+    function openModalLesson(id) {
+      activeLesson = curriculum.find(c => c.id === id);
+      if (!activeLesson) return;
+
+      document.getElementById('modal-lesson-title').innerText = activeLesson.title;
+      document.getElementById('modal-code-display').innerText = activeLesson.code;
+      document.getElementById('modal-terminal').innerText = '[SYSTEM]: Pronto para compilar e carregar no robô...';
+      document.getElementById('modal-sim-led').className = 'led-indicator';
+      document.getElementById('modal-sim-status').innerText = 'Pino 13: LOW';
+      document.getElementById('ide-modal').classList.add('active');
     }
 
-    function showSlide() {
-      const slide = currentLesson.slides[currentSlideIdx];
-      selectedOptionIdx = null;
-      userPlacedBlocks = [];
-      document.getElementById('feedback-sheet').className = 'feedback-sheet';
+    function executeModalStep() {
+      if (!activeLesson) return;
 
-      const pct = (currentSlideIdx / currentLesson.slides.length) * 100;
-      document.getElementById('slide-progress').style.width = pct + '%';
+      const terminal = document.getElementById('modal-terminal');
+      const led = document.getElementById('modal-sim-led');
+      const status = document.getElementById('modal-sim-status');
 
-      const container = document.getElementById('slide-container');
-      container.innerHTML = '';
+      terminal.innerText = activeLesson.logs.join('\n');
+      led.className = 'led-indicator on';
+      status.innerText = 'Pino 13: HIGH (5.0V)';
 
-      const btnCheck = document.getElementById('btn-check');
-
-      if (slide.type === 'info') {
-        btnCheck.innerText = 'Continuar';
-        container.innerHTML = `
-          <div class="slide-badge">📖 ${slide.badge}</div>
-          <div class="slide-title">${slide.title}</div>
-          <div class="slide-text">${slide.text}</div>
-          ${slide.code ? `<div class="code-box">${slide.code}</div>` : ''}
-        `;
-      } else if (slide.type === 'quiz') {
-        btnCheck.innerText = 'Verificar';
-        let optionsHTML = slide.options.map((opt, idx) => `
-          <button class="option-btn" onclick="selectQuizOption(${idx}, this)">${opt}</button>
-        `).join('');
-
-        container.innerHTML = `
-          <div class="slide-badge">❓ ${slide.badge}</div>
-          <div class="slide-title">${slide.title}</div>
-          <div class="options-grid">${optionsHTML}</div>
-        `;
-      } else if (slide.type === 'blocks') {
-        btnCheck.innerText = 'Verificar';
-        container.innerHTML = `
-          <div class="slide-badge">🧩 ${slide.badge}</div>
-          <div class="slide-title">${slide.title}</div>
-          <div class="answer-zone" id="answer-zone"></div>
-          <div class="blocks-palette" id="blocks-palette"></div>
-        `;
-        renderBlockPalette(slide.available);
+      if (!state.completedLessons.includes(activeLesson.id)) {
+        state.completedLessons.push(activeLesson.id);
+        state.xp += 25;
+        saveState();
       }
     }
 
-    function selectQuizOption(idx, btnElem) {
-      selectedOptionIdx = idx;
-      document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
-      btnElem.classList.add('selected');
+    function closeModal() {
+      document.getElementById('ide-modal').classList.remove('active');
     }
 
-    function renderBlockPalette(available) {
-      const palette = document.getElementById('blocks-palette');
-      if (!palette) return;
-      palette.innerHTML = '';
+    // --- IDE PLAYGROUND LIVRE ---
+    function runFreeIDE() {
+      const code = document.getElementById('free-ide-code').innerText;
+      const terminal = document.getElementById('free-ide-terminal');
+      const mcuLed = document.getElementById('free-mcu-led');
+      const mcuStatus = document.getElementById('free-mcu-status');
 
-      available.forEach((text) => {
-        if (!userPlacedBlocks.includes(text)) {
-          const btn = document.createElement('button');
-          btn.className = 'code-block-btn';
-          btn.innerText = text;
-          btn.onclick = () => addBlock(text);
-          palette.appendChild(btn);
-        }
-      });
-      renderAnswerZone();
-    }
+      terminal.innerText = '[COMPILER]: Verificando sintaxe...\n[COMPILER]: Sucesso! 0 Avisos.\n[UPLOADER]: Gravando na memória Flash (1024 bytes)...\n[SERIAL]: Executando loop principal...';
 
-    function addBlock(text) {
-      userPlacedBlocks.push(text);
-      const slide = currentLesson.slides[currentSlideIdx];
-      renderBlockPalette(slide.available);
-    }
-
-    function removeBlock(idx) {
-      userPlacedBlocks.splice(idx, 1);
-      const slide = currentLesson.slides[currentSlideIdx];
-      renderBlockPalette(slide.available);
-    }
-
-    function renderAnswerZone() {
-      const zone = document.getElementById('answer-zone');
-      if (!zone) return;
-      zone.innerHTML = '';
-
-      userPlacedBlocks.forEach((text, idx) => {
-        const btn = document.createElement('button');
-        btn.className = 'code-block-btn';
-        btn.style.borderColor = 'var(--secondary)';
-        btn.innerText = text;
-        btn.onclick = () => removeBlock(idx);
-        zone.appendChild(btn);
-      });
-    }
-
-    function checkSlideAnswer() {
-      const slide = currentLesson.slides[currentSlideIdx];
-      const sheet = document.getElementById('feedback-sheet');
-
-      if (slide.type === 'info') {
-        advanceSlide();
-        return;
-      }
-
-      let isCorrect = false;
-
-      if (slide.type === 'quiz') {
-        if (selectedOptionIdx === null) return;
-        isCorrect = selectedOptionIdx === slide.correct;
-      } else if (slide.type === 'blocks') {
-        if (userPlacedBlocks.length !== slide.correctOrder.length) {
-          isCorrect = false;
-        } else {
-          isCorrect = userPlacedBlocks.every((val, i) => val === slide.correctOrder[i]);
-        }
-      }
-
-      if (isCorrect) {
-        playSound('correct');
-        sheet.className = 'feedback-sheet correct';
-        document.getElementById('fb-title').innerText = '🎉 Excelente!';
-        document.getElementById('fb-text').innerText = slide.explanation || 'Você acertou!';
-        state.xp += 10;
+      if (code.includes('HIGH')) {
+        mcuLed.setAttribute('fill', '#10b981');
+        mcuStatus.innerText = 'Estado: Pino 13 LIGADO (5V)';
       } else {
-        playSound('wrong');
-        sheet.className = 'feedback-sheet wrong';
-        document.getElementById('fb-title').innerText = '❌ Ops, quase lá!';
-        document.getElementById('fb-text').innerText = slide.explanation || 'Tente organizar os elementos novamente!';
-        state.hearts = Math.max(0, state.hearts - 1);
-      }
-      saveState();
-    }
-
-    function advanceSlide() {
-      currentSlideIdx++;
-      document.getElementById('feedback-sheet').className = 'feedback-sheet';
-
-      if (currentSlideIdx < currentLesson.slides.length && state.hearts > 0) {
-        showSlide();
-      } else {
-        if (state.hearts > 0) {
-          if (!state.completedLessons.includes(currentLesson.id)) {
-            state.completedLessons.push(currentLesson.id);
-          }
-          saveState();
-          alert('🏁 Lição concluída com sucesso! +10 XP 🎉');
-        } else {
-          state.hearts = 5;
-          saveState();
-          alert('💔 Vidas zeradas! Recarregamos seus 5 corações para continuar.');
-        }
-        closeLessonModal();
+        mcuLed.setAttribute('fill', '#374151');
+        mcuStatus.innerText = 'Estado: Pino 13 DESLIGADO (0V)';
       }
     }
 
-    function closeLessonModal() {
-      document.getElementById('lesson-modal').classList.remove('active');
-      document.getElementById('feedback-sheet').className = 'feedback-sheet';
+    function resetFreeIDE() {
+      document.getElementById('free-mcu-led').setAttribute('fill', '#374151');
+      document.getElementById('free-mcu-status').innerText = 'Estado: Desligado (0V)';
+      document.getElementById('free-ide-terminal').innerText = '[SYSTEM]: Memória resetada.';
     }
 
-    function startInfinitePractice() {
-      currentLesson = {
-        id: 'inf',
-        slides: [
-          {
-            type: 'quiz',
-            badge: 'Treino',
-            title: 'Qual comando configura o pino 9 como saída de energia?',
-            options: ['pinMode(9, OUTPUT);', 'digitalWrite(9, HIGH);'],
-            correct: 0,
-            explanation: 'pinMode é usado para definir entradas e saídas.'
-          }
-        ]
-      };
-      currentSlideIdx = 0;
-      document.getElementById('lesson-modal').classList.add('active');
-      showSlide();
+    // --- NAVEGAÇÃO ENTRE TELAS ---
+    function switchView(viewId, btn) {
+      document.querySelectorAll('main > section').forEach(s => s.classList.add('hidden'));
+      document.getElementById(`view-${viewId}`).classList.remove('hidden');
+
+      document.querySelectorAll('.nav-item button, .mobile-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
     }
 
+    // --- BADGES / CONQUISTAS ---
     const badges = [
-      { id: 'b1', icon: '🐣', name: 'Primeiro Passo', desc: 'Iniciou a jornada no ArduinoGo' },
-      { id: 'b2', icon: '💡', name: 'Mestre dos LEDs', desc: 'Completou a lição de acender LEDs' },
-      { id: 'b3', icon: '⚙️', name: 'Mestre dos Servos', desc: 'Aprendeu a mover Servo Motores' }
+      { id: 'b1', name: 'Primeiro Compilador', desc: 'Escreveu seu primeiro programa em C++' },
+      { id: 'b2', name: 'Engenheiro de Hardware', desc: 'Acendeu um LED via sinal digital' },
+      { id: 'b3', name: 'Mestre da Robótica', desc: 'Controlou um Servo Motor SG90' }
     ];
 
     function renderBadges() {
       const container = document.getElementById('badges-container');
       if (!container) return;
       container.innerHTML = '';
+
       badges.forEach(b => {
-        const isUnlocked = state.unlockedBadges.includes(b.id) || state.completedLessons.length >= 2;
-        const card = document.createElement('div');
-        card.className = `badge-card ${isUnlocked ? 'unlocked' : ''}`;
-        card.innerHTML = `
-          <div class="badge-icon">${b.icon}</div>
-          <div class="badge-name">${b.name}</div>
-          <div class="badge-desc">${b.desc}</div>
+        const isUnlocked = state.unlockedBadges.includes(b.id) || state.completedLessons.length > 0;
+        container.innerHTML += `
+          <div class="project-card" style="opacity: ${isUnlocked ? '1' : '0.4'}">
+            <div class="project-body">
+              <div style="font-size:2rem; margin-bottom:10px;">🏆</div>
+              <div class="project-title">${b.name}</div>
+              <div class="project-desc">${b.desc}</div>
+              <div style="font-size:0.8rem; font-weight:700; color:${isUnlocked ? 'var(--primary)' : 'var(--text-muted)'}">
+                ${isUnlocked ? 'DESBLOQUEADO' : 'BLOQUEADO'}
+              </div>
+            </div>
+          </div>
         `;
-        container.appendChild(card);
       });
-    }
-
-    function switchTab(tabId, btn) {
-      document.querySelectorAll('.nav-tabs .tab-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-
-      document.getElementById('view-path').classList.add('hidden');
-      document.getElementById('view-infinite').classList.add('hidden');
-      document.getElementById('view-badges').classList.add('hidden');
-
-      document.getElementById(`view-${tabId}`).classList.remove('hidden');
     }
 
     document.addEventListener('DOMContentLoaded', updateUI);
