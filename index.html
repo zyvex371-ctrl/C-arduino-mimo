@@ -1,1 +1,777 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ArduinoGo — Aprenda C++ de Robótica</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --card-border: #334155;
+      --primary: #10b981;
+      --primary-hover: #059669;
+      --secondary: #06b6d4;
+      --accent: #f59e0b;
+      --danger: #ef4444;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --code-bg: #090d16;
+    }
 
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Top Bar Header */
+    header {
+      background: rgba(30, 41, 59, 0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--card-border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.4rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .stats-bar {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #0f172a;
+      padding: 6px 12px;
+      border-radius: 20px;
+      border: 1px solid var(--card-border);
+    }
+
+    /* Main App Layout */
+    main {
+      flex: 1;
+      max-width: 600px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 20px 16px 100px;
+    }
+
+    /* Navigation Tabs */
+    .nav-tabs {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--card-bg);
+      border-top: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      z-index: 40;
+    }
+
+    .tab-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-weight: 700;
+      font-size: 0.8rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .tab-btn span { font-size: 1.3rem; }
+
+    /* Path & Lesson Cards */
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .path-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .module-card {
+      width: 100%;
+      background: var(--card-bg);
+      border: 2px solid var(--card-border);
+      border-radius: 18px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .module-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+    }
+
+    .module-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .module-title { font-weight: 800; font-size: 1.1rem; }
+    .module-desc { color: var(--text-muted); font-size: 0.85rem; line-height: 1.4; }
+
+    .btn-start {
+      background: linear-gradient(135deg, var(--primary), #059669);
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 4px 0 #047857;
+      transition: all 0.1s;
+      width: 100%;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-start:active {
+      transform: translateY(4px);
+      box-shadow: 0 0 0 #047857;
+    }
+
+    /* Modal / Exercise View */
+    .exercise-modal {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 100;
+      display: none;
+      flex-direction: column;
+      padding: 20px;
+    }
+
+    .exercise-modal.active { display: flex; }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .progress-bar-bg {
+      flex: 1;
+      height: 12px;
+      background: var(--card-bg);
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--card-border);
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--primary);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .question-box {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .question-title {
+      font-size: 1.2rem;
+      font-weight: 800;
+      line-height: 1.4;
+    }
+
+    .code-block {
+      background: var(--code-bg);
+      border: 1px solid var(--card-border);
+      padding: 14px;
+      border-radius: 12px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.9rem;
+      color: #38bdf8;
+      white-space: pre-wrap;
+      line-height: 1.5;
+    }
+
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .option-btn {
+      background: var(--card-bg);
+      border: 2px solid var(--card-border);
+      color: var(--text);
+      padding: 16px;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .option-btn:hover { border-color: var(--secondary); background: #26334d; }
+    .option-btn.selected { border-color: var(--secondary); background: #1e3a8a; }
+
+    /* Bottom Feedback Sheet */
+    .feedback-sheet {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 20px;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+      animation: slideUp 0.3s ease;
+      z-index: 110;
+    }
+
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+    .feedback-sheet.correct { background: #064e3b; border-top: 3px solid var(--primary); display: flex; }
+    .feedback-sheet.wrong { background: #7f1d1d; border-top: 3px solid var(--danger); display: flex; }
+
+    .feedback-title { font-weight: 800; font-size: 1.2rem; }
+    .feedback-text { font-size: 0.9rem; line-height: 1.4; opacity: 0.9; }
+
+    .btn-next {
+      background: white;
+      color: black;
+      border: none;
+      padding: 14px;
+      border-radius: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      text-transform: uppercase;
+    }
+
+    /* Badges & Profile Screen */
+    .badges-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .badge-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 14px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      opacity: 0.5;
+    }
+
+    .badge-card.unlocked { opacity: 1; border-color: var(--accent); }
+    .badge-icon { font-size: 2rem; }
+    .badge-name { font-weight: 800; font-size: 0.9rem; }
+    .badge-desc { font-size: 0.75rem; color: var(--text-muted); }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">🤖 ArduinoGo</div>
+    <div class="stats-bar">
+      <div class="stat-item">⚡ <span id="user-xp">0</span> XP</div>
+      <div class="stat-item">🔥 <span id="user-streak">1</span>d</div>
+      <div class="stat-item">❤️ <span id="user-hearts">5</span></div>
+    </div>
+  </header>
+
+  <main>
+    <div id="view-path">
+      <div class="section-title">📍 Trilha de Aprendizado</div>
+      <div class="path-container" id="path-list"></div>
+    </div>
+
+    <div id="view-infinite" class="hidden">
+      <div class="section-title">♾️ Treino Infinito</div>
+      <div class="module-card">
+        <div class="module-title">Gerador de Questões Ilimitadas</div>
+        <div class="module-desc">Pratique infinitamente com desafios dinâmicos de C++ do Arduino. Perfeito para memorizar a sintaxe sem jamais repetir a mesma lição!</div>
+        <button class="btn-start" onclick="startInfinitePractice()">Iniciar Treino Infinito 🚀</button>
+      </div>
+    </div>
+
+    <div id="view-badges" class="hidden">
+      <div class="section-title">🏆 Suas Conquistas</div>
+      <div class="badges-grid" id="badges-container"></div>
+    </div>
+  </main>
+
+  <nav class="nav-tabs">
+    <button class="tab-btn active" onclick="switchTab('path', this)">
+      <span>🗺️</span>Trilha
+    </button>
+    <button class="tab-btn" onclick="switchTab('infinite', this)">
+      <span>♾️</span>Infinito
+    </button>
+    <button class="tab-btn" onclick="switchTab('badges', this)">
+      <span>🏆</span>Conquistas
+    </button>
+  </nav>
+
+  <div class="exercise-modal" id="exercise-modal">
+    <div class="modal-header">
+      <button class="close-btn" onclick="closeExercise()">✕</button>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="exercise-progress"></div>
+      </div>
+      <div>❤️ <span id="modal-hearts">5</span></div>
+    </div>
+
+    <div class="question-box">
+      <div class="question-title" id="q-title">Carregando pergunta...</div>
+      <div class="code-block hidden" id="q-code"></div>
+      <div class="options-grid" id="q-options"></div>
+    </div>
+
+    <button class="btn-start" style="margin-top:20px;" id="btn-check" onclick="checkAnswer()">Verificar Resposta</button>
+
+    <div class="feedback-sheet" id="feedback-sheet">
+      <div class="feedback-title" id="fb-title"></div>
+      <div class="feedback-text" id="fb-text"></div>
+      <button class="btn-next" onclick="nextQuestion()">Continuar</button>
+    </div>
+  </div>
+
+  <script>
+    // --- ESTADO DO USUÁRIO E PERSISTÊNCIA ---
+    let state = JSON.parse(localStorage.getItem('arduinoGoState')) || {
+      xp: 0,
+      streak: 1,
+      hearts: 5,
+      completedModules: [],
+      unlockedBadges: ['b1']
+    };
+
+    function saveState() {
+      localStorage.setItem('arduinoGoState', JSON.stringify(state));
+      updateUI();
+    }
+
+    function updateUI() {
+      document.getElementById('user-xp').innerText = state.xp;
+      document.getElementById('user-streak').innerText = state.streak;
+      document.getElementById('user-hearts').innerText = state.hearts;
+      document.getElementById('modal-hearts').innerText = state.hearts;
+      renderBadges();
+    }
+
+    // --- SINTETIZADOR DE ÁUDIO NATIVO (Sem arquivos externos) ---
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playSound(type) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      if (type === 'correct') {
+        osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+        osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1); // E5
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.3);
+      } else if (type === 'wrong') {
+        osc.frequency.setValueAtTime(220, audioCtx.currentTime); // A3
+        osc.frequency.setValueAtTime(164.81, audioCtx.currentTime + 0.15); // E3
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.4);
+      }
+    }
+
+    // --- CURRÍCULO DE MÓDULOS E PERGUNTAS ---
+    const modules = [
+      {
+        id: 'm1',
+        title: 'Módulo 1: O Cérebro do Arduino',
+        desc: 'Aprenda as duas funções obrigatórias de todo código: setup() e loop().',
+        questions: [
+          {
+            title: 'Qual função roda APENAS UMA VEZ no momento em que o Arduino liga?',
+            options: ['loop()', 'setup()', 'pinMode()', 'delay()'],
+            correct: 1,
+            explanation: 'A função setup() serve para configurações iniciais e roda só uma vez ao ligar.'
+          },
+          {
+            title: 'O que faz a função loop() no código do Arduino?',
+            code: 'void loop() {\n  // Código aqui...\n}',
+            options: ['Desliga o robô', 'Roda o código repetidamente sem parar', 'Apaga a memória', 'Roda apenas uma vez'],
+            correct: 1,
+            explanation: 'A função loop() executa o seu conteúdo continuamente em ciclo até desligar a energia.'
+          }
+        ]
+      },
+      {
+        id: 'm2',
+        title: 'Módulo 2: Luzes e Saídas Digitais',
+        desc: 'Aprenda a controlar LEDs e pinos usando pinMode e digitalWrite.',
+        questions: [
+          {
+            title: 'Como configuramos o pino 13 como uma SAÍDA de energia para um LED?',
+            options: ['pinMode(13, OUTPUT);', 'digitalWrite(13, HIGH);', 'pinMode(13, INPUT);', 'setPin(13, OUT);'],
+            correct: 0,
+            explanation: 'Usamos pinMode(pino, OUTPUT) na função setup() para definir um pino como saída.'
+          },
+          {
+            title: 'Qual comando liga um LED enviando 5V de energia para o pino?',
+            options: ['digitalWrite(13, LOW);', 'digitalWrite(13, HIGH);', 'digitalRead(13);', 'analogWrite(13, 0);'],
+            correct: 1,
+            explanation: 'HIGH envia 5V (liga), enquanto LOW envia 0V (desliga).'
+          },
+          {
+            title: 'O que o comando delay(1000) faz no código?',
+            options: ['Espera 1000 segundos', 'Espera 1000 milissegundos (1 segundo)', 'Aumenta a velocidade', 'Desliga o pino 10'],
+            correct: 1,
+            explanation: 'O comando delay() mede o tempo em milissegundos (1000ms = 1s).'
+          }
+        ]
+      },
+      {
+        id: 'm3',
+        title: 'Módulo 3: Decisões com Botões',
+        desc: 'Aprenda a ler estados com digitalRead e tomar decisões com if / else.',
+        questions: [
+          {
+            title: 'Qual comando lê se um botão conectado ao pino 2 está pressionado?',
+            options: ['digitalWrite(2, HIGH);', 'digitalRead(2);', 'analogRead(2);', 'pinMode(2, INPUT);'],
+            correct: 1,
+            explanation: 'digitalRead(pino) lê o estado digital (HIGH ou LOW) de um pino de entrada.'
+          },
+          {
+            title: 'Qual é a estrutura correta para testar se a leitura do botão é igual a HIGH?',
+            code: 'if (leitura == HIGH) {\n  // Ação\n}',
+            options: ['Se (leitura = HIGH)', 'if (leitura == HIGH)', 'when (leitura IS HIGH)', 'if (leitura -> HIGH)'],
+            correct: 1,
+            explanation: 'Em C++, usase dois sinais de igual (==) para comparar valores dentro do if.'
+          }
+        ]
+      },
+      {
+        id: 'm4',
+        title: 'Módulo 4: Sensores e Variáveis',
+        desc: 'Aprenda a ler sensores analógicos (como LDR) e guardar dados em variáveis.',
+        questions: [
+          {
+            title: 'Qual tipo de variável é usado para guardar números inteiros (ex: pino = 9)?',
+            options: ['float', 'String', 'int', 'boolean'],
+            correct: 2,
+            explanation: 'O tipo int guarda números inteiros positivos ou negativos sem casas decimais.'
+          },
+          {
+            title: 'Qual é a faixa de valores retornada pelo comando analogRead()?',
+            options: ['De 0 a 1', 'De 0 a 1023', 'De 0 a 255', 'De 0 a 100'],
+            correct: 1,
+            explanation: 'Os pinos analógicos do Arduino Uno convertem a voltagem em um valor entre 0 e 1023.'
+          }
+        ]
+      },
+      {
+        id: 'm5',
+        title: 'Módulo 5: Motores e Animatrônicos',
+        desc: 'Controle o Servo Motor SG90 e mova o rosto do seu robô!',
+        questions: [
+          {
+            title: 'Como incluímos a biblioteca para controlar o Servo Motor no Arduino?',
+            options: ['#include <Servo.h>', 'import Servo;', 'use Servo.h;', '#define ServoMotor'],
+            correct: 0,
+            explanation: '#include <Servo.h> carrega os comandos pré-prontos do Servo Motor.'
+          },
+          {
+            title: 'Qual comando move a cabeça do animatrônico para o ângulo exato de 90 graus?',
+            options: ['meuServo.rotate(90);', 'meuServo.write(90);', 'meuServo.move(90);', 'digitalWrite(servo, 90);'],
+            correct: 1,
+            explanation: 'O método write(ângulo) define a posição do servo em graus (de 0 a 180).'
+          }
+        ]
+      }
+    ];
+
+    // --- GERADOR INFINITO DE QUESTÕES ---
+    function generateRandomQuestion() {
+      const templates = [
+        () => {
+          const pin = Math.floor(Math.random() * 12) + 2;
+          return {
+            title: `Escolha o comando correto para configurar o pino digital ${pin} como SAÍDA:`,
+            options: [`pinMode(${pin}, OUTPUT);`, `digitalWrite(${pin}, HIGH);`, `pinMode(${pin}, INPUT);`, `setPin(${pin}, OUT);`],
+            correct: 0,
+            explanation: `Usamos pinMode(${pin}, OUTPUT) para definir o pino ${pin} como saída.`
+          };
+        },
+        () => {
+          const pin = Math.floor(Math.random() * 12) + 2;
+          const stateStr = Math.random() > 0.5 ? 'HIGH' : 'LOW';
+          const actionStr = stateStr === 'HIGH' ? 'ligar' : 'desligar';
+          return {
+            title: `Qual linha de código deve ser executada para ${actionStr} o componente no pino ${pin}?`,
+            options: [`digitalWrite(${pin}, ${stateStr});`, `digitalRead(${pin});`, `pinMode(${pin}, ${stateStr});`, `analogWrite(${pin}, 1023);`],
+            correct: 0,
+            explanation: `digitalWrite(${pin}, ${stateStr}) envia a ordem para ${actionStr} o pino.`
+          };
+        },
+        () => {
+          const ms = (Math.floor(Math.random() * 5) + 1) * 1000;
+          return {
+            title: `Para fazer o Arduino pausar o código por exatamente ${ms / 1000} segundo(s), qual comando você usa?`,
+            options: [`delay(${ms});`, `wait(${ms / 1000});`, `delay(${ms / 1000});`, `pause(${ms});`],
+            correct: 0,
+            explanation: `O delay aceita milissegundos. ${ms / 1000}s = ${ms}ms.`
+          };
+        },
+        () => {
+          const angle = [0, 45, 90, 135, 180][Math.floor(Math.random() * 5)];
+          return {
+            title: `Como mover o Servo Motor diretamente para a posição de ${angle} graus?`,
+            options: [`meuServo.write(${angle});`, `meuServo.turn(${angle});`, `digitalWrite(servo, ${angle});`, `meuServo.set(${angle});`],
+            correct: 0,
+            explanation: `meuServo.write(${angle}) posiciona o rotor no ângulo exato de ${angle}°.`
+          };
+        }
+      ];
+
+      return templates[Math.floor(Math.random() * templates.length)]();
+    }
+
+    // --- SISTEMA DE LIÇÃO E LÓGICA ---
+    let currentQuestions = [];
+    let currentQIndex = 0;
+    let selectedOptionIndex = null;
+    let isInfiniteMode = false;
+
+    function startModule(modId) {
+      const mod = modules.find(m => m.id === modId);
+      if (!mod) return;
+      isInfiniteMode = false;
+      currentQuestions = mod.questions;
+      currentQIndex = 0;
+      openExerciseModal();
+    }
+
+    function startInfinitePractice() {
+      isInfiniteMode = true;
+      currentQuestions = [generateRandomQuestion(), generateRandomQuestion(), generateRandomQuestion(), generateRandomQuestion(), generateRandomQuestion()];
+      currentQIndex = 0;
+      openExerciseModal();
+    }
+
+    function openExerciseModal() {
+      document.getElementById('exercise-modal').classList.add('active');
+      showQuestion();
+    }
+
+    function closeExercise() {
+      document.getElementById('exercise-modal').classList.remove('active');
+      document.getElementById('feedback-sheet').className = 'feedback-sheet';
+    }
+
+    function showQuestion() {
+      const q = currentQuestions[currentQIndex];
+      selectedOptionIndex = null;
+      document.getElementById('feedback-sheet').className = 'feedback-sheet';
+
+      // Atualiza barra de progresso
+      const pct = (currentQIndex / currentQuestions.length) * 100;
+      document.getElementById('exercise-progress').style.width = pct + '%';
+
+      document.getElementById('q-title').innerText = q.title;
+
+      const codeElem = document.getElementById('q-code');
+      if (q.code) {
+        codeElem.innerText = q.code;
+        codeElem.classList.remove('hidden');
+      } else {
+        codeElem.classList.add('hidden');
+      }
+
+      const optContainer = document.getElementById('q-options');
+      optContainer.innerHTML = '';
+      q.options.forEach((optText, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.innerText = optText;
+        btn.onclick = () => selectOption(idx, btn);
+        optContainer.appendChild(btn);
+      });
+    }
+
+    function selectOption(idx, btnElem) {
+      selectedOptionIndex = idx;
+      document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+      btnElem.classList.add('selected');
+    }
+
+    function checkAnswer() {
+      if (selectedOptionIndex === null) return;
+
+      const q = currentQuestions[currentQIndex];
+      const isCorrect = selectedOptionIndex === q.correct;
+      const sheet = document.getElementById('feedback-sheet');
+
+      if (isCorrect) {
+        playSound('correct');
+        sheet.className = 'feedback-sheet correct';
+        document.getElementById('fb-title').innerText = '🎉 Excelente!';
+        document.getElementById('fb-text').innerText = q.explanation;
+        state.xp += 15;
+      } else {
+        playSound('wrong');
+        sheet.className = 'feedback-sheet wrong';
+        document.getElementById('fb-title').innerText = '❌ Ops, quase lá!';
+        document.getElementById('fb-text').innerText = `Resposta certa: ${q.options[q.correct]}\n\n${q.explanation}`;
+        state.hearts = Math.max(0, state.hearts - 1);
+      }
+
+      saveState();
+    }
+
+    function nextQuestion() {
+      currentQIndex++;
+      if (currentQIndex < currentQuestions.length && state.hearts > 0) {
+        if (isInfiniteMode && currentQIndex === currentQuestions.length - 1) {
+          // Adiciona mais perguntas aleatórias continuamente
+          currentQuestions.push(generateRandomQuestion());
+        }
+        showQuestion();
+      } else {
+        closeExercise();
+        alert(state.hearts > 0 ? '🏁 Lição concluída com sucesso! +XP' : '💔 Suas vidas acabaram! Pratique mais para recuperar.');
+      }
+    }
+
+    // --- RENDERIZADORES DE TELA E NAVEGAÇÃO ---
+    function renderPath() {
+      const container = document.getElementById('path-list');
+      container.innerHTML = '';
+
+      modules.forEach((m, idx) => {
+        const card = document.createElement('div');
+        card.className = 'module-card';
+        card.innerHTML = `
+          <div class="module-header">
+            <div class="module-title">${m.title}</div>
+            <div>🌟</div>
+          </div>
+          <div class="module-desc">${m.desc}</div>
+          <button class="btn-start" onclick="startModule('${m.id}')">Começar Lição ▶</button>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    const badges = [
+      { id: 'b1', icon: '🐣', name: 'Primeiro Passo', desc: 'Iniciou a sua jornada no Arduino' },
+      { id: 'b2', icon: '💡', name: 'Mestre dos LEDs', desc: 'Completou o módulo de saídas digitais' },
+      { id: 'b3', icon: '🤖', name: 'Criador de Animatrônicos', desc: 'Aprendeu a mover Servo Motores' },
+      { id: 'b4', icon: '⚡', name: 'Poder Infinito', desc: 'Praticou no Gerador Infinito' }
+    ];
+
+    function renderBadges() {
+      const container = document.getElementById('badges-container');
+      container.innerHTML = '';
+      badges.forEach(b => {
+        const isUnlocked = state.unlockedBadges.includes(b.id);
+        const card = document.createElement('div');
+        card.className = `badge-card ${isUnlocked ? 'unlocked' : ''}`;
+        card.innerHTML = `
+          <div class="badge-icon">${b.icon}</div>
+          <div class="badge-name">${b.name}</div>
+          <div class="badge-desc">${b.desc}</div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function switchTab(tabId, btn) {
+      document.querySelectorAll('.nav-tabs .tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      document.getElementById('view-path').classList.add('hidden');
+      document.getElementById('view-infinite').classList.add('hidden');
+      document.getElementById('view-badges').classList.add('hidden');
+
+      document.getElementById(`view-${tabId}`).classList.remove('hidden');
+    }
+
+    // --- INICIALIZAÇÃO DA APLICAÇÃO ---
+    renderPath();
+    updateUI();
+  </script>
+</body>
+</html>
