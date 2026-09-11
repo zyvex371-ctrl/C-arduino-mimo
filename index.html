@@ -29,7 +29,7 @@
       margin: 0;
       padding: 0;
       font-family: 'Plus Jakarta Sans', sans-serif;
-      -webkit-tap-highlight-color: transparent; /* Remove bug azul ao clicar */
+      -webkit-tap-highlight-color: transparent;
       user-select: none;
     }
 
@@ -42,9 +42,8 @@
       overflow-x: hidden;
     }
 
-    /* Top Bar Header */
     header {
-      background: rgba(30, 41, 59, 0.9);
+      background: rgba(30, 41, 59, 0.95);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--card-border);
       position: sticky;
@@ -69,23 +68,22 @@
 
     .stats-bar {
       display: flex;
-      gap: 12px;
+      gap: 10px;
       align-items: center;
       font-weight: 700;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
     }
 
     .stat-item {
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
       background: #0f172a;
-      padding: 6px 12px;
+      padding: 6px 10px;
       border-radius: 20px;
       border: 1px solid var(--card-border);
     }
 
-    /* Main App Layout */
     main {
       flex: 1;
       max-width: 600px;
@@ -94,7 +92,6 @@
       padding: 20px 16px 100px;
     }
 
-    /* Navigation Tabs */
     .nav-tabs {
       position: fixed;
       bottom: 0;
@@ -129,7 +126,6 @@
 
     .tab-btn span { font-size: 1.3rem; }
 
-    /* Section & Lessons Path */
     .section-box {
       margin-bottom: 28px;
     }
@@ -157,7 +153,6 @@
       color: var(--text-muted);
     }
 
-    /* Lessons Tree List */
     .lessons-list {
       display: flex;
       flex-direction: column;
@@ -203,20 +198,10 @@
       gap: 12px;
     }
 
-    .lesson-icon {
-      font-size: 1.4rem;
-    }
+    .lesson-icon { font-size: 1.4rem; }
+    .lesson-title { font-weight: 700; font-size: 0.95rem; }
+    .lesson-status { font-size: 1.2rem; }
 
-    .lesson-title {
-      font-weight: 700;
-      font-size: 0.95rem;
-    }
-
-    .lesson-status {
-      font-size: 1.2rem;
-    }
-
-    /* Modal / Exercise View */
     .exercise-modal {
       position: fixed;
       inset: 0;
@@ -261,7 +246,6 @@
       transition: width 0.3s ease;
     }
 
-    /* Card de Teoria */
     .theory-card {
       background: var(--card-bg);
       border: 2px solid var(--secondary);
@@ -337,7 +321,6 @@
       background: #1e3a8a;
     }
 
-    /* Bottom Feedback Sheet */
     .feedback-sheet {
       position: fixed;
       bottom: 0;
@@ -396,7 +379,6 @@
 
     .btn-start:active { transform: translateY(2px); box-shadow: 0 2px 0 #047857; }
 
-    /* Badges Screen */
     .badges-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -504,14 +486,28 @@
   </div>
 
   <script>
-    // --- ESTADO DO USUÁRIO ---
-    let state = JSON.parse(localStorage.getItem('arduinoGoState')) || {
+    // --- ESTADO DO USUÁRIO E MIGRAÇÃO SEGURA ---
+    let rawState = localStorage.getItem('arduinoGoState');
+    let state = {
       xp: 0,
       streak: 1,
       hearts: 5,
-      completedLessons: [], // Ex: ['s1_l1', 's1_l2']
+      completedLessons: [],
       unlockedBadges: ['b1']
     };
+
+    if (rawState) {
+      try {
+        let parsed = JSON.parse(rawState);
+        state.xp = typeof parsed.xp === 'number' ? parsed.xp : 0;
+        state.streak = typeof parsed.streak === 'number' ? parsed.streak : 1;
+        state.hearts = (typeof parsed.hearts === 'number' && parsed.hearts > 0) ? parsed.hearts : 5;
+        state.completedLessons = Array.isArray(parsed.completedLessons) ? parsed.completedLessons : [];
+        state.unlockedBadges = Array.isArray(parsed.unlockedBadges) ? parsed.unlockedBadges : ['b1'];
+      } catch (e) {
+        console.log('Reset de estado por erro no JSON anterior');
+      }
+    }
 
     function saveState() {
       localStorage.setItem('arduinoGoState', JSON.stringify(state));
@@ -553,7 +549,7 @@
       }
     }
 
-    // --- CURRÍCULO DE SESSÕES COM 15 LIÇÕES CADA (TEORIA + PERGUNTAS) ---
+    // --- CURRÍCULO DA SESSÃO 1 (15 LIÇÕES COMPLETAS) ---
     const sections = [
       {
         id: 's1',
@@ -624,7 +620,7 @@
               code: 'pinMode(13, OUTPUT); // Correto!\ndigitalWrite(13, HIGH) // ERRO! Faltou o ;'
             },
             questions: [
-              { title: 'Qual caractere é OBRIGATÓRIO no final de cada comando no C++ do Arduino?', options: ['Dois pontos (:)'], correct: 1, options: ['Ponto final (.)', 'Ponto e vírgula (;)', 'Dois pontos (:)', 'Exclamação (!)'], correct: 1, explanation: 'O ponto e vírgula ; avisa ao processador onde o comando termina.' }
+              { title: 'Qual caractere é OBRIGATÓRIO no final de cada comando no C++ do Arduino?', options: ['Ponto final (.)', 'Ponto e vírgula (;)', 'Dois pontos (:)', 'Exclamação (!)'], correct: 1, explanation: 'O ponto e vírgula ; avisa ao processador onde o comando termina.' }
             ]
           },
           {
@@ -729,7 +725,6 @@
       }
     ];
 
-    // --- GERADOR INFINITO DE QUESTÕES ---
     function generateRandomQuestion() {
       const pin = Math.floor(Math.random() * 12) + 2;
       const angle = [0, 45, 90, 135, 180][Math.floor(Math.random() * 5)];
@@ -759,7 +754,6 @@
       return templates[Math.floor(Math.random() * templates.length)];
     }
 
-    // --- LÓGICA DE NAVEGAÇÃO E EXERCÍCIOS ---
     let currentLesson = null;
     let currentQIndex = 0;
     let selectedOptionIndex = null;
@@ -767,6 +761,7 @@
 
     function renderPath() {
       const container = document.getElementById('sections-container');
+      if (!container) return;
       container.innerHTML = '';
 
       sections.forEach((sec) => {
@@ -774,9 +769,9 @@
         secBox.className = 'section-box';
 
         let lessonsHTML = '';
-        let previousCompleted = true; // Primeira lição liberada por padrão
+        let previousCompleted = true;
 
-        sec.lessons.forEach((les, idx) => {
+        sec.lessons.forEach((les) => {
           const isCompleted = state.completedLessons.includes(les.id);
           const isUnlocked = isCompleted || previousCompleted;
 
@@ -791,8 +786,10 @@
             statusIcon = '▶';
           }
 
+          const actionAttr = isUnlocked ? `onclick="openLesson('${sec.id}', '${les.id}')"` : '';
+
           lessonsHTML += `
-            <div class="lesson-card ${cardStatusClass}" onclick="${isUnlocked ? `openLesson('${sec.id}', '${les.id}')` : ''}">
+            <div class="lesson-card ${cardStatusClass}" ${actionAttr}>
               <div class="lesson-info">
                 <span class="lesson-icon">${les.icon}</span>
                 <span class="lesson-title">${les.title}</span>
@@ -826,7 +823,6 @@
       currentLesson = les;
       currentQIndex = 0;
 
-      // Exibe Primeiro a Teoria
       document.getElementById('theory-title').innerText = les.theory.title;
       document.getElementById('theory-text').innerText = les.theory.text;
       const codeElem = document.getElementById('theory-code');
@@ -946,6 +942,10 @@
           }
           saveState();
           alert('🏁 Lição concluída com sucesso! Nova lição liberada! 🎉');
+        } else if (state.hearts <= 0) {
+          state.hearts = 5; // Recarrega automaticamente ao zerar
+          saveState();
+          alert('💔 Vidas zeradas! Recarregamos 5 corações para você continuar aprendendo.');
         }
         closeExercise();
       }
@@ -956,7 +956,6 @@
       document.getElementById('feedback-sheet').className = 'feedback-sheet';
     }
 
-    // --- CONQUISTAS E NAVEGAÇÃO ---
     const badges = [
       { id: 'b1', icon: '🐣', name: 'Primeiro Passo', desc: 'Iniciou a jornada no ArduinoGo' },
       { id: 'b2', icon: '💡', name: 'Mestre dos LEDs', desc: 'Completou a Lição de Pisca-Pisca' },
@@ -966,6 +965,7 @@
 
     function renderBadges() {
       const container = document.getElementById('badges-container');
+      if (!container) return;
       container.innerHTML = '';
       badges.forEach(b => {
         const isUnlocked = state.unlockedBadges.includes(b.id) || state.completedLessons.length >= 3;
@@ -991,7 +991,10 @@
       document.getElementById(`view-${tabId}`).classList.remove('hidden');
     }
 
-    // --- INICIALIZAÇÃO ---
+    // --- INICIALIZAÇÃO GARANTIDA ---
+    document.addEventListener('DOMContentLoaded', () => {
+      updateUI();
+    });
     updateUI();
   </script>
 </body>
