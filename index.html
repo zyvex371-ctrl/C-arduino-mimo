@@ -21,9 +21,17 @@
       --text: #f8fafc;
       --text-muted: #94a3b8;
       --code-bg: #090d16;
+      --locked: #475569;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-tap-highlight-color: transparent; /* Remove bug azul ao clicar */
+      user-select: none;
+    }
 
     body {
       background-color: var(--bg);
@@ -36,7 +44,7 @@
 
     /* Top Bar Header */
     header {
-      background: rgba(30, 41, 59, 0.8);
+      background: rgba(30, 41, 59, 0.9);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--card-border);
       position: sticky;
@@ -61,16 +69,16 @@
 
     .stats-bar {
       display: flex;
-      gap: 16px;
+      gap: 12px;
       align-items: center;
       font-weight: 700;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
 
     .stat-item {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       background: #0f172a;
       padding: 6px 12px;
       border-radius: 20px;
@@ -121,68 +129,91 @@
 
     .tab-btn span { font-size: 1.3rem; }
 
-    /* Path & Lesson Cards */
-    .section-title {
-      font-size: 1.3rem;
-      font-weight: 800;
+    /* Section & Lessons Path */
+    .section-box {
+      margin-bottom: 28px;
+    }
+
+    .section-header {
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      border: 2px solid var(--card-border);
+      border-radius: 16px;
+      padding: 16px;
       margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--secondary);
+      margin-bottom: 4px;
       display: flex;
       align-items: center;
       gap: 8px;
     }
 
-    .path-container {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      align-items: center;
+    .section-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
     }
 
-    .module-card {
-      width: 100%;
-      background: var(--card-bg);
-      border: 2px solid var(--card-border);
-      border-radius: 18px;
-      padding: 18px;
+    /* Lessons Tree List */
+    .lessons-list {
       display: flex;
       flex-direction: column;
       gap: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-      transition: transform 0.2s, border-color 0.2s;
     }
 
-    .module-card:hover {
-      transform: translateY(-2px);
+    .lesson-card {
+      background: var(--card-bg);
+      border: 2px solid var(--card-border);
+      border-radius: 14px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.2s;
+    }
+
+    .lesson-card.unlocked {
+      cursor: pointer;
       border-color: var(--primary);
     }
 
-    .module-header {
+    .lesson-card.unlocked:hover {
+      transform: scale(1.02);
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
+    }
+
+    .lesson-card.completed {
+      border-color: var(--secondary);
+      background: rgba(6, 182, 212, 0.1);
+    }
+
+    .lesson-card.locked {
+      opacity: 0.45;
+      filter: grayscale(1);
+      cursor: not-allowed;
+      border-color: var(--locked);
+    }
+
+    .lesson-info {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      gap: 12px;
     }
 
-    .module-title { font-weight: 800; font-size: 1.1rem; }
-    .module-desc { color: var(--text-muted); font-size: 0.85rem; line-height: 1.4; }
-
-    .btn-start {
-      background: linear-gradient(135deg, var(--primary), #059669);
-      color: white;
-      border: none;
-      padding: 12px;
-      border-radius: 12px;
-      font-weight: 800;
-      cursor: pointer;
-      box-shadow: 0 4px 0 #047857;
-      transition: all 0.1s;
-      width: 100%;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+    .lesson-icon {
+      font-size: 1.4rem;
     }
 
-    .btn-start:active {
-      transform: translateY(4px);
-      box-shadow: 0 0 0 #047857;
+    .lesson-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .lesson-status {
+      font-size: 1.2rem;
     }
 
     /* Modal / Exercise View */
@@ -194,6 +225,7 @@
       display: none;
       flex-direction: column;
       padding: 20px;
+      overflow-y: auto;
     }
 
     .exercise-modal.active { display: flex; }
@@ -202,7 +234,7 @@
       display: flex;
       align-items: center;
       gap: 16px;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
 
     .close-btn {
@@ -229,15 +261,42 @@
       transition: width 0.3s ease;
     }
 
+    /* Card de Teoria */
+    .theory-card {
+      background: var(--card-bg);
+      border: 2px solid var(--secondary);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      line-height: 1.6;
+    }
+
+    .theory-title {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--secondary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .theory-text {
+      font-size: 0.95rem;
+      color: var(--text);
+      white-space: pre-line;
+    }
+
     .question-box {
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 16px;
     }
 
     .question-title {
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       font-weight: 800;
       line-height: 1.4;
     }
@@ -248,24 +307,24 @@
       padding: 14px;
       border-radius: 12px;
       font-family: 'Fira Code', monospace;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       color: #38bdf8;
       white-space: pre-wrap;
-      line-height: 1.5;
+      user-select: text;
     }
 
     .options-grid {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
 
     .option-btn {
       background: var(--card-bg);
       border: 2px solid var(--card-border);
       color: var(--text);
-      padding: 16px;
-      border-radius: 14px;
+      padding: 14px 16px;
+      border-radius: 12px;
       font-weight: 700;
       font-size: 0.95rem;
       text-align: left;
@@ -273,8 +332,10 @@
       transition: all 0.2s;
     }
 
-    .option-btn:hover { border-color: var(--secondary); background: #26334d; }
-    .option-btn.selected { border-color: var(--secondary); background: #1e3a8a; }
+    .option-btn.selected {
+      border-color: var(--secondary);
+      background: #1e3a8a;
+    }
 
     /* Bottom Feedback Sheet */
     .feedback-sheet {
@@ -298,20 +359,44 @@
     .feedback-sheet.wrong { background: #7f1d1d; border-top: 3px solid var(--danger); display: flex; }
 
     .feedback-title { font-weight: 800; font-size: 1.2rem; }
-    .feedback-text { font-size: 0.9rem; line-height: 1.4; opacity: 0.9; }
+    .feedback-text { font-size: 0.9rem; line-height: 1.4; opacity: 0.95; white-space: pre-line; }
 
-    .btn-next {
-      background: white;
-      color: black;
+    .feedback-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .btn-action {
+      flex: 1;
+      padding: 14px;
+      border-radius: 12px;
+      font-weight: 800;
+      border: none;
+      cursor: pointer;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+    }
+
+    .btn-primary-act { background: white; color: black; }
+    .btn-secondary-act { background: rgba(255,255,255,0.2); color: white; }
+
+    .btn-start {
+      background: linear-gradient(135deg, var(--primary), #059669);
+      color: white;
       border: none;
       padding: 14px;
       border-radius: 12px;
       font-weight: 800;
       cursor: pointer;
+      box-shadow: 0 4px 0 #047857;
+      width: 100%;
       text-transform: uppercase;
     }
 
-    /* Badges & Profile Screen */
+    .btn-start:active { transform: translateY(2px); box-shadow: 0 2px 0 #047857; }
+
+    /* Badges Screen */
     .badges-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -328,10 +413,11 @@
       flex-direction: column;
       align-items: center;
       gap: 8px;
-      opacity: 0.5;
+      opacity: 0.4;
+      filter: grayscale(1);
     }
 
-    .badge-card.unlocked { opacity: 1; border-color: var(--accent); }
+    .badge-card.unlocked { opacity: 1; filter: grayscale(0); border-color: var(--accent); }
     .badge-icon { font-size: 2rem; }
     .badge-name { font-weight: 800; font-size: 0.9rem; }
     .badge-desc { font-size: 0.75rem; color: var(--text-muted); }
@@ -352,21 +438,25 @@
 
   <main>
     <div id="view-path">
-      <div class="section-title">📍 Trilha de Aprendizado</div>
-      <div class="path-container" id="path-list"></div>
+      <div id="sections-container"></div>
     </div>
 
     <div id="view-infinite" class="hidden">
-      <div class="section-title">♾️ Treino Infinito</div>
-      <div class="module-card">
-        <div class="module-title">Gerador de Questões Ilimitadas</div>
-        <div class="module-desc">Pratique infinitamente com desafios dinâmicos de C++ do Arduino. Perfeito para memorizar a sintaxe sem jamais repetir a mesma lição!</div>
+      <div class="section-header">
+        <div class="section-title">♾️ Treino Infinito</div>
+        <div class="section-desc">Gerador ilimitado de exercícios para fixar os comandos.</div>
+      </div>
+      <div style="background:var(--card-bg); border:2px solid var(--card-border); border-radius:16px; padding:20px;">
+        <p style="font-size:0.9rem; margin-bottom:16px; color:var(--text-muted);">Pratique questões aleatórias geradas na hora sem gastar vidas para treinar seu cérebro!</p>
         <button class="btn-start" onclick="startInfinitePractice()">Iniciar Treino Infinito 🚀</button>
       </div>
     </div>
 
     <div id="view-badges" class="hidden">
-      <div class="section-title">🏆 Suas Conquistas</div>
+      <div class="section-header">
+        <div class="section-title">🏆 Suas Conquistas</div>
+        <div class="section-desc">Desbloqueie selos conforme avança nas lições!</div>
+      </div>
       <div class="badges-grid" id="badges-container"></div>
     </div>
   </main>
@@ -392,28 +482,34 @@
       <div>❤️ <span id="modal-hearts">5</span></div>
     </div>
 
-    <div class="question-box">
+    <div id="theory-step" class="theory-card">
+      <div class="theory-title">📖 <span id="theory-title">Título da Aula</span></div>
+      <div class="theory-text" id="theory-text">Explicação da aula...</div>
+      <div class="code-block" id="theory-code"></div>
+      <button class="btn-start" style="margin-top:10px;" onclick="startQuestionsStep()">Entendi! Ir para os Exercícios ▶</button>
+    </div>
+
+    <div id="questions-step" class="question-box hidden">
       <div class="question-title" id="q-title">Carregando pergunta...</div>
       <div class="code-block hidden" id="q-code"></div>
       <div class="options-grid" id="q-options"></div>
+      <button class="btn-start" style="margin-top:auto;" id="btn-check" onclick="checkAnswer()">Verificar Resposta</button>
     </div>
-
-    <button class="btn-start" style="margin-top:20px;" id="btn-check" onclick="checkAnswer()">Verificar Resposta</button>
 
     <div class="feedback-sheet" id="feedback-sheet">
       <div class="feedback-title" id="fb-title"></div>
       <div class="feedback-text" id="fb-text"></div>
-      <button class="btn-next" onclick="nextQuestion()">Continuar</button>
+      <div class="feedback-actions" id="fb-actions"></div>
     </div>
   </div>
 
   <script>
-    // --- ESTADO DO USUÁRIO E PERSISTÊNCIA ---
+    // --- ESTADO DO USUÁRIO ---
     let state = JSON.parse(localStorage.getItem('arduinoGoState')) || {
       xp: 0,
       streak: 1,
       hearts: 5,
-      completedModules: [],
+      completedLessons: [], // Ex: ['s1_l1', 's1_l2']
       unlockedBadges: ['b1']
     };
 
@@ -427,10 +523,11 @@
       document.getElementById('user-streak').innerText = state.streak;
       document.getElementById('user-hearts').innerText = state.hearts;
       document.getElementById('modal-hearts').innerText = state.hearts;
+      renderPath();
       renderBadges();
     }
 
-    // --- SINTETIZADOR DE ÁUDIO NATIVO (Sem arquivos externos) ---
+    // --- ÁUDIO NATIVO ---
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     function playSound(type) {
       if (audioCtx.state === 'suspended') audioCtx.resume();
@@ -440,15 +537,15 @@
       gain.connect(audioCtx.destination);
 
       if (type === 'correct') {
-        osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
-        osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1); // E5
+        osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1);
         gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
         osc.start();
         osc.stop(audioCtx.currentTime + 0.3);
       } else if (type === 'wrong') {
-        osc.frequency.setValueAtTime(220, audioCtx.currentTime); // A3
-        osc.frequency.setValueAtTime(164.81, audioCtx.currentTime + 0.15); // E3
+        osc.frequency.setValueAtTime(220, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(164.81, audioCtx.currentTime + 0.15);
         gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
         osc.start();
@@ -456,108 +553,177 @@
       }
     }
 
-    // --- CURRÍCULO DE MÓDULOS E PERGUNTAS ---
-    const modules = [
+    // --- CURRÍCULO DE SESSÕES COM 15 LIÇÕES CADA (TEORIA + PERGUNTAS) ---
+    const sections = [
       {
-        id: 'm1',
-        title: 'Módulo 1: O Cérebro do Arduino',
-        desc: 'Aprenda as duas funções obrigatórias de todo código: setup() e loop().',
-        questions: [
+        id: 's1',
+        title: 'Sessão 1: Fundamentos & Saídas Digitais',
+        desc: 'Aprenda a estrutura do código e controle luzes e componentes simples.',
+        lessons: [
           {
-            title: 'Qual função roda APENAS UMA VEZ no momento em que o Arduino liga?',
-            options: ['loop()', 'setup()', 'pinMode()', 'delay()'],
-            correct: 1,
-            explanation: 'A função setup() serve para configurações iniciais e roda só uma vez ao ligar.'
+            id: 's1_l1', title: 'Lição 1: A Estrutura setup() e loop()', icon: '🧠',
+            theory: {
+              title: 'O Cérebro do Arduino',
+              text: 'Todo programa em C++ de Arduino precisa de DUAS funções obrigatórias:\n\n1. setup(): Executa APENAS UMA VEZ no segundo em que a placa liga.\n2. loop(): Executa continuamente em ciclo sem parar enquanto o robô estiver ligado.',
+              code: 'void setup() {\n  // Configurações (roda 1 vez)\n}\n\nvoid loop() {\n  // Ações repetitivas do robô\n}'
+            },
+            questions: [
+              { title: 'Qual função roda apenas UMA VEZ no momento em que o Arduino liga?', options: ['loop()', 'setup()', 'pinMode()', 'delay()'], correct: 1, explanation: 'A função setup() é usada para inicializar o circuito e roda 1 única vez.' },
+              { title: 'O que a função loop() faz com o código dentro dela?', options: ['Executa repetidamente sem parar', 'Roda 1 vez e apaga', 'Desliga a placa', 'Só roda no computador'], correct: 0, explanation: 'A função loop() fica rodando os comandos em ciclo contínuo.' }
+            ]
           },
           {
-            title: 'O que faz a função loop() no código do Arduino?',
-            code: 'void loop() {\n  // Código aqui...\n}',
-            options: ['Desliga o robô', 'Roda o código repetidamente sem parar', 'Apaga a memória', 'Roda apenas uma vez'],
-            correct: 1,
-            explanation: 'A função loop() executa o seu conteúdo continuamente em ciclo até desligar a energia.'
-          }
-        ]
-      },
-      {
-        id: 'm2',
-        title: 'Módulo 2: Luzes e Saídas Digitais',
-        desc: 'Aprenda a controlar LEDs e pinos usando pinMode e digitalWrite.',
-        questions: [
-          {
-            title: 'Como configuramos o pino 13 como uma SAÍDA de energia para um LED?',
-            options: ['pinMode(13, OUTPUT);', 'digitalWrite(13, HIGH);', 'pinMode(13, INPUT);', 'setPin(13, OUT);'],
-            correct: 0,
-            explanation: 'Usamos pinMode(pino, OUTPUT) na função setup() para definir um pino como saída.'
+            id: 's1_l2', title: 'Lição 2: Configurando Pinos com pinMode()', icon: '🔌',
+            theory: {
+              title: 'Configurando as Portas da Placa',
+              text: 'Para avisar ao Arduino que uma porta (pino) vai ENVIAR energia para um LED ou componente, usamos o comando pinMode() dentro do setup().\n\n- OUTPUT = Saída de energia (ex: LEDs, motores, buzzers).\n- INPUT = Entrada de informação (ex: sensores, botões).',
+              code: 'void setup() {\n  pinMode(13, OUTPUT); // Define o pino 13 como SAÍDA\n}'
+            },
+            questions: [
+              { title: 'Qual comando configura o pino 13 como uma SAÍDA de energia?', options: ['digitalWrite(13, OUTPUT);', 'pinMode(13, OUTPUT);', 'setPin(13, OUT);', 'pinMode(13, INPUT);'], correct: 1, explanation: 'Usamos pinMode(pino, OUTPUT) para definir uma porta como saída de energia.' }
+            ]
           },
           {
-            title: 'Qual comando liga um LED enviando 5V de energia para o pino?',
-            options: ['digitalWrite(13, LOW);', 'digitalWrite(13, HIGH);', 'digitalRead(13);', 'analogWrite(13, 0);'],
-            correct: 1,
-            explanation: 'HIGH envia 5V (liga), enquanto LOW envia 0V (desliga).'
+            id: 's1_l3', title: 'Lição 3: Ligando LEDs com digitalWrite()', icon: '💡',
+            theory: {
+              title: 'Ligando e Desligando Pinos Digitais',
+              text: 'Para mandar o Arduino ligar (enviar 5V) ou desligar (0V) uma porta digital, usamos digitalWrite():\n\n- HIGH = Liga (Envia 5V de energia).\n- LOW = Desliga (Corta a energia).',
+              code: 'digitalWrite(13, HIGH); // Liga o LED no pino 13\ndigitalWrite(13, LOW);  // Desliga o LED'
+            },
+            questions: [
+              { title: 'Qual comando envia 5V de energia para LIGAR um LED no pino 13?', options: ['digitalWrite(13, LOW);', 'digitalWrite(13, HIGH);', 'digitalRead(13);', 'pinMode(13, HIGH);'], correct: 1, explanation: 'O valor HIGH liga o pino enviando 5V de eletricidade.' }
+            ]
           },
           {
-            title: 'O que o comando delay(1000) faz no código?',
-            options: ['Espera 1000 segundos', 'Espera 1000 milissegundos (1 segundo)', 'Aumenta a velocidade', 'Desliga o pino 10'],
-            correct: 1,
-            explanation: 'O comando delay() mede o tempo em milissegundos (1000ms = 1s).'
-          }
-        ]
-      },
-      {
-        id: 'm3',
-        title: 'Módulo 3: Decisões com Botões',
-        desc: 'Aprenda a ler estados com digitalRead e tomar decisões com if / else.',
-        questions: [
-          {
-            title: 'Qual comando lê se um botão conectado ao pino 2 está pressionado?',
-            options: ['digitalWrite(2, HIGH);', 'digitalRead(2);', 'analogRead(2);', 'pinMode(2, INPUT);'],
-            correct: 1,
-            explanation: 'digitalRead(pino) lê o estado digital (HIGH ou LOW) de um pino de entrada.'
+            id: 's1_l4', title: 'Lição 4: Pausando com delay()', icon: '⏱️',
+            theory: {
+              title: 'Controlando o Tempo de Espera',
+              text: 'O comando delay() faz o Arduino esperar um tempo antes de ir para a próxima linha.\n\nO tempo é medido em MILISSEGUNDOS:\n- 1000 milissegundos = 1 segundo exato.\n- 500 milissegundos = meio segundo.',
+              code: 'digitalWrite(13, HIGH); // Liga\ndelay(1000);             // Espera 1 segundo ligado\ndigitalWrite(13, LOW);  // Desliga'
+            },
+            questions: [
+              { title: 'Para fazer o robô esperar 2 segundos exatos, qual comando você escreve?', options: ['delay(2);', 'delay(2000);', 'wait(2000);', 'pause(2000);'], correct: 1, explanation: 'Como o delay mede em ms, 2000ms equivalem a 2 segundos.' }
+            ]
           },
           {
-            title: 'Qual é a estrutura correta para testar se a leitura do botão é igual a HIGH?',
-            code: 'if (leitura == HIGH) {\n  // Ação\n}',
-            options: ['Se (leitura = HIGH)', 'if (leitura == HIGH)', 'when (leitura IS HIGH)', 'if (leitura -> HIGH)'],
-            correct: 1,
-            explanation: 'Em C++, usase dois sinais de igual (==) para comparar valores dentro do if.'
-          }
-        ]
-      },
-      {
-        id: 'm4',
-        title: 'Módulo 4: Sensores e Variáveis',
-        desc: 'Aprenda a ler sensores analógicos (como LDR) e guardar dados em variáveis.',
-        questions: [
-          {
-            title: 'Qual tipo de variável é usado para guardar números inteiros (ex: pino = 9)?',
-            options: ['float', 'String', 'int', 'boolean'],
-            correct: 2,
-            explanation: 'O tipo int guarda números inteiros positivos ou negativos sem casas decimais.'
+            id: 's1_l5', title: 'Lição 5: Pisca-Pisca Completo', icon: '✨',
+            theory: {
+              title: 'Juntando Tudo num Ciclo',
+              text: 'Combinando digitalWrite e delay dentro do loop(), criamos um pisca-pisca infinito!',
+              code: 'void loop() {\n  digitalWrite(13, HIGH); // Liga\n  delay(500);             // Espera 0.5s\n  digitalWrite(13, LOW);  // Desliga\n  delay(500);             // Espera 0.5s\n}'
+            },
+            questions: [
+              { title: 'O que o código de exemplo faz dentro da função loop()?', options: ['Desliga o pino para sempre', 'Faz o LED piscar sem parar a cada meio segundo', 'Queima o Arduino', 'Soma números'], correct: 1, explanation: 'Ligar, esperar, desligar e esperar repetidamente dentro do loop cria um efeito pisca-pisca.' }
+            ]
           },
           {
-            title: 'Qual é a faixa de valores retornada pelo comando analogRead()?',
-            options: ['De 0 a 1', 'De 0 a 1023', 'De 0 a 255', 'De 0 a 100'],
-            correct: 1,
-            explanation: 'Os pinos analógicos do Arduino Uno convertem a voltagem em um valor entre 0 e 1023.'
-          }
-        ]
-      },
-      {
-        id: 'm5',
-        title: 'Módulo 5: Motores e Animatrônicos',
-        desc: 'Controle o Servo Motor SG90 e mova o rosto do seu robô!',
-        questions: [
-          {
-            title: 'Como incluímos a biblioteca para controlar o Servo Motor no Arduino?',
-            options: ['#include <Servo.h>', 'import Servo;', 'use Servo.h;', '#define ServoMotor'],
-            correct: 0,
-            explanation: '#include <Servo.h> carrega os comandos pré-prontos do Servo Motor.'
+            id: 's1_l6', title: 'Lição 6: Ponto e Vírgula ; e Sintaxe', icon: '📝',
+            theory: {
+              title: 'Regras da Linguagem C++',
+              text: 'No C++ do Arduino, quase TODA linha de comando precisa terminar obrigatoriamente com PONTO E VÍRGULA (;).\nSe você esquecer o ;, o código dará erro e não vai compilar!',
+              code: 'pinMode(13, OUTPUT); // Correto!\ndigitalWrite(13, HIGH) // ERRO! Faltou o ;'
+            },
+            questions: [
+              { title: 'Qual caractere é OBRIGATÓRIO no final de cada comando no C++ do Arduino?', options: ['Dois pontos (:)'], correct: 1, options: ['Ponto final (.)', 'Ponto e vírgula (;)', 'Dois pontos (:)', 'Exclamação (!)'], correct: 1, explanation: 'O ponto e vírgula ; avisa ao processador onde o comando termina.' }
+            ]
           },
           {
-            title: 'Qual comando move a cabeça do animatrônico para o ângulo exato de 90 graus?',
-            options: ['meuServo.rotate(90);', 'meuServo.write(90);', 'meuServo.move(90);', 'digitalWrite(servo, 90);'],
-            correct: 1,
-            explanation: 'O método write(ângulo) define a posição do servo em graus (de 0 a 180).'
+            id: 's1_l7', title: 'Lição 7: Comentários no Código', icon: '💬',
+            theory: {
+              title: 'Escrevendo Anotações para Você',
+              text: 'Comentários são anotações que o Arduino ignora na hora de rodar. Servem para você explicar o que o seu código faz.\n\n- Use // para comentários de 1 linha.',
+              code: '// Este é um comentário! O Arduino ignora esta linha.\ndigitalWrite(13, HIGH);'
+            },
+            questions: [
+              { title: 'Como escrevemos um comentário de uma linha no código do Arduino?', options: ['# comentário', '// comentário', '', '* comentário'], correct: 1, explanation: 'Duas barras paralelas // indicam um comentário no C++.' }
+            ]
+          },
+          {
+            id: 's1_l8', title: 'Lição 8: Variáveis Inteiras (int)', icon: '📦',
+            theory: {
+              title: 'Guardando Números na Memória',
+              text: 'Variáveis são como "caixinhas" com nome para guardar dados. O tipo int guarda números inteiros (como o número do pino ou tempo).',
+              code: 'int pinoLed = 13; // Guarda o número 13 na variável pinoLed\n\nvoid setup() {\n  pinMode(pinoLed, OUTPUT);\n}'
+            },
+            questions: [
+              { title: 'Qual tipo de variável usase para guardar o número de um pino (ex: 13)?', options: ['String', 'float', 'int', 'boolean'], correct: 2, explanation: 'O tipo int guarda números inteiros.' }
+            ]
+          },
+          {
+            id: 's1_l9', title: 'Lição 9: O Som do Buzzer', icon: '🔊',
+            theory: {
+              title: 'Fazendo o Robô Emitir Sons',
+              text: 'O Buzzer Sonoro funciona exatamente como um LED digital: enviando HIGH ele apita e LOW ele se cala!',
+              code: 'int pinoBuzzer = 8;\n\nvoid setup() {\n  pinMode(pinoBuzzer, OUTPUT);\n}\n\nvoid loop() {\n  digitalWrite(pinoBuzzer, HIGH); // Apita!\n  delay(200);\n  digitalWrite(pinoBuzzer, LOW);  // Silêncio\n  delay(1000);\n}'
+            },
+            questions: [
+              { title: 'Como fazemos o Buzzer parar de apitar?', options: ['digitalWrite(pinoBuzzer, LOW);', 'digitalWrite(pinoBuzzer, HIGH);', 'pinMode(pinoBuzzer, OFF);', 'stopSound();'], correct: 0, explanation: 'Enviar LOW corta a energia e cala o Buzzer.' }
+            ]
+          },
+          {
+            id: 's1_l10', title: 'Lição 10: Múltiplos LEDs', icon: '🚦',
+            theory: {
+              title: 'Controlando Vários Pinos',
+              text: 'Você pode declarar e controlar quantas saídas quiser na mesma placa, basta nomear cada pino!',
+              code: 'int ledVerde = 12;\nint ledVermelho = 13;\n\nvoid setup() {\n  pinMode(ledVerde, OUTPUT);\n  pinMode(ledVermelho, OUTPUT);\n}'
+            },
+            questions: [
+              { title: 'Quantas saídas foram configuradas na função setup do código acima?', options: ['Apenas 1', 'Duas saídas (pino 12 e 13)', 'Nenhuma', 'Três saídas'], correct: 1, explanation: 'Foram configurados dois pinos como OUTPUT.' }
+            ]
+          },
+          {
+            id: 's1_l11', title: 'Lição 11: O Que É um Servo Motor?', icon: '⚙️',
+            theory: {
+              title: 'Conhecendo o Motor do Animatrônico',
+              text: 'O Servo Motor (como o SG90) não gira sem parar como uma roda comum. Ele gira para ÂNGULOS EXATOS entre 0° e 180°!\n\nPerfeito para mover bocas, pálpebras e braços do robô.'
+            },
+            questions: [
+              { title: 'Qual é a faixa de rotação padrão do Servo Motor SG90?', options: ['De 0° a 360°', 'De 0° a 180°', 'Apenas 90°', 'De 0° a 1000°'], correct: 1, explanation: 'Servos padrão de robótica giram com precisão de 0 a 180 graus.' }
+            ]
+          },
+          {
+            id: 's1_l12', title: 'Lição 12: A Biblioteca Servo.h', icon: '📚',
+            theory: {
+              title: 'Carregando Comandos de Motores',
+              text: 'Para o Arduino entender comandos de Servo Motor, incluímos a biblioteca Servo.h no topo do arquivo.',
+              code: '#include <Servo.h> // Inclui a biblioteca de servos\n\nServo meuServo;    // Cria um objeto servo com nome meuServo'
+            },
+            questions: [
+              { title: 'Qual comando inclui os recursos de Servo Motor no seu programa?', options: ['import Servo;', '#include <Servo.h>', 'use Servo;', '#define Servo'], correct: 1, explanation: '#include <Servo.h> traz todas as funções prontas do motor.' }
+            ]
+          },
+          {
+            id: 's1_l13', title: 'Lição 13: Conectando o Servo com attach()', icon: '🔗',
+            theory: {
+              title: 'Associando o Servo ao Pino',
+              text: 'No setup(), usamos attach(pino) para avisar ao Arduino em qual pino o fio do Servo está ligado.',
+              code: '#include <Servo.h>\nServo meuServo;\n\nvoid setup() {\n  meuServo.attach(9); // Servo ligado no pino 9\n}'
+            },
+            questions: [
+              { title: 'Qual comando associa o Servo ao pino digital 9 da placa?', options: ['meuServo.attach(9);', 'meuServo.pin(9);', 'pinMode(9, SERVO);', 'meuServo.connect(9);'], correct: 0, explanation: 'attach(pino) conecta o objeto do servo ao pino físico.' }
+            ]
+          },
+          {
+            id: 's1_l14', title: 'Lição 14: Movendo para Ângulos com write()', icon: '🎯',
+            theory: {
+              title: 'Posicionando o Robô com Precisão',
+              text: 'Para fazer o Servo virar para um ângulo específico, usamos write(angulo):\n\n- meuServo.write(0);   -> Roda para a ponta esquerda (0°).\n- meuServo.write(90);  -> Fica centralizado no meio (90°).\n- meuServo.write(180); -> Roda para a ponta direita (180°).',
+              code: 'meuServo.write(90); // Move o motor exatamente para os 90 graus!'
+            },
+            questions: [
+              { title: 'Qual código move o Servo Motor para a posição central de 90 graus?', options: ['meuServo.move(90);', 'meuServo.write(90);', 'digitalWrite(servo, 90);', 'meuServo.rotate(90);'], correct: 1, explanation: 'O método write(90) posiciona o motor no ângulo exato de 90°.' }
+            ]
+          },
+          {
+            id: 's1_l15', title: 'Lição 15: Animação de Mover a Cabeça', icon: '🤖',
+            theory: {
+              title: 'Sua Primeira Animação Robótica!',
+              text: 'Alternando posições com write() e delay(), você faz o robô mover a cabeça ou abrir a boca em ritmo!',
+              code: 'void loop() {\n  meuServo.write(0);   // Olhar para esquerda\n  delay(1000);\n  meuServo.write(180); // Olhar para direita\n  delay(1000);\n}'
+            },
+            questions: [
+              { title: 'O que o código acima faz dentro da função loop()?', options: ['Move o motor de um lado (0°) para o outro (180°) a cada 1 segundo', 'Queima o motor', 'Roda em 360 graus', 'Não faz nada'], correct: 0, explanation: 'O código oscila a posição do servo alternando os ângulos com tempo de espera.' }
+            ]
           }
         ]
       }
@@ -565,89 +731,143 @@
 
     // --- GERADOR INFINITO DE QUESTÕES ---
     function generateRandomQuestion() {
+      const pin = Math.floor(Math.random() * 12) + 2;
+      const angle = [0, 45, 90, 135, 180][Math.floor(Math.random() * 5)];
+      const ms = (Math.floor(Math.random() * 4) + 1) * 1000;
+
       const templates = [
-        () => {
-          const pin = Math.floor(Math.random() * 12) + 2;
-          return {
-            title: `Escolha o comando correto para configurar o pino digital ${pin} como SAÍDA:`,
-            options: [`pinMode(${pin}, OUTPUT);`, `digitalWrite(${pin}, HIGH);`, `pinMode(${pin}, INPUT);`, `setPin(${pin}, OUT);`],
-            correct: 0,
-            explanation: `Usamos pinMode(${pin}, OUTPUT) para definir o pino ${pin} como saída.`
-          };
+        {
+          title: `Qual o comando correto para definir o pino digital ${pin} como SAÍDA?`,
+          options: [`pinMode(${pin}, OUTPUT);`, `digitalWrite(${pin}, HIGH);`, `pinMode(${pin}, INPUT);`, `setPin(${pin});`],
+          correct: 0,
+          explanation: `Usamos pinMode(${pin}, OUTPUT) para configurar pinos de saída.`
         },
-        () => {
-          const pin = Math.floor(Math.random() * 12) + 2;
-          const stateStr = Math.random() > 0.5 ? 'HIGH' : 'LOW';
-          const actionStr = stateStr === 'HIGH' ? 'ligar' : 'desligar';
-          return {
-            title: `Qual linha de código deve ser executada para ${actionStr} o componente no pino ${pin}?`,
-            options: [`digitalWrite(${pin}, ${stateStr});`, `digitalRead(${pin});`, `pinMode(${pin}, ${stateStr});`, `analogWrite(${pin}, 1023);`],
-            correct: 0,
-            explanation: `digitalWrite(${pin}, ${stateStr}) envia a ordem para ${actionStr} o pino.`
-          };
+        {
+          title: `Como mover o Servo Motor diretamente para a posição de ${angle} graus?`,
+          options: [`meuServo.write(${angle});`, `meuServo.turn(${angle});`, `digitalWrite(servo, ${angle});`, `meuServo.set(${angle});`],
+          correct: 0,
+          explanation: `meuServo.write(${angle}) posiciona o rotor nos ${angle}°.`
         },
-        () => {
-          const ms = (Math.floor(Math.random() * 5) + 1) * 1000;
-          return {
-            title: `Para fazer o Arduino pausar o código por exatamente ${ms / 1000} segundo(s), qual comando você usa?`,
-            options: [`delay(${ms});`, `wait(${ms / 1000});`, `delay(${ms / 1000});`, `pause(${ms});`],
-            correct: 0,
-            explanation: `O delay aceita milissegundos. ${ms / 1000}s = ${ms}ms.`
-          };
-        },
-        () => {
-          const angle = [0, 45, 90, 135, 180][Math.floor(Math.random() * 5)];
-          return {
-            title: `Como mover o Servo Motor diretamente para a posição de ${angle} graus?`,
-            options: [`meuServo.write(${angle});`, `meuServo.turn(${angle});`, `digitalWrite(servo, ${angle});`, `meuServo.set(${angle});`],
-            correct: 0,
-            explanation: `meuServo.write(${angle}) posiciona o rotor no ângulo exato de ${angle}°.`
-          };
+        {
+          title: `Para o Arduino aguardar ${ms / 1000} segundos parado, qual comando usase?`,
+          options: [`delay(${ms});`, `wait(${ms / 1000});`, `delay(${ms / 1000});`, `pause(${ms});`],
+          correct: 0,
+          explanation: `O delay mede o tempo em ms (${ms / 1000}s = ${ms}ms).`
         }
       ];
 
-      return templates[Math.floor(Math.random() * templates.length)]();
+      return templates[Math.floor(Math.random() * templates.length)];
     }
 
-    // --- SISTEMA DE LIÇÃO E LÓGICA ---
-    let currentQuestions = [];
+    // --- LÓGICA DE NAVEGAÇÃO E EXERCÍCIOS ---
+    let currentLesson = null;
     let currentQIndex = 0;
     let selectedOptionIndex = null;
     let isInfiniteMode = false;
 
-    function startModule(modId) {
-      const mod = modules.find(m => m.id === modId);
-      if (!mod) return;
+    function renderPath() {
+      const container = document.getElementById('sections-container');
+      container.innerHTML = '';
+
+      sections.forEach((sec) => {
+        const secBox = document.createElement('div');
+        secBox.className = 'section-box';
+
+        let lessonsHTML = '';
+        let previousCompleted = true; // Primeira lição liberada por padrão
+
+        sec.lessons.forEach((les, idx) => {
+          const isCompleted = state.completedLessons.includes(les.id);
+          const isUnlocked = isCompleted || previousCompleted;
+
+          let cardStatusClass = 'locked';
+          let statusIcon = '🔒';
+
+          if (isCompleted) {
+            cardStatusClass = 'completed';
+            statusIcon = '✅';
+          } else if (isUnlocked) {
+            cardStatusClass = 'unlocked';
+            statusIcon = '▶';
+          }
+
+          lessonsHTML += `
+            <div class="lesson-card ${cardStatusClass}" onclick="${isUnlocked ? `openLesson('${sec.id}', '${les.id}')` : ''}">
+              <div class="lesson-info">
+                <span class="lesson-icon">${les.icon}</span>
+                <span class="lesson-title">${les.title}</span>
+              </div>
+              <span class="lesson-status">${statusIcon}</span>
+            </div>
+          `;
+
+          previousCompleted = isCompleted;
+        });
+
+        secBox.innerHTML = `
+          <div class="section-header">
+            <div class="section-title">📍 ${sec.title}</div>
+            <div class="section-desc">${sec.desc}</div>
+          </div>
+          <div class="lessons-list">${lessonsHTML}</div>
+        `;
+
+        container.appendChild(secBox);
+      });
+    }
+
+    function openLesson(secId, lesId) {
+      const sec = sections.find(s => s.id === secId);
+      if (!sec) return;
+      const les = sec.lessons.find(l => l.id === lesId);
+      if (!les) return;
+
       isInfiniteMode = false;
-      currentQuestions = mod.questions;
+      currentLesson = les;
       currentQIndex = 0;
-      openExerciseModal();
+
+      // Exibe Primeiro a Teoria
+      document.getElementById('theory-title').innerText = les.theory.title;
+      document.getElementById('theory-text').innerText = les.theory.text;
+      const codeElem = document.getElementById('theory-code');
+      if (les.theory.code) {
+        codeElem.innerText = les.theory.code;
+        codeElem.classList.remove('hidden');
+      } else {
+        codeElem.classList.add('hidden');
+      }
+
+      document.getElementById('theory-step').classList.remove('hidden');
+      document.getElementById('questions-step').classList.add('hidden');
+      document.getElementById('exercise-modal').classList.add('active');
+    }
+
+    function startQuestionsStep() {
+      document.getElementById('theory-step').classList.add('hidden');
+      document.getElementById('questions-step').classList.remove('hidden');
+      showQuestion();
     }
 
     function startInfinitePractice() {
       isInfiniteMode = true;
-      currentQuestions = [generateRandomQuestion(), generateRandomQuestion(), generateRandomQuestion(), generateRandomQuestion(), generateRandomQuestion()];
+      currentLesson = {
+        id: 'infinite',
+        questions: [generateRandomQuestion(), generateRandomQuestion(), generateRandomQuestion(), generateRandomQuestion()]
+      };
       currentQIndex = 0;
-      openExerciseModal();
-    }
 
-    function openExerciseModal() {
+      document.getElementById('theory-step').classList.add('hidden');
+      document.getElementById('questions-step').classList.remove('hidden');
       document.getElementById('exercise-modal').classList.add('active');
       showQuestion();
     }
 
-    function closeExercise() {
-      document.getElementById('exercise-modal').classList.remove('active');
-      document.getElementById('feedback-sheet').className = 'feedback-sheet';
-    }
-
     function showQuestion() {
-      const q = currentQuestions[currentQIndex];
+      const q = currentLesson.questions[currentQIndex];
       selectedOptionIndex = null;
       document.getElementById('feedback-sheet').className = 'feedback-sheet';
 
-      // Atualiza barra de progresso
-      const pct = (currentQIndex / currentQuestions.length) * 100;
+      const pct = (currentQIndex / currentLesson.questions.length) * 100;
       document.getElementById('exercise-progress').style.width = pct + '%';
 
       document.getElementById('q-title').innerText = q.title;
@@ -680,73 +900,75 @@
     function checkAnswer() {
       if (selectedOptionIndex === null) return;
 
-      const q = currentQuestions[currentQIndex];
+      const q = currentLesson.questions[currentQIndex];
       const isCorrect = selectedOptionIndex === q.correct;
       const sheet = document.getElementById('feedback-sheet');
+      const actions = document.getElementById('fb-actions');
 
       if (isCorrect) {
         playSound('correct');
         sheet.className = 'feedback-sheet correct';
         document.getElementById('fb-title').innerText = '🎉 Excelente!';
         document.getElementById('fb-text').innerText = q.explanation;
+        actions.innerHTML = `<button class="btn-action btn-primary-act" onclick="nextQuestion()">Continuar ▶</button>`;
         state.xp += 15;
       } else {
         playSound('wrong');
         sheet.className = 'feedback-sheet wrong';
-        document.getElementById('fb-title').innerText = '❌ Ops, quase lá!';
-        document.getElementById('fb-text').innerText = `Resposta certa: ${q.options[q.correct]}\n\n${q.explanation}`;
+        document.getElementById('fb-title').innerText = '❌ Ops, não foi dessa vez!';
+        document.getElementById('fb-text').innerText = `Dica: ${q.explanation}`;
+        actions.innerHTML = `
+          <button class="btn-action btn-secondary-act" onclick="retryQuestion()">🔁 Tentar Novamente</button>
+          <button class="btn-action btn-primary-act" onclick="nextQuestion()">⏭️ Pular</button>
+        `;
         state.hearts = Math.max(0, state.hearts - 1);
       }
 
       saveState();
     }
 
+    function retryQuestion() {
+      document.getElementById('feedback-sheet').className = 'feedback-sheet';
+      selectedOptionIndex = null;
+      document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+    }
+
     function nextQuestion() {
       currentQIndex++;
-      if (currentQIndex < currentQuestions.length && state.hearts > 0) {
-        if (isInfiniteMode && currentQIndex === currentQuestions.length - 1) {
-          // Adiciona mais perguntas aleatórias continuamente
-          currentQuestions.push(generateRandomQuestion());
-        }
+      document.getElementById('feedback-sheet').className = 'feedback-sheet';
+
+      if (currentQIndex < currentLesson.questions.length && state.hearts > 0) {
         showQuestion();
       } else {
+        if (state.hearts > 0 && !isInfiniteMode) {
+          if (!state.completedLessons.includes(currentLesson.id)) {
+            state.completedLessons.push(currentLesson.id);
+          }
+          saveState();
+          alert('🏁 Lição concluída com sucesso! Nova lição liberada! 🎉');
+        }
         closeExercise();
-        alert(state.hearts > 0 ? '🏁 Lição concluída com sucesso! +XP' : '💔 Suas vidas acabaram! Pratique mais para recuperar.');
       }
     }
 
-    // --- RENDERIZADORES DE TELA E NAVEGAÇÃO ---
-    function renderPath() {
-      const container = document.getElementById('path-list');
-      container.innerHTML = '';
-
-      modules.forEach((m, idx) => {
-        const card = document.createElement('div');
-        card.className = 'module-card';
-        card.innerHTML = `
-          <div class="module-header">
-            <div class="module-title">${m.title}</div>
-            <div>🌟</div>
-          </div>
-          <div class="module-desc">${m.desc}</div>
-          <button class="btn-start" onclick="startModule('${m.id}')">Começar Lição ▶</button>
-        `;
-        container.appendChild(card);
-      });
+    function closeExercise() {
+      document.getElementById('exercise-modal').classList.remove('active');
+      document.getElementById('feedback-sheet').className = 'feedback-sheet';
     }
 
+    // --- CONQUISTAS E NAVEGAÇÃO ---
     const badges = [
-      { id: 'b1', icon: '🐣', name: 'Primeiro Passo', desc: 'Iniciou a sua jornada no Arduino' },
-      { id: 'b2', icon: '💡', name: 'Mestre dos LEDs', desc: 'Completou o módulo de saídas digitais' },
-      { id: 'b3', icon: '🤖', name: 'Criador de Animatrônicos', desc: 'Aprendeu a mover Servo Motores' },
-      { id: 'b4', icon: '⚡', name: 'Poder Infinito', desc: 'Praticou no Gerador Infinito' }
+      { id: 'b1', icon: '🐣', name: 'Primeiro Passo', desc: 'Iniciou a jornada no ArduinoGo' },
+      { id: 'b2', icon: '💡', name: 'Mestre dos LEDs', desc: 'Completou a Lição de Pisca-Pisca' },
+      { id: 'b3', icon: '⚙️', name: 'Criador de Animatrônicos', desc: 'Aprendeu a posicionar Servo Motores' },
+      { id: 'b4', icon: '⚡', name: 'Poder Infinito', desc: 'Treinou no Gerador Infinito' }
     ];
 
     function renderBadges() {
       const container = document.getElementById('badges-container');
       container.innerHTML = '';
       badges.forEach(b => {
-        const isUnlocked = state.unlockedBadges.includes(b.id);
+        const isUnlocked = state.unlockedBadges.includes(b.id) || state.completedLessons.length >= 3;
         const card = document.createElement('div');
         card.className = `badge-card ${isUnlocked ? 'unlocked' : ''}`;
         card.innerHTML = `
@@ -769,8 +991,7 @@
       document.getElementById(`view-${tabId}`).classList.remove('hidden');
     }
 
-    // --- INICIALIZAÇÃO DA APLICAÇÃO ---
-    renderPath();
+    // --- INICIALIZAÇÃO ---
     updateUI();
   </script>
 </body>
