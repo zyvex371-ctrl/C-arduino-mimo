@@ -18,7 +18,7 @@ const Progress = {
         this.state.completedLessons = parsed.completedLessons || [];
         this.state.unlockedBadges = parsed.unlockedBadges || ['b1'];
       } catch (e) {
-        console.error('Erro ao ler progresso:', e);
+        console.error('Erro ao restaurar dados:', e);
       }
     }
     this.updateUI();
