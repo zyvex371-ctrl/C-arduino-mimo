@@ -143,7 +143,6 @@ const UI = {
       html += `<div class="code-snippet">${step.code}</div>`;
     }
 
-    // 1. RENDERIZAÇÃO DE INTERAÇÃO COM LACUNA ATIVA NO CÓDIGO (NOVO)
     if (step.type === 'interactive_slot') {
       btn.innerText = 'Verificar';
       html += `
@@ -158,9 +157,7 @@ const UI = {
         html += `<button class="chip-btn" onclick="Exercises.selectSlotChip('${chip}', this)">${chip}</button>`;
       });
       html += `</div>`;
-    }
-    // 2. ANATOMIA DE CÓDIGO
-    else if (step.type === 'code_breakdown' && step.breakdown) {
+    } else if (step.type === 'code_breakdown' && step.breakdown) {
       btn.innerText = 'Entendi →';
       html += `<div class="breakdown-grid">`;
       step.breakdown.forEach(item => {
@@ -172,22 +169,16 @@ const UI = {
         `;
       });
       html += `</div>`;
-    }
-    // 3. EXPLICAÇÃO SIMPLES
-    else if (step.type === 'intro' || step.type === 'explanation') {
+    } else if (step.type === 'intro' || step.type === 'explanation') {
       btn.innerText = 'Continuar';
-    }
-    // 4. MÚLTIPLA ESCOLHA
-    else if (step.type === 'quiz' || step.type === 'output_quiz' || step.type === 'true_false') {
+    } else if (step.type === 'quiz' || step.type === 'output_quiz' || step.type === 'true_false') {
       btn.innerText = 'Verificar';
       html += `<div class="options-stack">`;
       step.options.forEach((opt, idx) => {
         html += `<button class="option-card" onclick="Exercises.selectOption(${idx}, this)">${opt}</button>`;
       });
       html += `</div>`;
-    }
-    // 5. DESAFIO DIGITADO
-    else if (step.type === 'code_challenge') {
+    } else if (step.type === 'code_challenge') {
       btn.innerText = 'Verificar';
       html += `
         <div class="fill-input-area">
@@ -199,7 +190,6 @@ const UI = {
     body.innerHTML = html;
   },
 
-  // TELA DE CONCLUSÃO INDEPENDENTE FORA DO FLUXO DE ETAPAS
   showCompletionScreen(lesson, correctCount, totalSteps) {
     document.getElementById('lesson-screen').classList.add('hidden');
     const compScreen = document.getElementById('completion-screen');
@@ -215,6 +205,9 @@ const UI = {
         learnedHtml += `<li class="learned-item">✓ ${c}</li>`;
       });
     }
+
+    const nextTarget = Progress.getNextUncompletedLesson();
+    const nextLessonTitle = nextTarget && nextTarget.lesson ? nextTarget.lesson.title : 'Todas as lições concluídas!';
 
     container.innerHTML = `
       <div class="completion-badge-icon">🎉</div>
@@ -239,12 +232,17 @@ const UI = {
         </ul>
       </div>
 
+      <div style="width:100%; text-align:left; font-size:0.85rem; font-weight:700; color:var(--text-muted);">
+        PRÓXIMA LIÇÃO: <span style="color:var(--primary);">${nextLessonTitle}</span>
+      </div>
+
       <button class="btn-action-primary" onclick="UI.exitCompletionAndContinue()">Continuar trilha →</button>
     `;
   },
 
   exitCompletionAndContinue() {
     document.getElementById('completion-screen').classList.add('hidden');
+    Progress.updateUI();
     this.switchView('dashboard', document.getElementById('nav-dash'));
   },
 
