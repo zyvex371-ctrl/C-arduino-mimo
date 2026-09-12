@@ -60,6 +60,17 @@ const Progress = {
     return Math.min(100, Math.max(0, rawPct));
   },
 
+  getNextUncompletedLesson() {
+    for (const mod of LessonsData) {
+      for (const lesson of mod.lessons) {
+        if (!this.state.completedLessons.includes(lesson.id)) {
+          return { lesson, module: mod };
+        }
+      }
+    }
+    return { lesson: LessonsData[0].lessons[0], module: LessonsData[0] };
+  },
+
   updateUI() {
     document.getElementById('user-xp').innerText = this.state.xp;
     document.getElementById('user-streak').innerText = this.state.streak;
@@ -68,6 +79,14 @@ const Progress = {
     const pct = this.getOverallProgressPercentage();
     document.getElementById('dash-pct-text').innerText = pct + '% Concluído';
     document.getElementById('dash-pct-fill').style.width = pct + '%';
+
+    // ATUALIZA BANNER CONTINUE DE ONDE PAROU
+    const nextTarget = this.getNextUncompletedLesson();
+    if (nextTarget && nextTarget.lesson) {
+      document.getElementById('resume-title').innerText = nextTarget.lesson.title;
+      document.getElementById('resume-sub').innerText = nextTarget.module.title;
+      document.getElementById('btn-resume-action').onclick = () => Exercises.startLesson(nextTarget.lesson.id);
+    }
 
     UI.renderModules();
     UI.renderBadges();
