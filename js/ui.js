@@ -116,11 +116,11 @@ const UI = {
     
     sheet.className = 'feedback-sheet';
     Exercises.selectedOptionIdx = null;
-    Exercises.userPlacedBlocks = [];
+    Exercises.selectedSlotChip = null;
 
     btn.disabled = true;
 
-    const isInformative = ['intro', 'explanation', 'code_breakdown', 'summary', 'completion'].includes(step.type);
+    const isInformative = ['intro', 'explanation', 'code_breakdown'].includes(step.type);
     if (isInformative) {
       skipBtn.classList.add('hidden');
       btn.disabled = false;
@@ -131,7 +131,7 @@ const UI = {
     const totalSteps = Exercises.activeLesson.steps.length;
     const pct = Math.round(((Exercises.currentStepIdx + 1) / totalSteps) * 100);
     document.getElementById('lesson-progress-fill').style.width = pct + '%';
-    document.getElementById('step-counter').innerText = `ETAPA ${Exercises.currentStepIdx + 1} DE ${totalSteps}`;
+    document.getElementById('step-counter').innerText = `${Exercises.currentStepIdx + 1} DE ${totalSteps}`;
 
     let html = `
       <span class="step-badge">${step.badge || 'Aprender'}</span>
@@ -143,7 +143,24 @@ const UI = {
       html += `<div class="code-snippet">${step.code}</div>`;
     }
 
-    if (step.type === 'code_breakdown' && step.breakdown) {
+    // 1. RENDERIZAÇÃO DE INTERAÇÃO COM LACUNA ATIVA NO CÓDIGO (NOVO)
+    if (step.type === 'interactive_slot') {
+      btn.innerText = 'Verificar';
+      html += `
+        <div class="code-slot-area">
+          <span>${step.codeBefore || ''}</span>
+          <span class="active-code-slot" id="active-slot">___</span>
+          <span>${step.codeAfter || ''}</span>
+        </div>
+        <div class="chip-palette">
+      `;
+      step.chips.forEach(chip => {
+        html += `<button class="chip-btn" onclick="Exercises.selectSlotChip('${chip}', this)">${chip}</button>`;
+      });
+      html += `</div>`;
+    }
+    // 2. ANATOMIA DE CÓDIGO
+    else if (step.type === 'code_breakdown' && step.breakdown) {
       btn.innerText = 'Entendi →';
       html += `<div class="breakdown-grid">`;
       step.breakdown.forEach(item => {
@@ -155,52 +172,22 @@ const UI = {
         `;
       });
       html += `</div>`;
-    } else if (step.type === 'summary' && step.summaryItems) {
-      btn.innerText = 'Continuar →';
-      html += `<div class="summary-card">`;
-      step.summaryItems.forEach(item => {
-        html += `<div class="summary-item">${item}</div>`;
-      });
-      html += `</div>`;
-    } else if (step.type === 'completion') {
-      btn.innerText = 'CONTINUAR PARA A PRÓXIMA LIÇÃO →';
-      html += `
-        <div class="completion-card">
-          <div class="completion-icon">🎉</div>
-          <div style="font-size:1.4rem; font-weight:800; color:#fff;">${step.title}</div>
-          <div style="font-size:1rem; color:var(--text-muted); font-weight:600;">"${step.subtitle || Exercises.activeLesson.title}"</div>
-          <div class="completion-xp-tag">+50 XP GANHOS</div>
-          <div style="width:100%; height:12px; background:var(--editor-bg); border-radius:6px; overflow:hidden; border:1px solid var(--panel-border); margin:10px 0;">
-            <div style="width:100%; height:100%; background:linear-gradient(90deg, var(--primary), var(--secondary));"></div>
-          </div>
-          <div class="summary-card" style="width:100%; margin-bottom:0; text-align:left;">
-      `;
-      if (step.summaryItems) {
-        step.summaryItems.forEach(item => {
-          html += `<div class="summary-item">${item}</div>`;
-        });
-      }
-      html += `</div></div>`;
-    } else if (step.type === 'intro' || step.type === 'explanation') {
+    }
+    // 3. EXPLICAÇÃO SIMPLES
+    else if (step.type === 'intro' || step.type === 'explanation') {
       btn.innerText = 'Continuar';
-    } else if (step.type === 'quiz' || step.type === 'output_quiz' || step.type === 'true_false') {
+    }
+    // 4. MÚLTIPLA ESCOLHA
+    else if (step.type === 'quiz' || step.type === 'output_quiz' || step.type === 'true_false') {
       btn.innerText = 'Verificar';
       html += `<div class="options-stack">`;
       step.options.forEach((opt, idx) => {
         html += `<button class="option-card" onclick="Exercises.selectOption(${idx}, this)">${opt}</button>`;
       });
       html += `</div>`;
-    } else if (step.type === 'fill_blank') {
-      btn.innerText = 'Verificar';
-      const templateWithInput = step.codeTemplate.replace('___', `<input type="text" id="blank-input" class="inline-code-input" placeholder="?" autocomplete="off" oninput="Exercises.checkInputState()">`);
-      html += `<div class="fill-input-area">${templateWithInput}</div>`;
-    } else if (step.type === 'blocks') {
-      btn.innerText = 'Verificar';
-      html += `
-        <div class="answer-drop-zone" id="drop-zone"></div>
-        <div class="blocks-container" id="blocks-palette"></div>
-      `;
-    } else if (step.type === 'code_challenge') {
+    }
+    // 5. DESAFIO DIGITADO
+    else if (step.type === 'code_challenge') {
       btn.innerText = 'Verificar';
       html += `
         <div class="fill-input-area">
@@ -210,10 +197,55 @@ const UI = {
     }
 
     body.innerHTML = html;
+  },
 
-    if (step.type === 'blocks') {
-      Exercises.renderBlocksWidget(step.available);
+  // TELA DE CONCLUSÃO INDEPENDENTE FORA DO FLUXO DE ETAPAS
+  showCompletionScreen(lesson, correctCount, totalSteps) {
+    document.getElementById('lesson-screen').classList.add('hidden');
+    const compScreen = document.getElementById('completion-screen');
+    const container = document.getElementById('completion-container');
+    
+    compScreen.classList.remove('hidden');
+
+    const accuracyPct = Math.round((correctCount / totalSteps) * 100);
+
+    let learnedHtml = '';
+    if (lesson.learnedConcepts) {
+      lesson.learnedConcepts.forEach(c => {
+        learnedHtml += `<li class="learned-item">✓ ${c}</li>`;
+      });
     }
+
+    container.innerHTML = `
+      <div class="completion-badge-icon">🎉</div>
+      <div class="completion-hero-title">Lição Concluída!</div>
+      <div class="completion-lesson-name">${lesson.title}</div>
+      
+      <div class="completion-stats-grid">
+        <div class="stat-box">
+          <div class="stat-val">+100 XP</div>
+          <div class="stat-lbl">Recompensa</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-val">${correctCount}/${totalSteps}</div>
+          <div class="stat-lbl">Aproveitamento (${accuracyPct}%)</div>
+        </div>
+      </div>
+
+      <div class="learned-card">
+        <div class="learned-title">O que você aprendeu:</div>
+        <ul class="learned-list">
+          ${learnedHtml}
+        </ul>
+      </div>
+
+      <button class="btn-action-primary" onclick="UI.exitCompletionAndContinue()">Continuar trilha →</button>
+    `;
+  },
+
+  exitCompletionAndContinue() {
+    document.getElementById('completion-screen').classList.add('hidden');
+    this.switchView('dashboard', document.getElementById('nav-dash'));
   },
 
   exitLesson() {
