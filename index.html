@@ -202,7 +202,7 @@
     .node-tag { font-family: 'Fira Code', monospace; font-size: 0.75rem; background: var(--panel-bg); padding: 4px 8px; border-radius: 6px; border: 1px solid var(--panel-border); color: var(--primary); }
     .node-title { font-weight: 700; font-size: 0.92rem; }
 
-    /* --- OVERLAY DA LIÇÃO --- */
+    /* --- OVERLAY DA EXPERIÊNCIA DE LIÇÃO --- */
     .lesson-screen-overlay {
       position: fixed; inset: 0;
       background: var(--bg-dark);
@@ -250,12 +250,25 @@
       color: var(--text-muted);
     }
 
+    .btn-skip-step {
+      background: var(--editor-bg);
+      border: 1px solid var(--panel-border);
+      color: var(--text-muted);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .btn-skip-step:hover { color: var(--text-main); border-color: var(--panel-hover); }
+
     .lesson-body {
       flex: 1;
       max-width: 680px;
       width: 100%;
       margin: 0 auto;
-      padding: 30px 20px 120px 20px;
+      padding: 40px 20px 120px 20px;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -359,9 +372,7 @@
       box-shadow: 0 0 30px var(--primary-glow);
     }
 
-    .completion-icon {
-      font-size: 3rem;
-    }
+    .completion-icon { font-size: 3rem; }
 
     .completion-xp-tag {
       background: rgba(6, 182, 212, 0.15);
@@ -412,7 +423,7 @@
       font-family: 'Fira Code', monospace;
       font-size: 0.95rem;
       font-weight: 700;
-      padding: 4px 10px;
+      padding: 6px 12px;
       border-radius: 8px;
       outline: none;
       width: 140px;
@@ -465,9 +476,15 @@
       box-shadow: 0 0 20px var(--primary-glow);
       transition: all 0.2s ease;
     }
-    .btn-action-primary:hover { filter: brightness(1.1); transform: translateY(-1px); }
+    .btn-action-primary:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      box-shadow: none;
+      filter: grayscale(1);
+    }
+    .btn-action-primary:hover:not(:disabled) { filter: brightness(1.1); transform: translateY(-1px); }
 
-    /* SHEET DE FEEDBACK IMEDIATO */
+    /* SHEET DE FEEDBACK IMEDIATO (SINAIS DISTINTOS PARA CERTO E ERRADO) */
     .feedback-sheet {
       position: fixed; bottom: 0; left: 0; right: 0;
       padding: 24px 20px 28px 20px;
@@ -478,8 +495,8 @@
     }
     @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
-    .feedback-sheet.correct { background: #064e3b; border-top: 3px solid var(--success); display: flex; }
-    .feedback-sheet.wrong { background: #7f1d1d; border-top: 3px solid var(--danger); display: flex; }
+    .feedback-sheet.correct { background: #064e3b; border-top: 4px solid var(--success); display: flex; }
+    .feedback-sheet.wrong { background: #7f1d1d; border-top: 4px solid var(--danger); display: flex; }
 
     .feedback-content { width: 100%; max-width: 640px; display: flex; flex-direction: column; gap: 8px; }
     .feedback-title { font-weight: 800; font-size: 1.15rem; display: flex; align-items: center; gap: 8px; }
@@ -596,6 +613,7 @@
 </head>
 <body>
 
+  <!-- SIDEBAR DESKTOP -->
   <aside>
     <div class="brand">
       <div class="brand-icon">⚡</div>
@@ -614,6 +632,7 @@
     </ul>
   </aside>
 
+  <!-- CONTAINER PRINCIPAL -->
   <div class="app-container">
     <header>
       <div style="font-weight: 700; font-size: 0.9rem; color: var(--text-muted);">
@@ -627,6 +646,7 @@
     </header>
 
     <main>
+      <!-- VIEW 1: DASHBOARD -->
       <section id="view-dashboard">
         <div class="dash-hero">
           <h1>Olá, Desenvolvedor 👋</h1>
@@ -644,11 +664,13 @@
         <div id="modules-container"></div>
       </section>
 
+      <!-- VIEW 2: CURRÍCULO DEDICADO -->
       <section id="view-curriculum" class="hidden">
         <div class="section-title-head">🔧 Trilha Completa de C++ & Robótica</div>
         <div id="full-curriculum-container"></div>
       </section>
 
+      <!-- VIEW 3: IDE PLAYGROUND -->
       <section id="view-ide" class="hidden">
         <div class="section-title-head">🔧 IDE Playground — Laboratório Livre</div>
         <div class="ide-window">
@@ -674,6 +696,7 @@ void loop() {
               </div>
             </div>
 
+            <!-- HARDWARE REALISTA SIMULADOR -->
             <div class="hardware-pane">
               <div class="sim-card-3d">
                 <div style="font-size:0.75rem; font-weight:800; letter-spacing:1px; color:var(--secondary);">HARDWARE REALISTA VIRTUAL</div>
@@ -700,6 +723,7 @@ void loop() {
         </div>
       </section>
 
+      <!-- VIEW 4: PROJETOS -->
       <section id="view-projects" class="hidden">
         <div class="section-title-head">🧩 Projetos Práticos de Robótica</div>
         <div class="projects-grid">
@@ -722,6 +746,7 @@ void loop() {
         </div>
       </section>
 
+      <!-- VIEW 5: BADGES -->
       <section id="view-badges" class="hidden">
         <div class="section-title-head">🏆 Suas Conquistas</div>
         <div class="projects-grid" id="badges-container"></div>
@@ -729,6 +754,7 @@ void loop() {
     </main>
   </div>
 
+  <!-- OVERLAY DE EXPERIÊNCIA DE LIÇÃO -->
   <div class="lesson-screen-overlay hidden" id="lesson-screen">
     <div class="lesson-header">
       <button class="btn-close-lesson" onclick="exitLesson()">✕</button>
@@ -736,24 +762,27 @@ void loop() {
         <div class="lesson-progress-fill" id="lesson-progress-fill"></div>
       </div>
       <div class="step-counter" id="step-counter">ETAPA 1 DE 15</div>
+      <button class="btn-skip-step" id="btn-skip-step" onclick="skipStep()">Pular</button>
     </div>
 
     <div class="lesson-body" id="lesson-body">
-      </div>
+      <!-- O CONTEÚDO DA ETAPA É INJETADO AQUI DINAMICAMENTE -->
+    </div>
 
     <div class="lesson-footer-bar">
-      <button class="btn-action-primary" id="btn-step-action" onclick="handleStepAction()">Continuar</button>
+      <button class="btn-action-primary" id="btn-step-action" onclick="handleStepAction()" disabled>Verificar</button>
     </div>
 
     <div class="feedback-sheet" id="feedback-sheet">
       <div class="feedback-content">
         <div class="feedback-title" id="fb-title"></div>
         <div class="feedback-text" id="fb-text"></div>
-        <button class="btn-action-primary" style="margin-top:8px; background:#fff; color:#020617;" onclick="nextStep()">Avançar ▶</button>
+        <button class="btn-action-primary" id="btn-feedback-action" style="margin-top:8px;" onclick="handleFeedbackAction()">Continuar</button>
       </div>
     </div>
   </div>
 
+  <!-- NAV MOBILE -->
   <nav class="mobile-nav">
     <button class="mobile-btn active" onclick="switchView('dashboard', this)"><span>🏠</span>Início</button>
     <button class="mobile-btn" onclick="switchView('curriculum', this)"><span>💻</span>Trilha</button>
@@ -888,7 +917,7 @@ void loop() {
                 code: 'int velocidade = 80;',
                 options: ['int', 'velocidade', '80', '='],
                 correct: 0,
-                explanation: '"int" é o tipo reservado em C++ para declarar números inteiros (integer).'
+                explanation: 'Correto! "int" é a palavra-chave reservada em C++ para o tipo inteiro.'
               },
               {
                 type: 'fill_blank',
@@ -897,7 +926,7 @@ void loop() {
                 text: 'Crie uma variável chamada "pino" que guarde o valor 13:',
                 codeTemplate: '___ pino = 13;',
                 correctAnswer: 'int',
-                explanation: 'A palavra-chave "int" deve vir antes do nome da variável.'
+                explanation: 'Perfeito! "int" deve anteceder o nome da variável.'
               },
               {
                 type: 'true_false',
@@ -915,7 +944,7 @@ void loop() {
                 text: 'Organize os blocos para declarar a variável "brilho" com valor 255:',
                 available: ['255;', '=', 'brilho', 'int'],
                 correctOrder: ['int', 'brilho', '=', '255;'],
-                explanation: 'A ordem correta é: Tipo + Nome + Igual + Valor e Ponto-e-vírgula (;).'
+                explanation: 'Excelente! A ordem correta é Tipo + Nome + Igual + Valor + Ponto-e-vírgula.'
               },
               {
                 type: 'output_quiz',
@@ -960,7 +989,7 @@ void loop() {
                 text: 'Escreva a linha completa em C++ para declarar a variável "score" com o valor 100:',
                 placeholder: 'int score = 100;',
                 correctKeywords: ['int', 'score', '=', '100;'],
-                explanation: 'Excelente! Você completou a declaração com sucesso!'
+                explanation: 'Excelente! Você completou a declaração de código C++ com sucesso!'
               },
 
               // ETAPAS 14 A 15: RESUMO E CONCLUSÃO
@@ -1042,7 +1071,7 @@ void loop() {
                 title: 'Qual função configura o modo do pino?',
                 options: ['pinMode()', 'digitalWrite()', 'setup()', 'start()'],
                 correct: 0,
-                explanation: 'pinMode() é o comando oficial para configurar pinos no Arduino.'
+                explanation: 'pinMode() é a função oficial para configurar pinos no Arduino.'
               },
               {
                 type: 'fill_blank',
@@ -1197,6 +1226,8 @@ void loop() {
     let currentStepIdx = 0;
     let selectedOptionIdx = null;
     let userPlacedBlocks = [];
+    let isCurrentStepAnswered = false;
+    let isCurrentStepCorrect = false;
 
     function startLesson(lessonId) {
       for (const mod of modulesData) {
@@ -1219,11 +1250,26 @@ void loop() {
       const step = activeLesson.steps[currentStepIdx];
       const body = document.getElementById('lesson-body');
       const btn = document.getElementById('btn-step-action');
+      const skipBtn = document.getElementById('btn-skip-step');
       const sheet = document.getElementById('feedback-sheet');
       
       sheet.className = 'feedback-sheet';
       selectedOptionIdx = null;
       userPlacedBlocks = [];
+      isCurrentStepAnswered = false;
+      isCurrentStepCorrect = false;
+
+      // Resetar botão principal
+      btn.disabled = true;
+
+      // Exibir/Ocultar botão pular
+      const isInformative = ['intro', 'explanation', 'code_breakdown', 'summary', 'completion'].includes(step.type);
+      if (isInformative) {
+        skipBtn.classList.add('hidden');
+        btn.disabled = false;
+      } else {
+        skipBtn.classList.remove('hidden');
+      }
 
       // Progresso da Lição (Ex: ETAPA 5 DE 15)
       const totalSteps = activeLesson.steps.length;
@@ -1241,7 +1287,7 @@ void loop() {
         html += `<div class="code-snippet">${step.code}</div>`;
       }
 
-      // 1. RENDERIZAÇÃO DE ANATOMIA DE CÓDIGO
+      // 1. ANATOMIA DE CÓDIGO
       if (step.type === 'code_breakdown' && step.breakdown) {
         btn.innerText = 'Entendi →';
         html += `<div class="breakdown-grid">`;
@@ -1255,7 +1301,7 @@ void loop() {
         });
         html += `</div>`;
       }
-      // 2. RENDERIZAÇÃO DE RESUMO
+      // 2. RESUMO
       else if (step.type === 'summary' && step.summaryItems) {
         btn.innerText = 'Continuar →';
         html += `<div class="summary-card">`;
@@ -1264,7 +1310,7 @@ void loop() {
         });
         html += `</div>`;
       }
-      // 3. RENDERIZAÇÃO DE TELA DE CONCLUSÃO COMPLETA
+      // 3. TELA DE CONCLUSÃO COMPLETA
       else if (step.type === 'completion') {
         btn.innerText = 'CONTINUAR PARA A PRÓXIMA LIÇÃO →';
         html += `
@@ -1285,7 +1331,7 @@ void loop() {
         }
         html += `</div></div>`;
       }
-      // 4. RENDERIZAÇÃO DE EXPLICAÇÕES SIMPLES
+      // 4. EXPLICAÇÕES SIMPLES
       else if (step.type === 'intro' || step.type === 'explanation') {
         btn.innerText = 'Continuar';
       }
@@ -1301,7 +1347,7 @@ void loop() {
       // 6. WIDGET DE LACUNA
       else if (step.type === 'fill_blank') {
         btn.innerText = 'Verificar';
-        const templateWithInput = step.codeTemplate.replace('___', `<input type="text" id="blank-input" class="inline-code-input" placeholder="?" autocomplete="off">`);
+        const templateWithInput = step.codeTemplate.replace('___', `<input type="text" id="blank-input" class="inline-code-input" placeholder="?" autocomplete="off" oninput="checkInputState()">`);
         html += `<div class="fill-input-area">${templateWithInput}</div>`;
       }
       // 7. WIDGET DE BLOCOS
@@ -1317,7 +1363,7 @@ void loop() {
         btn.innerText = 'Verificar';
         html += `
           <div class="fill-input-area">
-            <input type="text" id="challenge-input" class="inline-code-input" style="width:100%; text-align:left;" placeholder="${step.placeholder}" autocomplete="off">
+            <input type="text" id="challenge-input" class="inline-code-input" style="width:100%; text-align:left;" placeholder="${step.placeholder}" autocomplete="off" oninput="checkInputState()">
           </div>
         `;
       }
@@ -1329,15 +1375,31 @@ void loop() {
       }
     }
 
+    function checkInputState() {
+      const btn = document.getElementById('btn-step-action');
+      const inputBlank = document.getElementById('blank-input');
+      const inputChallenge = document.getElementById('challenge-input');
+
+      if (inputBlank && inputBlank.value.trim().length > 0) {
+        btn.disabled = false;
+      } else if (inputChallenge && inputChallenge.value.trim().length > 0) {
+        btn.disabled = false;
+      } else {
+        btn.disabled = true;
+      }
+    }
+
     function selectOption(idx, btn) {
       selectedOptionIdx = idx;
       document.querySelectorAll('.option-card').forEach(b => b.classList.remove('selected'));
       btn.classList.add('selected');
+      document.getElementById('btn-step-action').disabled = false;
     }
 
     function renderBlocksWidget(available) {
       const palette = document.getElementById('blocks-palette');
       const dropZone = document.getElementById('drop-zone');
+      const btn = document.getElementById('btn-step-action');
       if (!palette || !dropZone) return;
 
       palette.innerHTML = '';
@@ -1360,6 +1422,13 @@ void loop() {
         b.onclick = () => { userPlacedBlocks.splice(i, 1); renderBlocksWidget(available); };
         dropZone.appendChild(b);
       });
+
+      if (btn) btn.disabled = userPlacedBlocks.length === 0;
+    }
+
+    function skipStep() {
+      // Pula a etapa atual sem dar recompensa nem tirar vidas
+      nextStep();
     }
 
     function handleStepAction() {
@@ -1372,7 +1441,7 @@ void loop() {
         return;
       }
 
-      // TELA DE CONCLUSÃO CONCLUI A LIÇÃO E ATUALIZA ESTADO
+      // TELA DE CONCLUSÃO CONCLUI A LIÇÃO
       if (step.type === 'completion') {
         state.xp += 50;
         if (!state.completedLessons.includes(activeLesson.id)) {
@@ -1383,35 +1452,52 @@ void loop() {
         return;
       }
 
-      let isCorrect = false;
+      isCurrentStepCorrect = false;
 
       if (step.type === 'quiz' || step.type === 'output_quiz' || step.type === 'true_false') {
         if (selectedOptionIdx === null) return;
-        isCorrect = selectedOptionIdx === step.correct;
+        isCurrentStepCorrect = selectedOptionIdx === step.correct;
       } else if (step.type === 'fill_blank') {
         const val = document.getElementById('blank-input').value.trim();
-        isCorrect = val.toLowerCase() === step.correctAnswer.toLowerCase();
+        isCurrentStepCorrect = val.toLowerCase() === step.correctAnswer.toLowerCase();
       } else if (step.type === 'blocks') {
-        isCorrect = userPlacedBlocks.join('') === step.correctOrder.join('');
+        isCurrentStepCorrect = userPlacedBlocks.join('') === step.correctOrder.join('');
       } else if (step.type === 'code_challenge') {
         const val = document.getElementById('challenge-input').value.trim();
-        isCorrect = step.correctKeywords.every(k => val.includes(k));
+        isCurrentStepCorrect = step.correctKeywords.every(k => val.includes(k));
       }
 
-      if (isCorrect) {
+      const fbBtn = document.getElementById('btn-feedback-action');
+
+      if (isCurrentStepCorrect) {
         playSound('correct');
         sheet.className = 'feedback-sheet correct';
         document.getElementById('fb-title').innerHTML = '✓ Correto!';
         document.getElementById('fb-text').innerText = step.explanation || 'Você compreendeu a lógica!';
+        fbBtn.innerText = 'Continuar';
         state.xp += 10;
+        saveState();
       } else {
         playSound('wrong');
         sheet.className = 'feedback-sheet wrong';
         document.getElementById('fb-title').innerHTML = '✕ Quase!';
         document.getElementById('fb-text').innerText = step.explanation || 'Confira a explicação e tente novamente.';
+        fbBtn.innerText = 'Tentar novamente';
         state.hearts = Math.max(0, state.hearts - 1);
+        saveState();
       }
-      saveState();
+    }
+
+    function handleFeedbackAction() {
+      const sheet = document.getElementById('feedback-sheet');
+      sheet.className = 'feedback-sheet';
+
+      if (isCurrentStepCorrect) {
+        nextStep();
+      } else {
+        // Tentar novamente: Reinicia a etapa mantendo o aluno nela
+        renderCurrentStep();
+      }
     }
 
     function nextStep() {
