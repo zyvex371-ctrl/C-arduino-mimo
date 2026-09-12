@@ -42,7 +42,6 @@ const LessonsData = [
               { token: ';', label: 'Fim de Linha' }
             ]
           },
-          // NOVO FORMATO DE EXERCÍCIO COM LACUNA ATIVA (INSPIRADO NA REFERÊNCIA)
           {
             type: 'interactive_slot',
             badge: '4/10 Prática no Código',
@@ -115,6 +114,73 @@ const LessonsData = [
             explanation: 'Incrível! Você dominou o conceito de variáveis em C++!'
           }
         ]
+      },
+      {
+        id: 'l2',
+        title: '02. Operadores Lógicos & Decisões',
+        tag: 'Estruturas',
+        learnedConcepts: [
+          'Estrutura condicional if (condicao)',
+          'Operadores de comparação: ==, !=, <, <=, >, >=',
+          'Bloco de código com chaves {}'
+        ],
+        steps: [
+          {
+            type: 'intro',
+            badge: '1/6 Condicionais',
+            title: 'Tomando Decisões com if',
+            text: 'O bloco if permite que seu código execute uma instrução apenas se uma condição for verdadeira.',
+            code: 'if (idade >= 18) {\n  // Acesso liberado\n}'
+          },
+          {
+            type: 'interactive_slot',
+            badge: '2/6 Comparação de Valores',
+            title: 'Complete a condição do código',
+            text: 'Preencha a lacuna para verificar se a temperatura é maior ou igual a 30:',
+            codeBefore: 'if (temperatura ',
+            codeAfter: ' 30) {\n  Serial.println("Quente!");\n}',
+            chips: ['>=', '<=', '==', '!='],
+            correctAnswer: '>=',
+            explanation: 'Perfeito! >= é o operador "maior ou igual a".'
+          },
+          {
+            type: 'quiz',
+            badge: '3/6 Operador de Igualdade',
+            title: 'Qual operador compara se dois valores são IGUAIS?',
+            options: ['==', '=', '!=', '>='],
+            correct: 0,
+            explanation: 'Em C++, usamos == para comparar igualdade e = para atribuir valor.'
+          },
+          {
+            type: 'interactive_slot',
+            badge: '4/6 Prática de Igualdade',
+            title: 'Verifique se o botão foi pressionado',
+            text: 'Preencha a lacuna para comparar se o estado é igual a 1:',
+            codeBefore: 'if (botao ',
+            codeAfter: ' 1) {\n  digitalWrite(13, HIGH);\n}',
+            chips: ['==', '=', '<', '&&'],
+            correctAnswer: '==',
+            explanation: 'Excelente! Usamos == dentro dos parênteses do if.'
+          },
+          {
+            type: 'true_false',
+            badge: '5/6 Blocos de Código',
+            title: 'Verdadeiro ou Falso',
+            text: 'O código dentro das chaves {} só roda se a condição do if for verdadeira.',
+            options: ['Verdadeiro', 'Falso'],
+            correct: 0,
+            explanation: 'Exato! Se for falsa, o programa pula o bloco.'
+          },
+          {
+            type: 'code_challenge',
+            badge: '6/6 Desafio Final',
+            title: 'Escreva a condição!',
+            text: 'Escreva o comando para verificar se idade é maior que 10:',
+            placeholder: 'if (idade > 10)',
+            correctKeywords: ['if', 'idade', '>', '10'],
+            explanation: 'Sensacional! Você dominou o bloco condicional!'
+          }
+        ]
       }
     ]
   },
@@ -124,8 +190,8 @@ const LessonsData = [
     desc: 'Controle o envio de energia no Arduino.',
     lessons: [
       {
-        id: 'l2',
-        title: '02. Configurando Saídas com pinMode()',
+        id: 'l3',
+        title: '03. Configurando Saídas com pinMode()',
         tag: 'Arduino',
         learnedConcepts: [
           'Papel dos pinos digitais do Arduino',
