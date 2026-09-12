@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ArduinoGo — Aprenda C++ & Robótica Passo a Passo</title>
+  <title>ArduinoGo — Plataforma Interativa de C++ & Robótica</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -15,7 +15,7 @@
       --panel-border: #1e293b;
       --panel-hover: #334155;
       
-      /* IDENTIDADE CIANO/AZUL */
+      /* IDENTIDADE AZUL / CIANO */
       --primary: #06b6d4;
       --primary-hover: #0891b2;
       --primary-glow: rgba(6, 182, 212, 0.35);
@@ -202,7 +202,7 @@
     .node-tag { font-family: 'Fira Code', monospace; font-size: 0.75rem; background: var(--panel-bg); padding: 4px 8px; border-radius: 6px; border: 1px solid var(--panel-border); color: var(--primary); }
     .node-title { font-weight: 700; font-size: 0.92rem; }
 
-    /* --- OVERLAY DA EXPERIÊNCIA DE LIÇÃO --- */
+    /* --- OVERLAY DA LIÇÃO --- */
     .lesson-screen-overlay {
       position: fixed; inset: 0;
       background: var(--bg-dark);
@@ -286,10 +286,10 @@
       margin-bottom: 20px;
     }
 
-    /* DECOMPOSIÇÃO VISUAL DE CÓDIGO (ANATOMIA DE C++) */
+    /* DECOMPOSIÇÃO VISUAL DE CÓDIGO (ANATOMIA) */
     .breakdown-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
       gap: 10px;
       margin-bottom: 20px;
     }
@@ -309,7 +309,7 @@
     .breakdown-token {
       font-family: 'Fira Code', monospace;
       font-weight: 700;
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       color: var(--secondary);
       background: var(--panel-bg);
       padding: 4px 8px;
@@ -325,16 +325,16 @@
       text-transform: uppercase;
     }
 
-    /* CARD DE RESUMO FINAL */
+    /* CARDS DE RESUMO E CONCLUSÃO */
     .summary-card {
       background: var(--panel-bg);
       border: 1px solid var(--panel-border);
       border-radius: 16px;
-      padding: 20px;
+      padding: 22px;
       margin-bottom: 20px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
     }
 
     .summary-item {
@@ -344,6 +344,33 @@
       font-size: 0.95rem;
       font-weight: 600;
       color: var(--text-main);
+    }
+
+    .completion-card {
+      background: linear-gradient(135deg, rgba(15,23,42,0.95), rgba(7,10,18,0.95));
+      border: 1px solid var(--primary);
+      border-radius: 20px;
+      padding: 28px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 0 30px var(--primary-glow);
+    }
+
+    .completion-icon {
+      font-size: 3rem;
+    }
+
+    .completion-xp-tag {
+      background: rgba(6, 182, 212, 0.15);
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-weight: 800;
+      font-size: 1.1rem;
     }
 
     /* WIDGETS DE INTERAÇÃO */
@@ -708,7 +735,7 @@ void loop() {
       <div class="lesson-progress-container">
         <div class="lesson-progress-fill" id="lesson-progress-fill"></div>
       </div>
-      <div class="step-counter" id="step-counter">1/15</div>
+      <div class="step-counter" id="step-counter">ETAPA 1 DE 15</div>
     </div>
 
     <div class="lesson-body" id="lesson-body">
@@ -769,10 +796,10 @@ void loop() {
       let totalLessons = 0;
       modulesData.forEach(m => totalLessons += m.lessons.length);
       
-      // Cálculo de progresso corrigido (máximo 100%)
+      // Cálculo estrito de progresso (0% a 100%)
       const completedCount = state.completedLessons.length;
-      const rawPct = Math.round((completedCount / totalLessons) * 100);
-      const pct = Math.min(100, Math.max(0, rawPct)) || 0;
+      const rawPct = totalLessons > 0 ? Math.round((completedCount / totalLessons) * 100) : 0;
+      const pct = Math.min(100, Math.max(0, rawPct));
       
       document.getElementById('dash-pct-text').innerText = pct + '% Concluído';
       document.getElementById('dash-pct-fill').style.width = pct + '%';
@@ -861,7 +888,7 @@ void loop() {
                 code: 'int velocidade = 80;',
                 options: ['int', 'velocidade', '80', '='],
                 correct: 0,
-                explanation: '"int" é o tipo reservado para números inteiros (integer).'
+                explanation: '"int" é o tipo reservado em C++ para declarar números inteiros (integer).'
               },
               {
                 type: 'fill_blank',
@@ -940,19 +967,25 @@ void loop() {
               {
                 type: 'summary',
                 badge: '14/15 Resumo da Lição',
-                title: 'O que você aprendeu hoje:',
+                title: 'O que você aprendeu nesta aula:',
                 summaryItems: [
                   '✓ O conceito de variáveis como caixas de memória',
-                  '✓ O tipo int para números inteiros',
-                  '✓ A sintaxe de declaração com o operador = e o ponto-e-vírgula ;',
-                  '✓ Como atualizar o valor guardado em uma variável'
+                  '✓ O tipo int para representar números inteiros',
+                  '✓ A sintaxe com o operador = e o ponto-e-vírgula ;',
+                  '✓ Como atualizar o valor armazenado em uma variável'
                 ]
               },
               {
                 type: 'completion',
-                badge: '15/15 Lição Concluída',
-                title: '🎉 Parabéns! Lição Concluída!',
-                text: 'Você concluiu a jornada de "Variáveis e Números em C++" com maestria!'
+                badge: '15/15 Conclusão',
+                title: 'LIÇÃO CONCLUÍDA',
+                subtitle: 'Variáveis e Números em C++',
+                summaryItems: [
+                  '✓ Aprendeu o que é uma variável',
+                  '✓ Dominou a declaração do tipo "int"',
+                  '✓ Praticou a atribuição e alteração de valores',
+                  '✓ Concluiu o desafio de código C++'
+                ]
               }
             ]
           }
@@ -1094,8 +1127,14 @@ void loop() {
               {
                 type: 'completion',
                 badge: '15/15 Conclusão',
-                title: '🎉 Excelente Trabalho!',
-                text: 'Você dominou a configuração de pinos do Arduino!'
+                title: 'LIÇÃO CONCLUÍDA',
+                subtitle: 'Configurando Saídas com pinMode()',
+                summaryItems: [
+                  '✓ Aprendeu os pinos digitais',
+                  '✓ Dominou a função pinMode()',
+                  '✓ Configurou saídas OUTPUT',
+                  '✓ Concluiu o desafio de hardware'
+                ]
               }
             ]
           }
@@ -1186,23 +1225,23 @@ void loop() {
       selectedOptionIdx = null;
       userPlacedBlocks = [];
 
-      // Progresso da Lição
+      // Progresso da Lição (Ex: ETAPA 5 DE 15)
       const totalSteps = activeLesson.steps.length;
       const pct = Math.round(((currentStepIdx + 1) / totalSteps) * 100);
       document.getElementById('lesson-progress-fill').style.width = pct + '%';
-      document.getElementById('step-counter').innerText = `${currentStepIdx + 1}/${totalSteps}`;
+      document.getElementById('step-counter').innerText = `ETAPA ${currentStepIdx + 1} DE ${totalSteps}`;
 
       let html = `
         <span class="step-badge">${step.badge || 'Aprender'}</span>
         <div class="step-title">${step.title}</div>
-        <div class="step-text">${step.text}</div>
+        <div class="step-text">${step.text || ''}</div>
       `;
 
       if (step.code) {
         html += `<div class="code-snippet">${step.code}</div>`;
       }
 
-      // RENDERIZAÇÃO DE ANATOMIA DE CÓDIGO
+      // 1. RENDERIZAÇÃO DE ANATOMIA DE CÓDIGO
       if (step.type === 'code_breakdown' && step.breakdown) {
         btn.innerText = 'Entendi →';
         html += `<div class="breakdown-grid">`;
@@ -1216,7 +1255,7 @@ void loop() {
         });
         html += `</div>`;
       }
-      // RENDERIZAÇÃO DE RESUMO
+      // 2. RENDERIZAÇÃO DE RESUMO
       else if (step.type === 'summary' && step.summaryItems) {
         btn.innerText = 'Continuar →';
         html += `<div class="summary-card">`;
@@ -1225,22 +1264,32 @@ void loop() {
         });
         html += `</div>`;
       }
-      // RENDERIZAÇÃO DE CONCLUSÃO
+      // 3. RENDERIZAÇÃO DE TELA DE CONCLUSÃO COMPLETA
       else if (step.type === 'completion') {
-        btn.innerText = 'Concluir Lição 🎉';
+        btn.innerText = 'CONTINUAR PARA A PRÓXIMA LIÇÃO →';
         html += `
-          <div class="summary-card" style="text-align:center; align-items:center; gap:14px;">
-            <div style="font-size:2.5rem;">🏆</div>
-            <div style="font-size:1.1rem; font-weight:800; color:var(--primary);">+50 XP GANHOS</div>
-            <div style="font-size:0.9rem; color:var(--text-muted);">Sua conquista foi gravada no perfil.</div>
-          </div>
+          <div class="completion-card">
+            <div class="completion-icon">🎉</div>
+            <div style="font-size:1.4rem; font-weight:800; color:#fff;">${step.title}</div>
+            <div style="font-size:1rem; color:var(--text-muted); font-weight:600;">"${step.subtitle || activeLesson.title}"</div>
+            <div class="completion-xp-tag">+50 XP GANHOS</div>
+            <div style="width:100%; height:12px; background:var(--editor-bg); border-radius:6px; overflow:hidden; border:1px solid var(--panel-border); margin:10px 0;">
+              <div style="width:100%; height:100%; background:linear-gradient(90deg, var(--primary), var(--secondary));"></div>
+            </div>
+            <div class="summary-card" style="width:100%; margin-bottom:0; text-align:left;">
         `;
+        if (step.summaryItems) {
+          step.summaryItems.forEach(item => {
+            html += `<div class="summary-item">${item}</div>`;
+          });
+        }
+        html += `</div></div>`;
       }
-      // RENDERIZAÇÃO DE EXPLICAÇÕES SIMPLES
+      // 4. RENDERIZAÇÃO DE EXPLICAÇÕES SIMPLES
       else if (step.type === 'intro' || step.type === 'explanation') {
         btn.innerText = 'Continuar';
       }
-      // WIDGETS DE OPÇÕES
+      // 5. WIDGETS DE OPÇÕES
       else if (step.type === 'quiz' || step.type === 'output_quiz' || step.type === 'true_false') {
         btn.innerText = 'Verificar';
         html += `<div class="options-stack">`;
@@ -1249,13 +1298,13 @@ void loop() {
         });
         html += `</div>`;
       }
-      // WIDGET DE LACUNA
+      // 6. WIDGET DE LACUNA
       else if (step.type === 'fill_blank') {
         btn.innerText = 'Verificar';
         const templateWithInput = step.codeTemplate.replace('___', `<input type="text" id="blank-input" class="inline-code-input" placeholder="?" autocomplete="off">`);
         html += `<div class="fill-input-area">${templateWithInput}</div>`;
       }
-      // WIDGET DE BLOCOS
+      // 7. WIDGET DE BLOCOS
       else if (step.type === 'blocks') {
         btn.innerText = 'Verificar';
         html += `
@@ -1263,7 +1312,7 @@ void loop() {
           <div class="blocks-container" id="blocks-palette"></div>
         `;
       }
-      // WIDGET DE DIGITAÇÃO DE DESAFIO
+      // 8. WIDGET DE DIGITAÇÃO DE DESAFIO
       else if (step.type === 'code_challenge') {
         btn.innerText = 'Verificar';
         html += `
@@ -1317,12 +1366,13 @@ void loop() {
       const step = activeLesson.steps[currentStepIdx];
       const sheet = document.getElementById('feedback-sheet');
 
-      // ETAPAS INFORMATIVAS E DE CONCLUSÃO AVANÇAM DIRETO
+      // ETAPAS INFORMATIVAS E RESUMOS AVANÇAM DIRETO
       if (['intro', 'explanation', 'code_breakdown', 'summary'].includes(step.type)) {
         nextStep();
         return;
       }
 
+      // TELA DE CONCLUSÃO CONCLUI A LIÇÃO E ATUALIZA ESTADO
       if (step.type === 'completion') {
         state.xp += 50;
         if (!state.completedLessons.includes(activeLesson.id)) {
@@ -1351,14 +1401,14 @@ void loop() {
       if (isCorrect) {
         playSound('correct');
         sheet.className = 'feedback-sheet correct';
-        document.getElementById('fb-title').innerHTML = '✓ Excelente!';
+        document.getElementById('fb-title').innerHTML = '✓ Correto!';
         document.getElementById('fb-text').innerText = step.explanation || 'Você compreendeu a lógica!';
         state.xp += 10;
       } else {
         playSound('wrong');
         sheet.className = 'feedback-sheet wrong';
-        document.getElementById('fb-title').innerHTML = '✕ Quase lá!';
-        document.getElementById('fb-text').innerText = step.explanation || 'Confira os detalhes e tente novamente.';
+        document.getElementById('fb-title').innerHTML = '✕ Quase!';
+        document.getElementById('fb-text').innerText = step.explanation || 'Confira a explicação e tente novamente.';
         state.hearts = Math.max(0, state.hearts - 1);
       }
       saveState();
