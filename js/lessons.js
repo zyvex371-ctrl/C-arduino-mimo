@@ -9,272 +9,65 @@ const LessonsData = [
         title: '01. Variáveis e Números em C++',
         tag: 'C++ Básico',
         learnedConcepts: [
-          'Conceito de variável como espaço na memória',
-          'Uso da palavra-chave int para números inteiros',
-          'Sintaxe com operador = e ponto-e-vírgula ;',
-          'Como reatribuir e atualizar valores de variáveis'
+          'Conceito de variável na memória',
+          'Uso da palavra-chave int',
+          'Sintaxe com operador = e ;'
         ],
         steps: [
           {
-            type: 'intro',
-            badge: '1/10 Introdução',
+            type: 'explanation',
+            badge: 'Aprender',
+            badgeType: 'type-info',
             title: 'O que é uma Variável?',
             text: 'Uma variável é um espaço com nome na memória do computador. Ela serve para guardar um valor que o seu programa precisa utilizar.',
             code: 'int idade = 11;'
           },
           {
-            type: 'explanation',
-            badge: '2/10 Explicação',
-            title: 'Tipos de Dados em C++',
-            text: 'Para guardar números inteiros em C++, usamos a palavra "int".\nVeja a estrutura abaixo:',
-            code: 'int idade = 11;'
-          },
-          {
-            type: 'code_breakdown',
-            badge: '3/10 Anatomia do Código',
-            title: 'Decomposição do Código',
-            text: 'Observe cada trecho da instrução C++:',
-            breakdown: [
-              { token: 'int', label: 'Tipo (Inteiro)' },
-              { token: 'idade', label: 'Nome' },
-              { token: '=', label: 'Operador' },
-              { token: '11', label: 'Valor' },
-              { token: ';', label: 'Fim de Linha' }
+            type: 'interactive_anatomy',
+            badge: 'Exploração',
+            badgeType: 'type-anatomy',
+            title: 'Toque para entender o código',
+            text: 'Descubra a função de cada palavra na declaração de uma variável C++.',
+            tokens: [
+              { label: 'int', expTitle: 'TIPO DE DADO', expText: 'Informa ao computador que esta variável guardará apenas números Inteiros.' },
+              { label: 'idade', expTitle: 'NOME DA VARIÁVEL', expText: 'É o rótulo que você dá para poder encontrar esse dado na memória depois.' },
+              { label: '=', expTitle: 'OPERADOR DE ATRIBUIÇÃO', expText: 'Pega o valor da direita e guarda dentro da variável da esquerda.' },
+              { label: '11', expTitle: 'VALOR', expText: 'O dado real que será salvo na memória.' },
+              { label: ';', expTitle: 'FIM DE INSTRUÇÃO', expText: 'Obrigatório em C++. Avisa que o comando terminou.' }
             ]
           },
           {
             type: 'interactive_slot',
-            badge: '4/10 Prática no Código',
-            title: 'Preencha a lacuna para criar uma variável inteira',
-            text: 'Toque no trecho abaixo para completar a declaração da variável pino:',
+            badge: 'Prática',
+            badgeType: 'type-practice',
+            title: 'Crie uma variável inteira',
+            text: 'Preencha a lacuna com a palavra correta para criar uma variável de número inteiro.',
             codeBefore: '',
             codeAfter: ' pino = 13;',
             chips: ['int', 'float', 'void', 'char'],
             correctAnswer: 'int',
-            explanation: 'Excelente! "int" é o tipo reservado para números inteiros.'
+            explanation: 'Excelente! "int" é a palavra-chave reservada.'
           },
           {
             type: 'quiz',
-            badge: '5/10 Fixação',
-            title: 'Qual parte indica o nome da variável?',
-            text: 'Examine a instrução:',
-            code: 'int velocidade = 80;',
-            options: ['int', 'velocidade', '80', '='],
+            badge: 'Prática',
+            badgeType: 'type-practice',
+            title: 'O que o símbolo = faz?',
+            text: 'Baseado no que exploramos na anatomia:',
+            options: ['Compara se dois números são iguais', 'Guarda o valor da direita na variável da esquerda', 'Soma dois números'],
             correct: 1,
-            explanation: '"velocidade" é o nome dado à posição de memória.'
-          },
-          {
-            type: 'true_false',
-            badge: '6/10 Sintaxe',
-            title: 'Verdadeiro ou Falso',
-            text: 'Toda instrução em C++ precisa obrigatoriamente terminar com ponto-e-vírgula (;).',
-            options: ['Verdadeiro', 'Falso'],
-            correct: 0,
-            explanation: 'Exato! O ponto-e-vírgula sinaliza o fim da instrução ao compilador.'
-          },
-          {
-            type: 'interactive_slot',
-            badge: '7/10 Atribuição de Valor',
-            title: 'Defina o valor da variável',
-            text: 'Preencha a lacuna para guardar o valor 100 na variável energia:',
-            codeBefore: 'int energia = ',
-            codeAfter: ';',
-            chips: ['100', 'energia', 'int', 'true'],
-            correctAnswer: '100',
-            explanation: 'Correto! 100 é um valor inteiro válido.'
-          },
-          {
-            type: 'output_quiz',
-            badge: '8/10 Previsão de Saída',
-            title: 'Qual será o valor final?',
-            text: 'Analise a substituição na memória:',
-            code: 'int vidas = 3;\nvidas = 5;',
-            options: ['3', '5', '8', 'Erro'],
-            correct: 1,
-            explanation: 'A linha "vidas = 5;" substitui o valor antigo 3 pelo novo valor 5.'
-          },
-          {
-            type: 'interactive_slot',
-            badge: '9/10 Operadores',
-            title: 'Escolha o operador correto',
-            text: 'Toque no operador para atribuir o valor à variável:',
-            codeBefore: 'int pontos ',
-            codeAfter: ' 500;',
-            chips: ['=', '==', '+', ';'],
-            correctAnswer: '=',
-            explanation: 'O sinal de igual = é o operador de atribuição de valor.'
+            explanation: 'Em programação, = significa atribuição (guardar um valor).'
           },
           {
             type: 'code_challenge',
-            badge: '10/10 Desafio Final',
-            title: 'Desafio Prático!',
-            text: 'Digite a linha completa em C++ para declarar a variável "score" com o valor 100:',
-            placeholder: 'int score = 100;',
-            correctKeywords: ['int', 'score', '=', '100;'],
-            explanation: 'Incrível! Você dominou o conceito de variáveis em C++!'
-          }
-        ]
-      },
-      {
-        id: 'l2',
-        title: '02. Operadores Lógicos & Decisões',
-        tag: 'Estruturas',
-        learnedConcepts: [
-          'Estrutura condicional if (condicao)',
-          'Operadores de comparação: ==, !=, <, <=, >, >=',
-          'Bloco de código com chaves {}'
-        ],
-        steps: [
-          {
-            type: 'intro',
-            badge: '1/6 Condicionais',
-            title: 'Tomando Decisões com if',
-            text: 'O bloco if permite que seu código execute uma instrução apenas se uma condição for verdadeira.',
-            code: 'if (idade >= 18) {\n  // Acesso liberado\n}'
-          },
-          {
-            type: 'interactive_slot',
-            badge: '2/6 Comparação de Valores',
-            title: 'Complete a condição do código',
-            text: 'Preencha a lacuna para verificar se a temperatura é maior ou igual a 30:',
-            codeBefore: 'if (temperatura ',
-            codeAfter: ' 30) {\n  Serial.println("Quente!");\n}',
-            chips: ['>=', '<=', '==', '!='],
-            correctAnswer: '>=',
-            explanation: 'Perfeito! >= é o operador "maior ou igual a".'
-          },
-          {
-            type: 'quiz',
-            badge: '3/6 Operador de Igualdade',
-            title: 'Qual operador compara se dois valores são IGUAIS?',
-            options: ['==', '=', '!=', '>='],
-            correct: 0,
-            explanation: 'Em C++, usamos == para comparar igualdade e = para atribuir valor.'
-          },
-          {
-            type: 'interactive_slot',
-            badge: '4/6 Prática de Igualdade',
-            title: 'Verifique se o botão foi pressionado',
-            text: 'Preencha a lacuna para comparar se o estado é igual a 1:',
-            codeBefore: 'if (botao ',
-            codeAfter: ' 1) {\n  digitalWrite(13, HIGH);\n}',
-            chips: ['==', '=', '<', '&&'],
-            correctAnswer: '==',
-            explanation: 'Excelente! Usamos == dentro dos parênteses do if.'
-          },
-          {
-            type: 'true_false',
-            badge: '5/6 Blocos de Código',
-            title: 'Verdadeiro ou Falso',
-            text: 'O código dentro das chaves {} só roda se a condição do if for verdadeira.',
-            options: ['Verdadeiro', 'Falso'],
-            correct: 0,
-            explanation: 'Exato! Se for falsa, o programa pula o bloco.'
-          },
-          {
-            type: 'code_challenge',
-            badge: '6/6 Desafio Final',
-            title: 'Escreva a condição!',
-            text: 'Escreva o comando para verificar se idade é maior que 10:',
-            placeholder: 'if (idade > 10)',
-            correctKeywords: ['if', 'idade', '>', '10'],
-            explanation: 'Sensacional! Você dominou o bloco condicional!'
-          }
-        ]
-      }
-    ]
-  },
-  {
-    id: 'mod2',
-    title: 'Módulo 2: Pinos Digitais & Robótica',
-    desc: 'Controle o envio de energia no Arduino.',
-    lessons: [
-      {
-        id: 'l3',
-        title: '03. Configurando Saídas com pinMode()',
-        tag: 'Arduino',
-        learnedConcepts: [
-          'Papel dos pinos digitais do Arduino',
-          'Sintaxe da função pinMode()',
-          'Parâmetro OUTPUT para envio de energia',
-          'Configuração inicial dentro de void setup()'
-        ],
-        steps: [
-          {
-            type: 'intro',
-            badge: '1/8 Introdução',
-            title: 'Pinos do Arduino',
-            text: 'O microcontrolador possui pinos digitais numerados para acionar componentes.',
-            code: 'pinMode(13, OUTPUT);'
-          },
-          {
-            type: 'explanation',
-            badge: '2/8 Explicação',
-            title: 'A Função pinMode()',
-            text: 'Usamos pinMode() dentro do setup() para avisar ao Arduino como o pino será usado.',
-            code: 'void setup() {\n  pinMode(13, OUTPUT);\n}'
-          },
-          {
-            type: 'code_breakdown',
-            badge: '3/8 Anatomia',
-            title: 'Decomposição do Comando',
-            text: 'Examine os parâmetros:',
-            breakdown: [
-              { token: 'pinMode', label: 'Função' },
-              { token: '(', label: 'Abre' },
-              { token: '13', label: 'Pino' },
-              { token: ',', label: 'Vírgula' },
-              { token: 'OUTPUT', label: 'Modo' },
-              { token: ');', label: 'Fecha' }
-            ]
-          },
-          {
-            type: 'interactive_slot',
-            badge: '4/8 Prática com Pinos',
-            title: 'Configure o modo do pino',
-            text: 'Toque na opção para definir o pino 13 como saída:',
-            codeBefore: 'pinMode(13, ',
-            codeAfter: ');',
-            chips: ['OUTPUT', 'INPUT', 'HIGH', 'LOW'],
-            correctAnswer: 'OUTPUT',
-            explanation: 'OUTPUT indica que o pino enviará 5 Volts de eletricidade.'
-          },
-          {
-            type: 'quiz',
-            badge: '5/8 Fixação',
-            title: 'Em qual bloco do código configuramos os pinos?',
-            options: ['void setup()', 'void loop()', 'Fora do código', 'No terminal'],
-            correct: 0,
-            explanation: 'setup() roda uma única vez ao ligar a placa.'
-          },
-          {
-            type: 'true_false',
-            badge: '6/8 Sintaxe',
-            title: 'Verdadeiro ou Falso',
-            text: 'A palavra OUTPUT no Arduino deve ser escrita inteiramente em maiúsculas.',
-            options: ['Verdadeiro', 'Falso'],
-            correct: 0,
-            explanation: 'Verdadeiro! C++ diferencia maiúsculas de minúsculas.'
-          },
-          {
-            type: 'interactive_slot',
-            badge: '7/8 Escolha do Pino',
-            title: 'Selecione o pino correto',
-            text: 'Preencha a lacuna para configurar o pino 12:',
-            codeBefore: 'pinMode(',
-            codeAfter: ', OUTPUT);',
-            chips: ['12', 'pinMode', 'setup', 'OUTPUT'],
-            correctAnswer: '12',
-            explanation: 'O primeiro argumento de pinMode() é o número do pino físico.'
-          },
-          {
-            type: 'code_challenge',
-            badge: '8/8 Desafio Final',
-            title: 'Escreva a instrução!',
-            text: 'Digite o comando completo para configurar o pino 13 como OUTPUT:',
-            placeholder: 'pinMode(13, OUTPUT);',
-            correctKeywords: ['pinMode', '13', 'OUTPUT'],
-            explanation: 'Perfeito! Você dominou a configuração de pinos no Arduino!'
+            badge: 'Desafio Prático',
+            badgeType: 'type-challenge',
+            title: 'Sua vez de digitar!',
+            text: 'Escreva o código C++ para declarar a variável.',
+            referenceCode: 'int score = 100;',
+            placeholder: '',
+            correctKeywords: ['int', 'score', '=', '100', ';'],
+            explanation: 'Perfeito! Você digitou a declaração completa corretamente.'
           }
         ]
       }
