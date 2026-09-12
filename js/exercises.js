@@ -5,7 +5,6 @@ const Exercises = {
   selectedSlotChip: null,
   isCurrentStepCorrect: false,
 
-  // Métricas para a Tela de Conclusão Independente
   correctAnswersCount: 0,
   skippedAnswersCount: 0,
 
@@ -118,7 +117,6 @@ const Exercises = {
     if (this.currentStepIdx < this.activeLesson.steps.length && Progress.state.hearts > 0) {
       UI.renderCurrentStep();
     } else {
-      // FIM DA LIÇÃO: Concede XP, marca conclusão e abre a TELA DE CONCLUSÃO SEPARADA
       if (Progress.state.hearts > 0) {
         Progress.addXP(100);
         Progress.completeLesson(this.activeLesson.id);
