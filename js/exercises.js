@@ -82,15 +82,15 @@ const Exercises = {
     if (this.isCurrentStepCorrect) {
       UI.playSound('correct');
       sheet.className = 'feedback-sheet correct';
-      document.getElementById('fb-title').innerHTML = '✓ Correto!';
+      document.getElementById('fb-title').innerHTML = '✓ Perfeito!';
       document.getElementById('fb-text').innerText = step.explanation || 'Você acertou o conceito!';
       fbBtn.innerText = 'Continuar';
       this.correctAnswersCount++;
     } else {
       UI.playSound('wrong');
       sheet.className = 'feedback-sheet wrong';
-      document.getElementById('fb-title').innerHTML = '✕ Ainda não.';
-      document.getElementById('fb-text').innerText = step.explanation || 'Revise a instrução e tente novamente.';
+      document.getElementById('fb-title').innerHTML = '✕ Quase lá!';
+      document.getElementById('fb-text').innerText = `Dica: ${step.explanation || 'Revise a instrução e tente novamente com atenção.'}`;
       fbBtn.innerText = 'Tentar novamente';
       Progress.decrementHeart();
     }
