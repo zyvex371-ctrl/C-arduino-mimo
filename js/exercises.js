@@ -4,9 +4,7 @@ const Exercises = {
   selectedOptionIdx: null,
   selectedSlotChip: null,
   isCurrentStepCorrect: false,
-
   correctAnswersCount: 0,
-  skippedAnswersCount: 0,
 
   startLesson(lessonId) {
     this.activeLesson = null;
@@ -18,7 +16,6 @@ const Exercises = {
 
     this.currentStepIdx = 0;
     this.correctAnswersCount = 0;
-    this.skippedAnswersCount = 0;
 
     document.getElementById('completion-screen').classList.add('hidden');
     document.getElementById('lesson-screen').classList.remove('hidden');
@@ -48,7 +45,6 @@ const Exercises = {
   checkInputState() {
     const btn = document.getElementById('btn-step-action');
     const inputChallenge = document.getElementById('challenge-input');
-
     if (inputChallenge && inputChallenge.value.trim().length > 0) {
       btn.disabled = false;
     } else {
@@ -57,16 +53,15 @@ const Exercises = {
   },
 
   skipStep() {
-    this.skippedAnswersCount++;
-    this.nextStep();
+    this.advanceToNextStep();
   },
 
   handleStepAction() {
     const step = this.activeLesson.steps[this.currentStepIdx];
     const sheet = document.getElementById('feedback-sheet');
 
-    if (['intro', 'explanation', 'code_breakdown'].includes(step.type)) {
-      this.nextStep();
+    if (['intro', 'explanation', 'interactive_anatomy'].includes(step.type)) {
+      this.advanceToNextStep();
       return;
     }
 
@@ -88,42 +83,42 @@ const Exercises = {
       UI.playSound('correct');
       sheet.className = 'feedback-sheet correct';
       document.getElementById('fb-title').innerHTML = '✓ Correto!';
-      document.getElementById('fb-text').innerText = step.explanation || 'Você compreendeu a lógica!';
+      document.getElementById('fb-text').innerText = step.explanation || 'Você acertou o conceito!';
       fbBtn.innerText = 'Continuar';
       this.correctAnswersCount++;
     } else {
       UI.playSound('wrong');
       sheet.className = 'feedback-sheet wrong';
       document.getElementById('fb-title').innerHTML = '✕ Ainda não.';
-      document.getElementById('fb-text').innerText = step.explanation || 'Confira a explicação e tente novamente.';
+      document.getElementById('fb-text').innerText = step.explanation || 'Revise a instrução e tente novamente.';
       fbBtn.innerText = 'Tentar novamente';
       Progress.decrementHeart();
     }
   },
 
   handleFeedbackAction() {
-    const sheet = document.getElementById('feedback-sheet');
-    sheet.className = 'feedback-sheet';
-
+    document.getElementById('feedback-sheet').className = 'feedback-sheet';
     if (this.isCurrentStepCorrect) {
-      this.nextStep();
+      this.advanceToNextStep();
     } else {
       UI.renderCurrentStep();
     }
   },
 
-  nextStep() {
+  advanceToNextStep() {
     this.currentStepIdx++;
-    if (this.currentStepIdx < this.activeLesson.steps.length && Progress.state.hearts > 0) {
-      UI.renderCurrentStep();
+    if (this.currentStepIdx < this.activeLesson.steps.length) {
+      if (Progress.state.hearts > 0) {
+        UI.renderCurrentStep();
+      } else {
+        Progress.resetHearts();
+        UI.exitLesson();
+      }
     } else {
       if (Progress.state.hearts > 0) {
         Progress.addXP(100);
         Progress.completeLesson(this.activeLesson.id);
         UI.showCompletionScreen(this.activeLesson, this.correctAnswersCount, this.activeLesson.steps.length);
-      } else {
-        Progress.resetHearts();
-        UI.exitLesson();
       }
     }
   }
