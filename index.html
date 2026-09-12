@@ -11,6 +11,7 @@
 </head>
 <body>
 
+  <!-- SIDEBAR DESKTOP -->
   <aside>
     <div class="brand">
       <div class="brand-icon">⚡</div>
@@ -29,6 +30,7 @@
     </ul>
   </aside>
 
+  <!-- CONTAINER PRINCIPAL -->
   <div class="app-container">
     <header>
       <div style="font-weight: 700; font-size: 0.9rem; color: var(--text-muted);">
@@ -42,6 +44,7 @@
     </header>
 
     <main>
+      <!-- DASHBOARD -->
       <section id="view-dashboard">
         <div class="dash-hero">
           <h1>Olá, Desenvolvedor 👋</h1>
@@ -59,11 +62,13 @@
         <div id="modules-container"></div>
       </section>
 
+      <!-- TRILHA DEDICADA -->
       <section id="view-curriculum" class="hidden">
         <div class="section-title-head">🔧 Trilha Completa de C++ & Robótica</div>
         <div id="full-curriculum-container"></div>
       </section>
 
+      <!-- IDE PLAYGROUND -->
       <section id="view-ide" class="hidden">
         <div class="section-title-head">🔧 IDE Playground — Laboratório Livre</div>
         <div class="ide-window">
@@ -89,6 +94,7 @@ void loop() {
               </div>
             </div>
 
+            <!-- SIMULADOR HARDWARE REALISTA -->
             <div class="hardware-pane">
               <div class="sim-card-3d">
                 <div style="font-size:0.75rem; font-weight:800; letter-spacing:1px; color:var(--secondary);">HARDWARE REALISTA VIRTUAL</div>
@@ -115,6 +121,7 @@ void loop() {
         </div>
       </section>
 
+      <!-- PROJETOS -->
       <section id="view-projects" class="hidden">
         <div class="section-title-head">🧩 Projetos Práticos de Robótica</div>
         <div class="projects-grid">
@@ -137,6 +144,7 @@ void loop() {
         </div>
       </section>
 
+      <!-- BADGES -->
       <section id="view-badges" class="hidden">
         <div class="section-title-head">🏆 Suas Conquistas</div>
         <div class="projects-grid" id="badges-container"></div>
@@ -144,13 +152,14 @@ void loop() {
     </main>
   </div>
 
+  <!-- OVERLAY DE EXPERIÊNCIA DE LIÇÃO -->
   <div class="lesson-screen-overlay hidden" id="lesson-screen">
     <div class="lesson-header">
       <button class="btn-close-lesson" onclick="UI.exitLesson()">✕</button>
       <div class="lesson-progress-container">
         <div class="lesson-progress-fill" id="lesson-progress-fill"></div>
       </div>
-      <div class="step-counter" id="step-counter">ETAPA 1 DE 15</div>
+      <div class="step-counter" id="step-counter">1 DE 10</div>
       <button class="btn-skip-step" id="btn-skip-step" onclick="Exercises.skipStep()">Pular</button>
     </div>
 
@@ -169,6 +178,12 @@ void loop() {
     </div>
   </div>
 
+  <!-- TELA DE CONCLUSÃO (FORA DO FLUXO DA LIÇÃO) -->
+  <div class="lesson-screen-overlay hidden" id="completion-screen">
+    <div class="completion-container" id="completion-container"></div>
+  </div>
+
+  <!-- NAV MOBILE -->
   <nav class="mobile-nav">
     <button class="mobile-btn active" onclick="UI.switchView('dashboard', this)"><span>🏠</span>Início</button>
     <button class="mobile-btn" onclick="UI.switchView('curriculum', this)"><span>💻</span>Trilha</button>
