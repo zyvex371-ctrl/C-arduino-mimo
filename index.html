@@ -15,7 +15,7 @@
       --panel-border: #1f2937;
       --panel-hover: #374151;
       --primary: #10b981;
-      --primary-glow: rgba(16, 185, 129, 0.35);
+      --primary-glow: rgba(16, 185, 129, 0.4);
       --secondary: #06b6d4;
       --secondary-glow: rgba(6, 182, 212, 0.25);
       --accent: #f59e0b;
@@ -227,6 +227,10 @@
       width: 100%;
       max-width: 210px;
       margin: 0 auto;
+      min-height: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .arduino-3d-img {
@@ -239,6 +243,14 @@
 
     .arduino-3d-img.active {
       filter: drop-shadow(0 0 25px rgba(16, 185, 129, 0.85)) brightness(1.15);
+    }
+
+    /* VETOR SVG DE FALLBACK CASO A IMAGEM NÃO CARREGUE */
+    .arduino-svg-fallback {
+      width: 100%;
+      max-width: 190px;
+      height: auto;
+      filter: drop-shadow(0 8px 15px rgba(0,0,0,0.6));
     }
 
     .led-status-pill {
@@ -412,7 +424,7 @@
         Hardware & Software Lab
       </div>
       <div class="header-status">
-        <div class="status-badge xp">⚡ <span id="user-xp">0</span> XP</div>
+        <div class="status-badge xp">⚡ <span id="user-xp">160</span> XP</div>
         <div class="status-badge streak">🔥 <span id="user-streak">1</span>d</div>
         <div class="status-badge hearts">❤️ <span id="user-hearts">5</span></div>
       </div>
@@ -470,8 +482,8 @@ void loop() {
               <div class="sim-card-3d">
                 <div style="font-size:0.75rem; font-weight:800; letter-spacing:1px; color:var(--secondary);">HARDWARE VIRTUAL 3D</div>
                 
-                <div class="mcu-image-wrapper">
-                  <img src="arduino.jpg" id="arduino-3d" class="arduino-3d-img" alt="Arduino 3D Virtual">
+                <div class="mcu-image-wrapper" id="mcu-box">
+                  <img src="arduino.jpg" id="arduino-3d" class="arduino-3d-img" alt="Arduino 3D Virtual" onerror="loadFallbackSvg()">
                 </div>
 
                 <div class="led-status-pill">
@@ -557,7 +569,7 @@ void loop() {
   <script>
     // --- ESTADO & PERSISTÊNCIA ---
     let state = {
-      xp: 0,
+      xp: 160,
       streak: 1,
       hearts: 5,
       completedLessons: [],
@@ -568,7 +580,7 @@ void loop() {
     if (raw) {
       try {
         let p = JSON.parse(raw);
-        state.xp = p.xp || 0;
+        state.xp = p.xp || 160;
         state.streak = p.streak || 1;
         state.hearts = typeof p.hearts === 'number' ? p.hearts : 5;
         state.completedLessons = p.completedLessons || [];
@@ -595,6 +607,21 @@ void loop() {
       renderBadges();
     }
 
+    // --- SE A IMAGEM FALHAR, GERA PLACA 3D EM SVG AUTOMATICAMENTE ---
+    function loadFallbackSvg() {
+      const box = document.getElementById('mcu-box');
+      if (!box) return;
+      box.innerHTML = `
+        <svg class="arduino-svg-fallback" id="arduino-3d-svg" viewBox="0 0 200 150">
+          <rect x="10" y="10" width="180" height="130" rx="12" fill="#0284c7" stroke="#0369a1" stroke-width="3"/>
+          <rect x="25" y="25" width="40" height="30" rx="4" fill="#64748b"/>
+          <rect x="75" y="65" width="90" height="25" rx="4" fill="#0f172a"/>
+          <circle id="svg-led-light" cx="165" cy="35" r="9" fill="#374151" stroke="#1e2937" stroke-width="2"/>
+          <text x="148" y="58" fill="#ffffff" font-size="9" font-weight="bold">PIN 13</text>
+        </svg>
+      `;
+    }
+
     // --- SINTETIZADOR DE ÁUDIO NATIVO ---
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     function playSound(type) {
@@ -618,10 +645,10 @@ void loop() {
       }
     }
 
-    // --- CURRÍCULO DE AULAS SLIDE POR SLIDE (ESTILO MIMO) ---
+    // --- CURRÍCULO DE AULAS MIMO ---
     const lessonsData = [
       {
-        id: 'l1', title: '01. Variáveis e Números em C++', tag: 'C++ Básicos',
+        id: 'l1', title: '01. Variáveis e Números em C++', tag: 'C++ Básico',
         slides: [
           {
             type: 'info', badge: 'Conceito',
@@ -718,7 +745,7 @@ void loop() {
       });
     }
 
-    // --- RENDERIZADOR DE SLIDES DO MODAL (ESTILO MIMO) ---
+    // --- MODAL DE SLIDES MIMO ---
     let currentLesson = null;
     let currentSlideIdx = 0;
     let selectedQuizIdx = null;
@@ -867,18 +894,21 @@ void loop() {
       const code = document.getElementById('free-ide-code').innerText;
       const terminal = document.getElementById('free-ide-terminal');
       const img = document.getElementById('arduino-3d');
+      const svgLed = document.getElementById('svg-led-light');
       const dot = document.getElementById('led-dot-indicator');
       const status = document.getElementById('free-mcu-status');
 
-      terminal.innerText = '[COMPILER]: Compilando código C++...\n[UPLOADER]: Gravando no microcontrolador...\n[HARDWARE]: Sinal digital atualizado no Pino 13.\n[SERIAL]: Executando loopPrincipal().';
+      terminal.innerText = '[COMPILER]: Compilando arquivo C++...\n[UPLOADER]: Gravando no microcontrolador...\n[HARDWARE]: Sinal enviado para o Pino 13.\n[SERIAL]: Executando loop() sem erros.';
 
       if (code.includes('HIGH')) {
-        img.classList.add('active');
+        if (img) img.classList.add('active');
+        if (svgLed) svgLed.setAttribute('fill', '#10b981');
         dot.classList.add('active');
         status.innerText = 'Pino 13: HIGH (5V)';
         status.style.color = '#10b981';
       } else {
-        img.classList.remove('active');
+        if (img) img.classList.remove('active');
+        if (svgLed) svgLed.setAttribute('fill', '#374151');
         dot.classList.remove('active');
         status.innerText = 'Pino 13: LOW (0V)';
         status.style.color = 'var(--text-muted)';
@@ -886,14 +916,17 @@ void loop() {
     }
 
     function resetFreeIDE() {
-      document.getElementById('arduino-3d').classList.remove('active');
+      const img = document.getElementById('arduino-3d');
+      const svgLed = document.getElementById('svg-led-light');
+      if (img) img.classList.remove('active');
+      if (svgLed) svgLed.setAttribute('fill', '#374151');
       document.getElementById('led-dot-indicator').classList.remove('active');
       document.getElementById('free-mcu-status').innerText = 'Pino 13: LOW (0V)';
       document.getElementById('free-mcu-status').style.color = 'var(--text-muted)';
       document.getElementById('free-ide-terminal').innerText = '[SYSTEM]: Memória reiniciada.';
     }
 
-    // --- NAVEGAÇÃO ENTRE TELAS ---
+    // --- SWITCH DE TELAS ---
     function switchView(viewId, btn) {
       document.querySelectorAll('main > section').forEach(s => s.classList.add('hidden'));
       document.getElementById(`view-${viewId}`).classList.remove('hidden');
@@ -902,7 +935,7 @@ void loop() {
       if (btn) btn.classList.add('active');
     }
 
-    // --- BADGES ---
+    // --- CONQUISTAS ---
     const badgesData = [
       { id: 'b1', name: 'Primeiro Compilador', desc: 'Escreveu seu primeiro programa em C++' },
       { id: 'b2', name: 'Engenheiro de Hardware', desc: 'Acendeu um LED via sinal digital' },
