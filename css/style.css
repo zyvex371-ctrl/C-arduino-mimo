@@ -126,16 +126,13 @@ header {
 
 main { padding: 28px; flex: 1; max-width: 1000px; width: 100%; margin: 0 auto; }
 
-.dash-hero {
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(7, 10, 18, 0.9)), radial-gradient(circle at top right, rgba(6, 182, 212, 0.2), transparent 60%);
-  border: 1px solid var(--panel-border);
-  border-radius: 20px; padding: 28px;
+.resume-hero {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(7, 10, 18, 0.95)), radial-gradient(circle at top right, rgba(6, 182, 212, 0.25), transparent 70%);
+  border: 1px solid var(--primary);
+  border-radius: 20px; padding: 24px;
   margin-bottom: 28px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4), 0 0 20px var(--primary-glow);
 }
-
-.dash-hero h1 { font-size: 1.6rem; font-weight: 800; margin-bottom: 6px; }
-.dash-hero p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px; }
 
 .overall-progress-bar {
   height: 10px; background: var(--editor-bg);
@@ -272,7 +269,7 @@ main { padding: 28px; flex: 1; max-width: 1000px; width: 100%; margin: 0 auto; }
   margin-bottom: 18px;
 }
 
-/* INTERMEDIÁRIO DE CÓDIGO COM LACUNAS ATIVAS (INSPIRADO NA REFERÊNCIA) */
+/* ÁREA DE SLOTS INTERATIVOS (INSPIRADO NA REFERÊNCIA) */
 .code-slot-area {
   background: var(--editor-bg);
   border: 1px solid var(--panel-border);
@@ -336,7 +333,6 @@ main { padding: 28px; flex: 1; max-width: 1000px; width: 100%; margin: 0 auto; }
   border-color: var(--primary);
 }
 
-/* CARDS E DECOMPOSIÇÃO */
 .breakdown-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
@@ -463,7 +459,7 @@ main { padding: 28px; flex: 1; max-width: 1000px; width: 100%; margin: 0 auto; }
 .feedback-title { font-weight: 800; font-size: 1.15rem; display: flex; align-items: center; gap: 8px; }
 .feedback-text { font-size: 0.92rem; opacity: 0.95; line-height: 1.5; }
 
-/* TELA DE CONCLUSÃO INDEPENDENTE (OUT OF STEP COUNT) */
+/* TELA DE CONCLUSÃO INDEPENDENTE */
 .completion-container {
   max-width: 580px;
   width: 100%;
