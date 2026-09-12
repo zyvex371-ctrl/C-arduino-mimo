@@ -11,13 +11,12 @@
 </head>
 <body>
 
-  <!-- SIDEBAR DESKTOP -->
   <aside>
     <div class="brand">
       <div class="brand-icon">⚡</div>
       <div>
         <div class="brand-title">ArduinoGo</div>
-        <div style="font-size: 0.7rem; color: var(--text-muted); font-family: 'Fira Code', monospace;">MIMO LAB 3D</div>
+        <div style="font-size: 0.7rem; color: var(--text-muted); font-family: 'Fira Code', monospace;">Plataforma de Ensino</div>
       </div>
     </div>
 
@@ -30,11 +29,10 @@
     </ul>
   </aside>
 
-  <!-- CONTAINER PRINCIPAL -->
   <div class="app-container">
     <header>
       <div style="font-weight: 700; font-size: 0.9rem; color: var(--text-muted);">
-        Plataforma Interativa de C++ e Robótica
+        Aprenda Robótica na Prática
       </div>
       <div class="header-status">
         <div class="status-badge xp">⚡ <span id="user-xp">0</span> XP</div>
@@ -44,14 +42,12 @@
     </header>
 
     <main>
-      <!-- DASHBOARD -->
       <section id="view-dashboard">
-        <!-- ÁREA CONTINUE DE ONDE PAROU -->
-        <div class="resume-hero" id="resume-banner">
+        <div class="resume-hero" id="resume-banner" style="display:none;">
           <div style="font-size: 0.75rem; font-weight: 800; color: var(--primary); letter-spacing: 1px; text-transform: uppercase;">Continue de Onde Parou</div>
-          <h2 id="resume-title" style="font-size: 1.3rem; margin: 4px 0 8px 0;">01. Variáveis e Números em C++</h2>
+          <h2 id="resume-title" style="font-size: 1.3rem; margin: 4px 0 8px 0;">--</h2>
           <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px; color: var(--text-muted);">
-            <span id="resume-sub">Módulo 1: Conhecendo o C++</span>
+            <span id="resume-sub">--</span>
             <span id="dash-pct-text">0% Concluído</span>
           </div>
           <div class="overall-progress-bar">
@@ -60,17 +56,15 @@
           <button class="btn-action-primary" style="margin-top: 14px; height: 44px; width: fit-content; padding: 0 24px;" id="btn-resume-action">Continuar lição →</button>
         </div>
 
-        <div class="section-title-head">🚀 Trilha Principal de Aprendizado</div>
+        <div class="section-title-head">🚀 Sua Trilha de Aprendizado</div>
         <div id="modules-container"></div>
       </section>
 
-      <!-- TRILHA DEDICADA -->
       <section id="view-curriculum" class="hidden">
         <div class="section-title-head">💻 Trilha Completa de C++ & Robótica</div>
         <div id="full-curriculum-container"></div>
       </section>
 
-      <!-- IDE PLAYGROUND -->
       <section id="view-ide" class="hidden">
         <div class="section-title-head">🔧 IDE Playground — Laboratório Livre</div>
         <div class="ide-window">
@@ -84,7 +78,7 @@
               <div class="editor-topbar"><span>Linguagem: C++ (Arduino Uno)</span><span>UTF-8</span></div>
               <div class="code-area-wrapper">
                 <div class="line-numbers">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9</div>
-                <div class="code-content" contenteditable="true" id="free-ide-code">// Escreva seu código C++ aqui
+                <div class="code-content" contenteditable="true" id="free-ide-code" spellcheck="false">// Escreva seu código C++ aqui
 void setup() {
   pinMode(13, OUTPUT);
 }
@@ -96,7 +90,6 @@ void loop() {
               </div>
             </div>
 
-            <!-- SIMULADOR HARDWARE REALISTA -->
             <div class="hardware-pane">
               <div class="sim-card-3d">
                 <div style="font-size:0.75rem; font-weight:800; letter-spacing:1px; color:var(--secondary);">HARDWARE REALISTA VIRTUAL</div>
@@ -123,7 +116,6 @@ void loop() {
         </div>
       </section>
 
-      <!-- PROJETOS -->
       <section id="view-projects" class="hidden">
         <div class="section-title-head">🧩 Projetos Práticos de Robótica</div>
         <div class="projects-grid">
@@ -132,7 +124,7 @@ void loop() {
             <div class="project-body">
               <div class="project-title">Robô Animatrônico FNAF</div>
               <div class="project-desc">Controle Servo Motores SG90 para mover a cabeça e boca do robô.</div>
-              <button class="btn-btn btn-exec" style="width:100%; justify-content:center;" onclick="UI.switchView('ide', null)">Abrir na IDE</button>
+              <button class="btn-btn btn-exec" style="width:100%; justify-content:center;" onclick="UI.switchView('ide', document.getElementById('nav-ide'))">Abrir na IDE</button>
             </div>
           </div>
           <div class="project-card">
@@ -140,13 +132,12 @@ void loop() {
             <div class="project-body">
               <div class="project-title">Semáforo Automático</div>
               <div class="project-desc">Crie a sequência lógica dos LEDs Verde, Amarelo e Vermelho.</div>
-              <button class="btn-btn btn-exec" style="width:100%; justify-content:center;" onclick="UI.switchView('ide', null)">Abrir na IDE</button>
+              <button class="btn-btn btn-exec" style="width:100%; justify-content:center;" onclick="UI.switchView('ide', document.getElementById('nav-ide'))">Abrir na IDE</button>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- BADGES -->
       <section id="view-badges" class="hidden">
         <div class="section-title-head">🏆 Suas Conquistas</div>
         <div class="projects-grid" id="badges-container"></div>
@@ -154,14 +145,13 @@ void loop() {
     </main>
   </div>
 
-  <!-- OVERLAY DE EXPERIÊNCIA DE LIÇÃO -->
   <div class="lesson-screen-overlay hidden" id="lesson-screen">
     <div class="lesson-header">
       <button class="btn-close-lesson" onclick="UI.exitLesson()">✕</button>
       <div class="lesson-progress-container">
         <div class="lesson-progress-fill" id="lesson-progress-fill"></div>
       </div>
-      <div class="step-counter" id="step-counter">1 DE 10</div>
+      <div class="step-counter" id="step-counter">ETAPA 1 DE 10</div>
       <button class="btn-skip-step" id="btn-skip-step" onclick="Exercises.skipStep()">Pular</button>
     </div>
 
@@ -180,12 +170,10 @@ void loop() {
     </div>
   </div>
 
-  <!-- TELA DE CONCLUSÃO INDEPENDENTE (OUT OF STEP COUNT) -->
   <div class="lesson-screen-overlay hidden" id="completion-screen">
     <div class="completion-container" id="completion-container"></div>
   </div>
 
-  <!-- NAV MOBILE -->
   <nav class="mobile-nav">
     <button class="mobile-btn active" onclick="UI.switchView('dashboard', this)"><span>🏠</span>Início</button>
     <button class="mobile-btn" onclick="UI.switchView('curriculum', this)"><span>💻</span>Trilha</button>
