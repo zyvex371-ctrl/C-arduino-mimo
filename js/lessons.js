@@ -519,4 +519,3 @@ const LessonsData = [
     ]
   }
 ];
-
