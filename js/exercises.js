@@ -2,8 +2,12 @@ const Exercises = {
   activeLesson: null,
   currentStepIdx: 0,
   selectedOptionIdx: null,
-  userPlacedBlocks: [],
+  selectedSlotChip: null,
   isCurrentStepCorrect: false,
+
+  // Métricas para a Tela de Conclusão Independente
+  correctAnswersCount: 0,
+  skippedAnswersCount: 0,
 
   startLesson(lessonId) {
     this.activeLesson = null;
@@ -14,6 +18,10 @@ const Exercises = {
     if (!this.activeLesson) return;
 
     this.currentStepIdx = 0;
+    this.correctAnswersCount = 0;
+    this.skippedAnswersCount = 0;
+
+    document.getElementById('completion-screen').classList.add('hidden');
     document.getElementById('lesson-screen').classList.remove('hidden');
     UI.renderCurrentStep();
   },
@@ -25,44 +33,24 @@ const Exercises = {
     document.getElementById('btn-step-action').disabled = false;
   },
 
-  renderBlocksWidget(available) {
-    const palette = document.getElementById('blocks-palette');
-    const dropZone = document.getElementById('drop-zone');
-    const btn = document.getElementById('btn-step-action');
-    if (!palette || !dropZone) return;
+  selectSlotChip(chipValue, btnElement) {
+    this.selectedSlotChip = chipValue;
+    document.querySelectorAll('.chip-btn').forEach(b => b.classList.remove('selected'));
+    btnElement.classList.add('selected');
 
-    palette.innerHTML = '';
-    available.forEach(text => {
-      if (!this.userPlacedBlocks.includes(text)) {
-        const b = document.createElement('button');
-        b.className = 'code-block-btn';
-        b.innerText = text;
-        b.onclick = () => { this.userPlacedBlocks.push(text); this.renderBlocksWidget(available); };
-        palette.appendChild(b);
-      }
-    });
-
-    dropZone.innerHTML = '';
-    this.userPlacedBlocks.forEach((text, i) => {
-      const b = document.createElement('button');
-      b.className = 'code-block-btn';
-      b.style.borderColor = 'var(--primary)';
-      b.innerText = text;
-      b.onclick = () => { this.userPlacedBlocks.splice(i, 1); this.renderBlocksWidget(available); };
-      dropZone.appendChild(b);
-    });
-
-    if (btn) btn.disabled = this.userPlacedBlocks.length === 0;
+    const slotEl = document.getElementById('active-slot');
+    if (slotEl) {
+      slotEl.innerText = chipValue;
+      slotEl.classList.add('filled');
+    }
+    document.getElementById('btn-step-action').disabled = false;
   },
 
   checkInputState() {
     const btn = document.getElementById('btn-step-action');
-    const inputBlank = document.getElementById('blank-input');
     const inputChallenge = document.getElementById('challenge-input');
 
-    if (inputBlank && inputBlank.value.trim().length > 0) {
-      btn.disabled = false;
-    } else if (inputChallenge && inputChallenge.value.trim().length > 0) {
+    if (inputChallenge && inputChallenge.value.trim().length > 0) {
       btn.disabled = false;
     } else {
       btn.disabled = true;
@@ -70,6 +58,7 @@ const Exercises = {
   },
 
   skipStep() {
+    this.skippedAnswersCount++;
     this.nextStep();
   },
 
@@ -77,28 +66,18 @@ const Exercises = {
     const step = this.activeLesson.steps[this.currentStepIdx];
     const sheet = document.getElementById('feedback-sheet');
 
-    if (['intro', 'explanation', 'code_breakdown', 'summary'].includes(step.type)) {
+    if (['intro', 'explanation', 'code_breakdown'].includes(step.type)) {
       this.nextStep();
-      return;
-    }
-
-    if (step.type === 'completion') {
-      Progress.addXP(50);
-      Progress.completeLesson(this.activeLesson.id);
-      UI.exitLesson();
       return;
     }
 
     this.isCurrentStepCorrect = false;
 
-    if (step.type === 'quiz' || step.type === 'output_quiz' || step.type === 'true_false') {
+    if (step.type === 'interactive_slot') {
+      this.isCurrentStepCorrect = this.selectedSlotChip === step.correctAnswer;
+    } else if (step.type === 'quiz' || step.type === 'output_quiz' || step.type === 'true_false') {
       if (this.selectedOptionIdx === null) return;
       this.isCurrentStepCorrect = this.selectedOptionIdx === step.correct;
-    } else if (step.type === 'fill_blank') {
-      const val = document.getElementById('blank-input').value.trim();
-      this.isCurrentStepCorrect = val.toLowerCase() === step.correctAnswer.toLowerCase();
-    } else if (step.type === 'blocks') {
-      this.isCurrentStepCorrect = this.userPlacedBlocks.join('') === step.correctOrder.join('');
     } else if (step.type === 'code_challenge') {
       const val = document.getElementById('challenge-input').value.trim();
       this.isCurrentStepCorrect = step.correctKeywords.every(k => val.includes(k));
@@ -112,11 +91,11 @@ const Exercises = {
       document.getElementById('fb-title').innerHTML = '✓ Correto!';
       document.getElementById('fb-text').innerText = step.explanation || 'Você compreendeu a lógica!';
       fbBtn.innerText = 'Continuar';
-      Progress.addXP(10);
+      this.correctAnswersCount++;
     } else {
       UI.playSound('wrong');
       sheet.className = 'feedback-sheet wrong';
-      document.getElementById('fb-title').innerHTML = '✕ Quase!';
+      document.getElementById('fb-title').innerHTML = '✕ Ainda não.';
       document.getElementById('fb-text').innerText = step.explanation || 'Confira a explicação e tente novamente.';
       fbBtn.innerText = 'Tentar novamente';
       Progress.decrementHeart();
@@ -139,13 +118,15 @@ const Exercises = {
     if (this.currentStepIdx < this.activeLesson.steps.length && Progress.state.hearts > 0) {
       UI.renderCurrentStep();
     } else {
+      // FIM DA LIÇÃO: Concede XP, marca conclusão e abre a TELA DE CONCLUSÃO SEPARADA
       if (Progress.state.hearts > 0) {
+        Progress.addXP(100);
         Progress.completeLesson(this.activeLesson.id);
+        UI.showCompletionScreen(this.activeLesson, this.correctAnswersCount, this.activeLesson.steps.length);
       } else {
         Progress.resetHearts();
+        UI.exitLesson();
       }
-      UI.exitLesson();
     }
   }
 };
-
