@@ -175,7 +175,7 @@
     .node-tag { font-family: 'Fira Code', monospace; font-size: 0.75rem; background: var(--editor-bg); padding: 4px 8px; border-radius: 6px; border: 1px solid var(--panel-border); color: var(--secondary); }
     .node-title { font-weight: 700; font-size: 0.95rem; }
 
-    /* --- IDE & HARDWARE REALISTA --- */
+    /* --- JANELA IDE --- */
     .ide-window {
       width: 100%; min-height: 580px;
       background: var(--panel-bg);
@@ -220,6 +220,7 @@
       gap: 12px;
     }
 
+    /* CONTAINER E POSICIONAMENTO DO LED SOBRE A FOTO */
     .mcu-image-wrapper {
       position: relative;
       width: 100%;
@@ -231,12 +232,37 @@
       width: 100%;
       height: auto;
       border-radius: 14px;
-      transition: all 0.3s ease;
-      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.8));
+      display: block;
+      filter: brightness(0.85); /* Fica levemente apagado quando desligado */
+      transition: filter 0.3s ease;
     }
 
     .arduino-real-img.active {
-      filter: drop-shadow(0 0 25px rgba(16, 185, 129, 0.95)) brightness(1.15);
+      filter: brightness(1.05); /* Ganha vida quando o código executa */
+    }
+
+    /* LÂMPADA NEON POSICIONADA EXATAMENTE NO LED DA FOTO */
+    .led-on-picture {
+      position: absolute;
+      top: 28%;
+      left: 53.5%;
+      transform: translate(-50%, -50%);
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: rgba(16, 185, 129, 0);
+      pointer-events: none;
+      transition: all 0.3s ease;
+    }
+
+    /* EFEITO DE LUZ INTENSA QUANDO O LED ACENDE */
+    .led-on-picture.active {
+      background: #4ade80;
+      box-shadow: 
+        0 0 8px #22c55e,
+        0 0 18px #10b981,
+        0 0 35px #10b981,
+        0 0 50px #059669;
     }
 
     .led-status-pill {
@@ -386,7 +412,6 @@
 </head>
 <body>
 
-  <!-- SIDEBAR DESKTOP -->
   <aside>
     <div class="brand">
       <div class="brand-icon">⚡</div>
@@ -405,7 +430,6 @@
     </ul>
   </aside>
 
-  <!-- CONTAINER PRINCIPAL -->
   <div class="app-container">
     <header>
       <div style="font-weight: 700; font-size: 0.9rem; color: var(--text-muted);">
@@ -419,7 +443,6 @@
     </header>
 
     <main>
-      <!-- VIEW 1: DASHBOARD -->
       <section id="view-dashboard">
         <div class="dash-hero">
           <h1>Olá, Desenvolvedor 👋</h1>
@@ -437,13 +460,11 @@
         <div class="lessons-tree" id="dash-lessons-preview"></div>
       </section>
 
-      <!-- VIEW 2: TRILHA DE AULAS -->
       <section id="view-curriculum" class="hidden">
         <div class="section-title-head">🔧 Trilha de C++ e Robótica</div>
         <div class="lessons-tree" id="full-curriculum-list"></div>
       </section>
 
-      <!-- VIEW 3: IDE PLAYGROUND LIVRE COM A IMAGEM REALISTA -->
       <section id="view-ide" class="hidden">
         <div class="section-title-head">🔧 IDE Playground — Teste Livre</div>
         <div class="ide-window">
@@ -469,13 +490,13 @@ void loop() {
               </div>
             </div>
 
-            <!-- HARDWARE VIRTUAL REALISTA -->
             <div class="hardware-pane">
               <div class="sim-card-3d">
                 <div style="font-size:0.75rem; font-weight:800; letter-spacing:1px; color:var(--secondary);">HARDWARE REALISTA VIRTUAL</div>
                 
                 <div class="mcu-image-wrapper">
                   <img src="https://i.postimg.cc/VLKLLNJw/cff55d82-a88e-43e4-a3d7-d37b6eb30dbf.jpg" id="arduino-real" class="arduino-real-img" alt="Arduino Realista 3D">
+                  <div class="led-on-picture" id="photo-led-light"></div>
                 </div>
 
                 <div class="led-status-pill">
@@ -495,7 +516,6 @@ void loop() {
         </div>
       </section>
 
-      <!-- VIEW 4: PROJETOS -->
       <section id="view-projects" class="hidden">
         <div class="section-title-head">🧩 Projetos Práticos de Robótica</div>
         <div class="projects-grid">
@@ -518,7 +538,6 @@ void loop() {
         </div>
       </section>
 
-      <!-- VIEW 5: BADGES -->
       <section id="view-badges" class="hidden">
         <div class="section-title-head">🏆 Suas Conquistas</div>
         <div class="projects-grid" id="badges-container"></div>
@@ -526,7 +545,6 @@ void loop() {
     </main>
   </div>
 
-  <!-- MODAL DE LIÇÕES SLIDE POR SLIDE -->
   <div class="modal-overlay" id="lesson-modal">
     <div class="lesson-slide-card">
       <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -554,7 +572,6 @@ void loop() {
     </div>
   </div>
 
-  <!-- NAVEGAÇÃO MOBILE -->
   <nav class="mobile-nav">
     <button class="mobile-btn active" onclick="switchView('dashboard', this)"><span>🏠</span>Início</button>
     <button class="mobile-btn" onclick="switchView('curriculum', this)"><span>💻</span>Aulas</button>
@@ -869,11 +886,12 @@ void loop() {
       document.getElementById('lesson-modal').classList.remove('active');
     }
 
-    // --- EXECUÇÃO DA IDE COM LED NEON NA IMAGEM REALISTA ---
+    // --- ACENDE O LED DA PRÓPRIA FOTO NA IDE ---
     function runFreeIDE() {
       const code = document.getElementById('free-ide-code').innerText;
       const terminal = document.getElementById('free-ide-terminal');
       const img = document.getElementById('arduino-real');
+      const photoLed = document.getElementById('photo-led-light');
       const dot = document.getElementById('led-dot-indicator');
       const status = document.getElementById('free-mcu-status');
 
@@ -881,11 +899,13 @@ void loop() {
 
       if (code.includes('HIGH')) {
         if (img) img.classList.add('active');
+        if (photoLed) photoLed.classList.add('active');
         dot.classList.add('active');
         status.innerText = 'Pino 13: HIGH (5V)';
         status.style.color = '#10b981';
       } else {
         if (img) img.classList.remove('active');
+        if (photoLed) photoLed.classList.remove('active');
         dot.classList.remove('active');
         status.innerText = 'Pino 13: LOW (0V)';
         status.style.color = 'var(--text-muted)';
@@ -894,7 +914,9 @@ void loop() {
 
     function resetFreeIDE() {
       const img = document.getElementById('arduino-real');
+      const photoLed = document.getElementById('photo-led-light');
       if (img) img.classList.remove('active');
+      if (photoLed) photoLed.classList.remove('active');
       document.getElementById('led-dot-indicator').classList.remove('active');
       document.getElementById('free-mcu-status').innerText = 'Pino 13: LOW (0V)';
       document.getElementById('free-mcu-status').style.color = 'var(--text-muted)';
