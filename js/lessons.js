@@ -1,7 +1,7 @@
 const LessonsData = [
   {
     id: 'mod1',
-    title: 'Módulo 1: Conhecendo o C++',
+    title: 'Módulo 1: Fundamentos de C++ & Variáveis',
     desc: 'Aprenda os conceitos básicos da linguagem que o Arduino entende.',
     lessons: [
       {
@@ -11,8 +11,7 @@ const LessonsData = [
         learnedConcepts: [
           'Conceito de variável na memória',
           'Uso da palavra-chave int para números',
-          'Sintaxe com operador = e ;',
-          'Como atualizar valores de variáveis'
+          'Sintaxe com operador = e ;'
         ],
         steps: [
           {
@@ -20,7 +19,7 @@ const LessonsData = [
             badge: 'Aprender',
             badgeType: 'type-info',
             title: 'O que é uma Variável?',
-            text: 'Uma variável é como uma caixa com um nome na memória do computador. Ela serve para guardar um valor que o seu programa precisa utilizar.',
+            text: 'Uma variável é como uma caixa com um nome na memória do computador para guardar dados.',
             code: 'int idade = 11;'
           },
           {
@@ -30,86 +29,33 @@ const LessonsData = [
             title: 'Toque para entender o código',
             text: 'Descubra a função de cada palavra na declaração de uma variável C++.',
             tokens: [
-              { label: 'int', expTitle: 'TIPO DE DADO', expText: 'Informa ao computador que esta variável guardará apenas números Inteiros.' },
-              { label: 'idade', expTitle: 'NOME DA VARIÁVEL', expText: 'É o rótulo que você dá para poder encontrar esse dado na memória depois.' },
-              { label: '=', expTitle: 'OPERADOR DE ATRIBUIÇÃO', expText: 'Pega o valor da direita e guarda dentro da variável da esquerda.' },
-              { label: '11', expTitle: 'VALOR', expText: 'O dado real que será salvo na memória.' },
-              { label: ';', expTitle: 'FIM DE INSTRUÇÃO', expText: 'Obrigatório em C++. Avisa que a linha de comando terminou.' }
+              { label: 'int', expTitle: 'TIPO', expText: 'Número Inteiro.' },
+              { label: 'idade', expTitle: 'NOME', expText: 'Rótulo da variável.' },
+              { label: '=', expTitle: 'ATRIBUIÇÃO', expText: 'Guarda o valor.' },
+              { label: '11', expTitle: 'VALOR', expText: 'Dado salvo.' },
+              { label: ';', expTitle: 'FIM', expText: 'Encerra a instrução.' }
             ]
           },
           {
             type: 'interactive_slot',
-            badge: 'Prática no Código',
+            badge: 'Prática',
             badgeType: 'type-practice',
             title: 'Crie uma variável inteira',
-            text: 'Preencha a lacuna abaixo tocando na palavra correta para criar uma variável de número inteiro.',
+            text: 'Preencha a lacuna para criar uma variável numérica:',
             codeBefore: '',
             codeAfter: ' pino = 13;',
             chips: ['int', 'float', 'void', 'char'],
             correctAnswer: 'int',
-            explanation: 'Excelente! "int" é o tipo reservado para números inteiros.'
-          },
-          {
-            type: 'quiz',
-            badge: 'Prática',
-            badgeType: 'type-practice',
-            title: 'O que o símbolo = faz?',
-            text: 'Baseado no que você explorou antes:',
-            options: ['Compara se dois números são iguais', 'Guarda o valor da direita na variável da esquerda', 'Soma dois números'],
-            correct: 1,
-            explanation: 'Em programação, = significa atribuição (guardar um valor).'
-          },
-          {
-            type: 'explanation',
-            badge: 'Aprender',
-            badgeType: 'type-info',
-            title: 'O valor pode mudar',
-            text: 'Como o nome diz, uma "variável" pode ter seu valor alterado a qualquer momento durante a execução do programa!',
-            code: 'int nivel = 1;\nnivel = 2; // Agora o nível vale 2'
-          },
-          {
-            type: 'output_quiz',
-            badge: 'Prática',
-            badgeType: 'type-practice',
-            title: 'Qual será o valor final?',
-            text: 'Analise a substituição na memória:',
-            code: 'int vidas = 3;\nvidas = 5;',
-            options: ['3', '5', '8', 'Erro'],
-            correct: 1,
-            explanation: 'A linha "vidas = 5;" substitui o valor antigo 3 pelo novo valor 5.'
-          },
-          {
-            type: 'interactive_slot',
-            badge: 'Prática no Código',
-            badgeType: 'type-practice',
-            title: 'Defina o valor da variável',
-            text: 'Preencha a lacuna para guardar o valor 100 na variável energia:',
-            codeBefore: 'int energia = ',
-            codeAfter: ';',
-            chips: ['100', 'energia', 'int', 'true'],
-            correctAnswer: '100',
-            explanation: 'Correto! 100 é um valor numérico inteiro válido.'
-          },
-          {
-            type: 'true_false',
-            badge: 'Prática',
-            badgeType: 'type-practice',
-            title: 'Verdadeiro ou Falso',
-            text: 'Toda instrução em C++ precisa obrigatoriamente terminar com ponto-e-vírgula (;).',
-            options: ['Verdadeiro', 'Falso'],
-            correct: 0,
-            explanation: 'Exato! O ponto-e-vírgula sinaliza o fim da instrução ao compilador.'
+            explanation: '"int" é o tipo reservado para números inteiros.'
           },
           {
             type: 'code_challenge',
             badge: 'Desafio Prático',
             badgeType: 'type-challenge',
-            title: 'Sua vez de digitar!',
+            title: 'Digite do zero!',
             text: 'Escreva a linha completa em C++ para declarar a variável "score" com o valor 100.',
-            referenceCode: 'int score = 100;',
-            placeholder: '',
             correctKeywords: ['int', 'score', '=', '100', ';'],
-            explanation: 'Perfeito! Você digitou a declaração C++ completa e corretamente.'
+            explanation: 'Perfeito! Declaração correta.'
           }
         ]
       },
@@ -118,61 +64,38 @@ const LessonsData = [
         title: '02. Tomando Decisões com (if)',
         tag: 'Lógica',
         learnedConcepts: [
-          'Estrutura condicional if (condicao)',
-          'Operadores de comparação: ==, !=, <, <=, >, >=',
-          'O que são blocos de código {}'
+          'Estrutura condicional if',
+          'Operadores de comparação: ==, >='
         ],
         steps: [
           {
             type: 'explanation',
             badge: 'Aprender',
             badgeType: 'type-info',
-            title: 'Tomando Decisões',
-            text: 'O bloco "if" (se) permite que seu código execute uma instrução APENAS se uma condição for verdadeira.',
-            code: 'if (idade >= 18) {\n  // Acesso liberado\n}'
+            title: 'O comando if',
+            text: 'O if permite executar instruções apenas se uma condição for verdadeira.',
+            code: 'if (temperatura >= 30) {\n  // Ligar cooler\n}'
           },
           {
             type: 'interactive_slot',
-            badge: 'Prática de Lógica',
-            badgeType: 'type-practice',
-            title: 'Complete a condição',
-            text: 'Preencha a lacuna para verificar se a temperatura é maior ou igual a 30:',
-            codeBefore: 'if (temperatura ',
-            codeAfter: ' 30) {\n  Serial.println("Quente!");\n}',
-            chips: ['>=', '<=', '==', '!='],
-            correctAnswer: '>=',
-            explanation: 'Perfeito! >= é o operador lógico "maior ou igual a".'
-          },
-          {
-            type: 'quiz',
             badge: 'Prática',
             badgeType: 'type-practice',
-            title: 'Qual operador compara se dois valores são IGUAIS?',
-            options: ['==', '=', '!=', '>='],
-            correct: 0,
-            explanation: 'Em C++, usamos "==" para comparar e "=" para atribuir valor.'
-          },
-          {
-            type: 'interactive_slot',
-            badge: 'Prática de Código',
-            badgeType: 'type-practice',
-            title: 'Verifique o Botão',
-            text: 'Preencha a lacuna para comparar se o botão é igual a 1 (pressionado):',
+            title: 'Operador de Igualdade',
+            text: 'Qual operador compara se dois valores são iguais em C++?',
             codeBefore: 'if (botao ',
-            codeAfter: ' 1) {\n  digitalWrite(13, HIGH);\n}',
-            chips: ['==', '=', '<', '&&'],
+            codeAfter: ' 1) { }',
+            chips: ['==', '=', '!=', '<'],
             correctAnswer: '==',
-            explanation: 'Excelente! Usamos "==" dentro dos parênteses do if para comparar.'
+            explanation: 'Usamos "==" para comparar igualdade.'
           },
           {
-            type: 'true_false',
-            badge: 'Prática',
-            badgeType: 'type-practice',
-            title: 'Blocos de Código',
-            text: 'O código dentro das chaves { } só roda se a condição do "if" for verdadeira.',
-            options: ['Verdadeiro', 'Falso'],
-            correct: 0,
-            explanation: 'Exato! Se a condição for falsa, o programa ignora tudo dentro das chaves.'
+            type: 'code_challenge',
+            badge: 'Desafio',
+            badgeType: 'type-challenge',
+            title: 'Escreva uma estrutura if',
+            text: 'Digite uma verificação se o valor é maior que 50:',
+            correctKeywords: ['if', '>', '50'],
+            explanation: 'Excelente! Condição estruturada com sucesso.'
           }
         ]
       }
@@ -187,89 +110,400 @@ const LessonsData = [
         id: 'l3',
         title: '03. Configurando Saídas (pinMode)',
         tag: 'Hardware',
-        learnedConcepts: [
-          'O papel dos pinos digitais',
-          'Sintaxe e uso da função pinMode()',
-          'A diferença prática do parâmetro OUTPUT',
-          'void setup() como configurador inicial'
-        ],
+        learnedConcepts: ['pinMode()', 'OUTPUT vs INPUT'],
         steps: [
           {
             type: 'explanation',
             badge: 'Aprender',
             badgeType: 'type-info',
-            title: 'Pinos do Arduino',
-            text: 'O microcontrolador possui "Pinos Digitais". Eles servem para enviar eletricidade (como ligar um motor) ou receber dados (como ler um botão).',
+            title: 'Preparando os Pinos',
+            text: 'Antes de usar qualquer pino no Arduino, precisamos configurá-lo no setup().',
             code: 'pinMode(13, OUTPUT);'
           },
           {
-            type: 'interactive_anatomy',
-            badge: 'Exploração',
-            badgeType: 'type-anatomy',
-            title: 'A Função pinMode()',
-            text: 'Toque para entender como preparamos a placa para usar o componente.',
-            tokens: [
-              { label: 'pinMode', expTitle: 'FUNÇÃO', expText: 'O comando nativo do Arduino para configurar o modo de trabalho de um pino.' },
-              { label: '(', expTitle: 'ABERTURA', expText: 'Inicia a passagem dos parâmetros (os dados que a função precisa).' },
-              { label: '13', expTitle: 'NÚMERO DO PINO', expText: 'Indica fisicamente em qual buraquinho da placa o fio está conectado.' },
-              { label: ',', expTitle: 'SEPARADOR', expText: 'A vírgula separa os parâmetros dentro da função.' },
-              { label: 'OUTPUT', expTitle: 'MODO (SAÍDA)', expText: 'Avisa que este pino vai ENVIAR energia (5V) em vez de receber.' },
-              { label: ');', expTitle: 'FECHAMENTO E FIM', expText: 'Finaliza o comando.' }
-            ]
-          },
-          {
             type: 'interactive_slot',
-            badge: 'Prática de Hardware',
+            badge: 'Prática',
             badgeType: 'type-practice',
-            title: 'Configure o modo do pino',
-            text: 'Toque na opção para definir que o pino 13 deve enviar energia:',
+            title: 'Modo Saída',
+            text: 'Preencha o parâmetro para configurar o pino como saída de energia:',
             codeBefore: 'pinMode(13, ',
             codeAfter: ');',
             chips: ['OUTPUT', 'INPUT', 'HIGH', 'LOW'],
             correctAnswer: 'OUTPUT',
-            explanation: 'Isso! OUTPUT (Saída) indica que o pino enviará 5 Volts de eletricidade.'
-          },
-          {
-            type: 'quiz',
-            badge: 'Prática',
-            badgeType: 'type-practice',
-            title: 'Em qual bloco do código configuramos os pinos normalmente?',
-            options: ['void setup()', 'void loop()', 'Fora do código'],
-            correct: 0,
-            explanation: 'A configuração é feita no setup() porque só precisa rodar uma única vez ao ligar a placa.'
-          },
-          {
-            type: 'true_false',
-            badge: 'Prática',
-            badgeType: 'type-practice',
-            title: 'Maiúsculas importam?',
-            text: 'A palavra OUTPUT precisa obrigatoriamente ser escrita com todas as letras MAIÚSCULAS.',
-            options: ['Verdadeiro', 'Falso'],
-            correct: 0,
-            explanation: 'Verdadeiro! O compilador do Arduino C++ difere maiúsculas de minúsculas (é case-sensitive).'
-          },
-          {
-            type: 'interactive_slot',
-            badge: 'Prática no Código',
-            badgeType: 'type-practice',
-            title: 'Selecione o pino',
-            text: 'Preencha a lacuna para configurar fisicamente o pino 9 do Arduino:',
-            codeBefore: 'pinMode(',
-            codeAfter: ', OUTPUT);',
-            chips: ['9', 'pinMode', 'setup', 'OUTPUT'],
-            correctAnswer: '9',
-            explanation: 'O primeiro argumento de pinMode() é sempre o número do pino físico.'
+            explanation: 'OUTPUT indica que o pino enviará 5V.'
           },
           {
             type: 'code_challenge',
-            badge: 'Desafio Prático',
+            badge: 'Desafio',
             badgeType: 'type-challenge',
-            title: 'Escreva a instrução completa!',
-            text: 'Agora que você entende o conceito, escreva o código para configurar o pino 13 como OUTPUT.',
-            referenceCode: 'pinMode(13, OUTPUT);',
-            placeholder: '',
-            correctKeywords: ['pinMode', '13', 'OUTPUT'],
-            explanation: 'Perfeito! Você dominou a configuração de saídas de hardware!'
+            title: 'Configure o pino 8',
+            text: 'Escreva o comando para configurar o pino 8 como OUTPUT:',
+            correctKeywords: ['pinMode', '8', 'OUTPUT'],
+            explanation: 'Perfeito!'
+          }
+        ]
+      },
+      {
+        id: 'l4',
+        title: '04. Escrevendo em Pinos (digitalWrite)',
+        tag: 'Hardware',
+        learnedConcepts: ['digitalWrite()', 'HIGH e LOW'],
+        steps: [
+          {
+            type: 'explanation',
+            badge: 'Aprender',
+            badgeType: 'type-info',
+            title: 'Ligando e Desligando LEDs',
+            text: 'O comando digitalWrite envia 5V (HIGH) ou 0V (LOW) para o pino.',
+            code: 'digitalWrite(13, HIGH);'
+          },
+          {
+            type: 'interactive_slot',
+            badge: 'Prática',
+            badgeType: 'type-practice',
+            title: 'Desligar componente',
+            text: 'Qual valor envia 0V (desligado) para o pino?',
+            codeBefore: 'digitalWrite(13, ',
+            codeAfter: ');',
+            chips: ['LOW', 'HIGH', 'OUTPUT', '5V'],
+            correctAnswer: 'LOW',
+            explanation: 'LOW desliga o pino.'
+          },
+          {
+            type: 'code_challenge',
+            badge: 'Desafio',
+            badgeType: 'type-challenge',
+            title: 'Ligue o pino 13',
+            text: 'Escreva a instrução para colocar o pino 13 em HIGH:',
+            correctKeywords: ['digitalWrite', '13', 'HIGH'],
+            explanation: 'Excelente!'
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'mod3',
+    title: 'Módulo 3: Entradas Analógicas & Sensores',
+    desc: 'Trabalhe com valores contínuos e sensores de luz/temperatura.',
+    lessons: [
+      {
+        id: 'l5',
+        title: '05. Lendo Potenciômetros (analogRead)',
+        tag: 'Sensores',
+        learnedConcepts: ['analogRead()', 'Pinos A0 a A5'],
+        steps: [
+          {
+            type: 'explanation',
+            badge: 'Aprender',
+            badgeType: 'type-info',
+            title: 'Leitura Analógica',
+            text: 'Diferente do digital (0 ou 1), o analogRead lê valores de 0 a 1023.',
+            code: 'int valor = analogRead(A0);'
+          },
+          {
+            type: 'interactive_slot',
+            badge: 'Prática',
+            badgeType: 'type-practice',
+            title: 'Função de Leitura',
+            text: 'Qual função lê um pino analógico?',
+            codeBefore: 'int sensor = ',
+            codeAfter: '(A0);',
+            chips: ['analogRead', 'digitalRead', 'pinMode', 'analogWrite'],
+            correctAnswer: 'analogRead',
+            explanation: 'analogRead lê portas analógicas.'
+          },
+          {
+            type: 'code_challenge',
+            badge: 'Desafio',
+            badgeType: 'type-challenge',
+            title: 'Faça a leitura',
+            text: 'Escreva o comando para ler a porta analógica A1:',
+            correctKeywords: ['analogRead', 'A1'],
+            explanation: 'Muito bom!'
+          }
+        ]
+      },
+      {
+        id: 'l6',
+        title: '06. Sensor de Luz LDR',
+        tag: 'Sensores',
+        learnedConcepts: ['Divisor de tensão', 'Mapeamento de valores'],
+        steps: [
+          {
+            type: 'explanation',
+            badge: 'Aprender',
+            badgeType: 'type-info',
+            title: 'LDR e Escuridão',
+            text: 'O LDR altera sua resistência conforme a luz incidente, permitindo detectar dia e noite.',
+            code: 'int luz = analogRead(A2);'
+          },
+          {
+            type: 'code_challenge',
+            badge: 'Desafio',
+            badgeType: 'type-challenge',
+            title: 'Atribua o valor do LDR',
+            text: 'Escreva uma linha lendo o sensor LDR conectado no pino A3:',
+            correctKeywords: ['analogRead', 'A3'],
+            explanation: 'Perfeito!'
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'mod4',
+    title: 'Módulo 4: Atuadores, Sons e Motores',
+    desc: 'Controle movimento com Servo Motores e sons com Buzzers.',
+    lessons: [
+      {
+        id: 'l7',
+        title: '07. Controlando Servo Motores (SG90)',
+        tag: 'Motores',
+        learnedConcepts: ['Biblioteca Servo.h', 'write() de ângulos'],
+        steps: [
+          {
+            type: 'explanation',
+            badge: 'Aprender',
+            badgeType: 'type-info',
+            title: 'Movimento Preciso',
+            text: 'Servo motores giram de 0 a 180 graus com precisão.',
+            code: '#include <Servo.h>\nServo meuServo;\nmeuServo.attach(9);\nmeuServo.write(90);'
+          },
+          {
+            type: 'interactive_slot',
+            badge: 'Prática',
+            badgeType: 'type-practice',
+            title: 'Definindo Ângulo',
+            text: 'Qual comando define a posição do servo motor para 180 graus?',
+            codeBefore: 'meuServo.',
+            codeAfter: '(180);',
+            chips: ['write', 'attach', 'read', 'set'],
+            correctAnswer: 'write',
+            explanation: '.write() define o ângulo do eixo.'
+          },
+          {
+            type: 'code_challenge',
+            badge: 'Desafio',
+            badgeType: 'type-challenge',
+            title: 'Gire o motor',
+            text: 'Escreva o comando para mover o servo para 0 graus:',
+            correctKeywords: ['write', '0'],
+            explanation: 'Excelente!'
+          }
+        ]
+      },
+      {
+        id: 'l8',
+        title: '08. Gerando Sons com Buzzer',
+        tag: 'Atuadores',
+        learnedConcepts: ['tone()', 'noTone()'],
+        steps: [
+          {
+            type: 'explanation',
+            badge: 'Aprender',
+            badgeType: 'type-info',
+            title: 'Buzzer Sonoro',
+            text: 'Podemos emitir frequências sonoras usando a função tone().',
+            code: 'tone(8, 1000); // Pino 8, Frequência 1000Hz'
+          },
+          {
+            type: 'code_challenge',
+            badge: 'Desafio',
+            badgeType: 'type-challenge',
+            title: 'Emita um som',
+            text: 'Escreva o comando tone para tocar no pino 7 com frequência 500:',
+            correctKeywords: ['tone', '7', '500'],
+            explanation: 'Mandou bem!'
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'mod5',
+    title: 'Módulo 5: Estruturas de Controle & Funções',
+    desc: 'Otimize seu código com loops e modularização.',
+    lessons: [
+      {
+        id: 'l9',
+        title: '09. Monitor Serial (Serial.begin)',
+        tag: 'Comunicação',
+        learnedConcepts: ['Serial.begin(9600)', 'Serial.println()'],
+        steps: [
+          {
+            type: 'explanation',
+            badge: 'Aprender',
+            badgeType: 'type-info',
+            title: 'Conversando com o PC',
+            text: 'O Monitor Serial permite exibir textos e variáveis na tela do seu computador.',
+            code: 'Serial.begin(9600);\nSerial.println("Ola Arduino");'
+          },
+          {
+            type: 'code_challenge',
+            badge: 'Desafio',
+            badgeType: 'type-challenge',
+            title: 'Imprima na tela',
+            text: 'Escreva o comando para imprimir a palavra "Teste" no Serial:',
+            correctKeywords: ['Serial.println', 'Teste'],
+            explanation: 'Perfeito!'
+          }
+        ]
+      },
+      {
+        id: 'l10',
+        title: '10. Laço de Repetição (for)',
+        tag: 'Lógica',
+        learnedConcepts: ['Estrutura for', 'Iterações e contadores'],
+        steps: [
+          {
+            type: 'explanation',
+            badge: 'Aprender',
+            badgeType: 'type-info',
+            title: 'Repetindo Tarefas',
+            text: 'O loop for repete um bloco de código um número específico de vezes.',
+            code: 'for (int i = 0; i < 5; i++) {\n  // Repete 5 vezes\n}'
+          },
+          {
+            type: 'code_challenge',
+            badge: 'Desafio',
+            badgeType: 'type-challenge',
+            title: 'Escreva um loop for',
+            text: 'Digite a inicialização básica de um loop for com int i = 0:',
+            correctKeywords: ['for', 'int i = 0'],
+            explanation: 'Excelente!'
+          }
+        ]
+      },
+      {
+        id: 'l11',
+        title: '11. Criando Funções Próprias',
+        tag: 'C++ Avançado',
+        learnedConcepts: ['void nomeFuncao()', 'Reutilização de código'],
+        steps: [
+          {
+            type: 'explanation',
+            badge: 'Aprender',
+            badgeType: 'type-info',
+            title: 'Modularizando o Código',
+            text: 'Funções ajudam a organizar blocos de código que se repetem.',
+            code: 'void piscarLed() {\n  digitalWrite(13, HIGH);\n  delay(500);\n}'
+          },
+          {
+            type: 'code_challenge',
+            badge: 'Desafio',
+            badgeType: 'type-challenge',
+            title: 'Declare uma função void',
+            text: 'Escreva a assinatura inicial de uma função vazia chamada "alarme":',
+            correctKeywords: ['void', 'alarme'],
+            explanation: 'Perfeito!'
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'mod6',
+    title: 'Módulo 6: Projetos Práticos de Robótica',
+    desc: 'Aplique todo o conhecimento em projetos reais montados.',
+    lessons: [
+      {
+        id: 'l12',
+        title: '12. Projeto: Semáforo Inteligente',
+        tag: 'Projeto',
+        learnedConcepts: ['Múltiplos LEDs', 'Temporização com delay'],
+        steps: [
+          {
+            type: 'explanation',
+            badge: 'Aprender',
+            badgeType: 'type-info',
+            title: 'Lógica de Trânsito',
+            text: 'Neste projeto, controlaremos três LEDs (Vermelho, Amarelo e Verde) em sequência.',
+            code: 'digitalWrite(VERDE, HIGH);\ndelay(3000);\ndigitalWrite(VERDE, LOW);'
+          },
+          {
+            type: 'code_challenge',
+            badge: 'Desafio',
+            badgeType: 'type-challenge',
+            title: 'Atraso de tempo',
+            text: 'Escreva um comando delay de 2 segundos (2000 milissegundos):',
+            correctKeywords: ['delay', '2000'],
+            explanation: 'Excelente!'
+          }
+        ]
+      },
+      {
+        id: 'l13',
+        title: '13. Projeto: Alarme com Sensor de Presença',
+        tag: 'Projeto',
+        learnedConcepts: ['Leitura de Botão/Sensor', 'Ativação de Buzzer'],
+        steps: [
+          {
+            type: 'explanation',
+            badge: 'Aprender',
+            badgeType: 'type-info',
+            title: 'Sistema de Segurança',
+            text: 'Se o sensor for acionado, o buzzer toca e o LED pisca.',
+            code: 'if (digitalRead(SENSOR) == HIGH) {\n  tone(BUZZER, 1500);\n}'
+          },
+          {
+            type: 'code_challenge',
+            badge: 'Desafio',
+            badgeType: 'type-challenge',
+            title: 'Verifique o sensor',
+            text: 'Escreva uma estrutura if verificando se digitalRead(2) é igual a HIGH:',
+            correctKeywords: ['if', 'digitalRead', '2', 'HIGH'],
+            explanation: 'Perfeito!'
+          }
+        ]
+      },
+      {
+        id: 'l14',
+        title: '14. Projeto: Robô Animatrônico',
+        tag: 'Projeto',
+        learnedConcepts: ['Servo motor controlado por lógica', 'Movimentos de mandíbula'],
+        steps: [
+          {
+            type: 'explanation',
+            badge: 'Aprender',
+            badgeType: 'type-info',
+            title: 'Movendo a Boca do Robô',
+            text: 'Usamos o servo motor para abrir e fechar a boca do robô animatrônico.',
+            code: 'cabecaServo.write(45);\ndelay(400);\ncabecaServo.write(0);'
+          },
+          {
+            type: 'code_challenge',
+            badge: 'Desafio',
+            badgeType: 'type-challenge',
+            title: 'Posicione o servo',
+            text: 'Escreva o comando para posicionar o servo chamado cabecaServo em 90 graus:',
+            correctKeywords: ['cabecaServo.write', '90'],
+            explanation: 'Muito bem!'
+          }
+        ]
+      },
+      {
+        id: 'l15',
+        title: '15. Projeto Final: Estação Meteorológica',
+        tag: 'Projeto Final',
+        learnedConcepts: ['Leitura de múltiplos sensores', 'Exibição no Serial Monitor'],
+        steps: [
+          {
+            type: 'explanation',
+            badge: 'Aprender',
+            badgeType: 'type-info',
+            title: 'Consolidação Final',
+            text: 'Você concluiu a jornada de C++ e Robótica! Agora junta sensores, atuadores e lógica.',
+            code: 'int temp = analogRead(A0);\nSerial.print("Temp: ");\nSerial.println(temp);'
+          },
+          {
+            type: 'code_challenge',
+            badge: 'Desafio Final',
+            badgeType: 'type-challenge',
+            title: 'Imprima a temperatura',
+            text: 'Escreva o comando para imprimir a variável temp no Serial:',
+            correctKeywords: ['Serial.println', 'temp'],
+            explanation: 'Parabéns! Você concluiu todos os módulos!'
           }
         ]
       }
