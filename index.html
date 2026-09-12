@@ -175,7 +175,7 @@
     .node-tag { font-family: 'Fira Code', monospace; font-size: 0.75rem; background: var(--editor-bg); padding: 4px 8px; border-radius: 6px; border: 1px solid var(--panel-border); color: var(--secondary); }
     .node-title { font-weight: 700; font-size: 0.95rem; }
 
-    /* --- JANELA IDE & SIMULADOR REALISTA --- */
+    /* --- IDE & HARDWARE REALISTA --- */
     .ide-window {
       width: 100%; min-height: 580px;
       background: var(--panel-bg);
@@ -207,7 +207,6 @@
     .line-numbers { padding: 0 14px; color: #4b5563; text-align: right; user-select: none; border-right: 1px solid rgba(255,255,255,0.05); }
     .code-content { flex: 1; padding: 0 16px; color: var(--text-main); white-space: pre-wrap; outline: none; user-select: text; }
 
-    /* HARDWARE REALISTA CONTAINER */
     .hardware-pane { background: var(--panel-bg); display: flex; flex-direction: column; padding: 20px; overflow-y: auto; gap: 18px; text-align: center; }
     
     .sim-card-3d {
@@ -231,14 +230,13 @@
     .arduino-real-img {
       width: 100%;
       height: auto;
-      border-radius: 12px;
+      border-radius: 14px;
       transition: all 0.3s ease;
       filter: drop-shadow(0 10px 20px rgba(0,0,0,0.8));
     }
 
-    /* Brilho Neon Verde quando o código roda */
     .arduino-real-img.active {
-      filter: drop-shadow(0 0 25px rgba(16, 185, 129, 0.9)) brightness(1.15);
+      filter: drop-shadow(0 0 25px rgba(16, 185, 129, 0.95)) brightness(1.15);
     }
 
     .led-status-pill {
@@ -445,7 +443,7 @@
         <div class="lessons-tree" id="full-curriculum-list"></div>
       </section>
 
-      <!-- VIEW 3: IDE PLAYGROUND LIVRE COM A IMAGEM REALISTA DO LINK -->
+      <!-- VIEW 3: IDE PLAYGROUND LIVRE COM A IMAGEM REALISTA -->
       <section id="view-ide" class="hidden">
         <div class="section-title-head">🔧 IDE Playground — Teste Livre</div>
         <div class="ide-window">
@@ -471,13 +469,13 @@ void loop() {
               </div>
             </div>
 
-            <!-- HARDWARE VIRTUAL COM A SUA IMAGEM REALISTA -->
+            <!-- HARDWARE VIRTUAL REALISTA -->
             <div class="hardware-pane">
               <div class="sim-card-3d">
                 <div style="font-size:0.75rem; font-weight:800; letter-spacing:1px; color:var(--secondary);">HARDWARE REALISTA VIRTUAL</div>
                 
                 <div class="mcu-image-wrapper">
-                  <img src="https://familiar-tomato-prxks2rc.edgeone.dev/" id="arduino-real" class="arduino-real-img" alt="Arduino Realista 3D">
+                  <img src="https://i.postimg.cc/VLKLLNJw/cff55d82-a88e-43e4-a3d7-d37b6eb30dbf.jpg" id="arduino-real" class="arduino-real-img" alt="Arduino Realista 3D">
                 </div>
 
                 <div class="led-status-pill">
