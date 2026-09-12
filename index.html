@@ -134,7 +134,7 @@
 
     main { padding: 28px; flex: 1; max-width: 1200px; width: 100%; margin: 0 auto; }
 
-    /* --- DASHBOARD HERO --- */
+    /* --- DASHBOARD --- */
     .dash-hero {
       background: linear-gradient(135deg, rgba(17, 24, 39, 0.9), rgba(9, 13, 22, 0.9)), radial-gradient(circle at top right, rgba(6, 182, 212, 0.15), transparent 60%);
       border: 1px solid var(--panel-border);
@@ -156,7 +156,6 @@
 
     .section-title-head { font-size: 1.2rem; font-weight: 800; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
     
-    /* --- LISTA DE AULAS --- */
     .lessons-tree { display: flex; flex-direction: column; gap: 12px; }
 
     .lesson-node {
@@ -176,7 +175,7 @@
     .node-tag { font-family: 'Fira Code', monospace; font-size: 0.75rem; background: var(--editor-bg); padding: 4px 8px; border-radius: 6px; border: 1px solid var(--panel-border); color: var(--secondary); }
     .node-title { font-weight: 700; font-size: 0.95rem; }
 
-    /* --- JANELA IDE & SIMULADOR --- */
+    /* --- JANELA IDE & SIMULADOR REALISTA --- */
     .ide-window {
       width: 100%; min-height: 580px;
       background: var(--panel-bg);
@@ -208,7 +207,7 @@
     .line-numbers { padding: 0 14px; color: #4b5563; text-align: right; user-select: none; border-right: 1px solid rgba(255,255,255,0.05); }
     .code-content { flex: 1; padding: 0 16px; color: var(--text-main); white-space: pre-wrap; outline: none; user-select: text; }
 
-    /* HARDWARE CONTAINER 3D */
+    /* CONTAINER DO ARDUINO REALISTA EM 3D */
     .hardware-pane { background: var(--panel-bg); display: flex; flex-direction: column; padding: 20px; overflow-y: auto; gap: 18px; text-align: center; }
     
     .sim-card-3d {
@@ -225,32 +224,32 @@
     .mcu-image-wrapper {
       position: relative;
       width: 100%;
-      max-width: 210px;
+      max-width: 220px;
       margin: 0 auto;
-      min-height: 150px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    .arduino-3d-img {
+    /* PLACA REALISTA EM VETOR 3D */
+    .board-3d-svg {
       width: 100%;
       height: auto;
-      border-radius: 12px;
+      filter: drop-shadow(0 12px 25px rgba(0,0,0,0.8));
       transition: all 0.3s ease;
-      filter: drop-shadow(0 8px 20px rgba(0,0,0,0.7));
     }
 
-    .arduino-3d-img.active {
-      filter: drop-shadow(0 0 25px rgba(16, 185, 129, 0.85)) brightness(1.15);
+    /* BRILHO DO LED NEON VERDE QUANDO LIGA */
+    .led-glow-element {
+      fill: #22c55e;
+      opacity: 0.2;
+      transition: all 0.3s ease;
     }
 
-    /* VETOR SVG DE FALLBACK CASO A IMAGEM NÃO CARREGUE */
-    .arduino-svg-fallback {
-      width: 100%;
-      max-width: 190px;
-      height: auto;
-      filter: drop-shadow(0 8px 15px rgba(0,0,0,0.6));
+    .led-glow-element.active {
+      fill: #10b981;
+      opacity: 1;
+      filter: drop-shadow(0 0 15px #10b981) drop-shadow(0 0 30px #10b981);
     }
 
     .led-status-pill {
@@ -300,7 +299,7 @@
     .btn-exec:hover { filter: brightness(1.1); transform: translateY(-1px); }
     .btn-sec { background: var(--panel-border); color: var(--text-main); }
 
-    /* --- MODAL DE AULAS ESTILO MIMO --- */
+    /* --- MODAL MIMO --- */
     .modal-overlay {
       position: fixed; inset: 0; background: rgba(3, 7, 18, 0.92);
       backdrop-filter: blur(10px); z-index: 100;
@@ -377,7 +376,6 @@
     .project-title { font-weight: 800; font-size: 1rem; margin-bottom: 6px; }
     .project-desc { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 16px; flex: 1; }
 
-    /* --- NAVIGATION MOBILE --- */
     .mobile-nav {
       display: none; position: fixed; bottom: 0; left: 0; right: 0;
       height: 60px; background: var(--panel-bg); border-top: 1px solid var(--panel-border);
@@ -480,10 +478,56 @@ void loop() {
 
             <div class="hardware-pane">
               <div class="sim-card-3d">
-                <div style="font-size:0.75rem; font-weight:800; letter-spacing:1px; color:var(--secondary);">HARDWARE VIRTUAL 3D</div>
+                <div style="font-size:0.75rem; font-weight:800; letter-spacing:1px; color:var(--secondary);">HARDWARE VIRTUAL 3D REALISTA</div>
                 
-                <div class="mcu-image-wrapper" id="mcu-box">
-                  <img src="arduino.jpg" id="arduino-3d" class="arduino-3d-img" alt="Arduino 3D Virtual" onerror="loadFallbackSvg()">
+                <div class="mcu-image-wrapper">
+                  <svg class="board-3d-svg" viewBox="0 0 300 280">
+                    <defs>
+                      <linearGradient id="boardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#0e7490"/>
+                        <stop offset="100%" stop-color="#0f5257"/>
+                      </linearGradient>
+                      <linearGradient id="chipGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#27272a"/>
+                        <stop offset="100%" stop-color="#09090b"/>
+                      </linearGradient>
+                      <linearGradient id="metalGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#e2e8f0"/>
+                        <stop offset="100%" stop-color="#64748b"/>
+                      </linearGradient>
+                    </defs>
+
+                    <polygon points="40,20 260,20 280,240 20,240" fill="url(#boardGrad)" stroke="#155e75" stroke-width="4" rx="10"/>
+                    
+                    <circle cx="45" cy="40" r="7" fill="url(#metalGrad)"/>
+                    <circle cx="255" cy="40" r="7" fill="url(#metalGrad)"/>
+                    <circle cx="35" cy="220" r="7" fill="url(#metalGrad)"/>
+                    <circle cx="265" cy="220" r="7" fill="url(#metalGrad)"/>
+
+                    <rect x="60" y="32" width="180" height="20" rx="3" fill="#18181b"/>
+                    <rect x="65" y="36" width="170" height="12" fill="#09090b"/>
+
+                    <rect x="70" y="200" width="160" height="20" rx="3" fill="#18181b"/>
+
+                    <rect x="110" y="100" width="80" height="80" rx="6" fill="url(#chipGrad)" stroke="#3f3f46" stroke-width="2"/>
+                    
+                    <rect x="95" y="110" width="15" height="4" fill="url(#metalGrad)"/>
+                    <rect x="95" y="125" width="15" height="4" fill="url(#metalGrad)"/>
+                    <rect x="95" y="140" width="15" height="4" fill="url(#metalGrad)"/>
+                    <rect x="95" y="155" width="15" height="4" fill="url(#metalGrad)"/>
+                    <rect x="190" y="110" width="15" height="4" fill="url(#metalGrad)"/>
+                    <rect x="190" y="125" width="15" height="4" fill="url(#metalGrad)"/>
+                    <rect x="190" y="140" width="15" height="4" fill="url(#metalGrad)"/>
+                    <rect x="190" y="155" width="15" height="4" fill="url(#metalGrad)"/>
+
+                    <text x="122" y="145" fill="#a1a1aa" font-size="11" font-weight="bold" font-family="'Fira Code', monospace">ATMEGA</text>
+
+                    <rect x="65" y="150" width="30" height="45" rx="4" fill="url(#metalGrad)" stroke="#475569"/>
+
+                    <circle cx="215" cy="70" r="12" class="led-glow-element" id="svg-led-glow"/>
+                    <circle cx="215" cy="70" r="6" fill="#15803d" stroke="#22c55e" stroke-width="2"/>
+                    <text x="185" y="74" fill="#67e8f9" font-size="10" font-weight="bold" font-family="sans-serif">PIN 13</text>
+                  </svg>
                 </div>
 
                 <div class="led-status-pill">
@@ -607,22 +651,7 @@ void loop() {
       renderBadges();
     }
 
-    // --- SE A IMAGEM FALHAR, GERA PLACA 3D EM SVG AUTOMATICAMENTE ---
-    function loadFallbackSvg() {
-      const box = document.getElementById('mcu-box');
-      if (!box) return;
-      box.innerHTML = `
-        <svg class="arduino-svg-fallback" id="arduino-3d-svg" viewBox="0 0 200 150">
-          <rect x="10" y="10" width="180" height="130" rx="12" fill="#0284c7" stroke="#0369a1" stroke-width="3"/>
-          <rect x="25" y="25" width="40" height="30" rx="4" fill="#64748b"/>
-          <rect x="75" y="65" width="90" height="25" rx="4" fill="#0f172a"/>
-          <circle id="svg-led-light" cx="165" cy="35" r="9" fill="#374151" stroke="#1e2937" stroke-width="2"/>
-          <text x="148" y="58" fill="#ffffff" font-size="9" font-weight="bold">PIN 13</text>
-        </svg>
-      `;
-    }
-
-    // --- SINTETIZADOR DE ÁUDIO NATIVO ---
+    // --- SINTETIZADOR DE ÁUDIO ---
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     function playSound(type) {
       if (audioCtx.state === 'suspended') audioCtx.resume();
@@ -645,7 +674,7 @@ void loop() {
       }
     }
 
-    // --- CURRÍCULO DE AULAS MIMO ---
+    // --- AULAS ---
     const lessonsData = [
       {
         id: 'l1', title: '01. Variáveis e Números em C++', tag: 'C++ Básico',
@@ -745,7 +774,6 @@ void loop() {
       });
     }
 
-    // --- MODAL DE SLIDES MIMO ---
     let currentLesson = null;
     let currentSlideIdx = 0;
     let selectedQuizIdx = null;
@@ -889,26 +917,23 @@ void loop() {
       document.getElementById('lesson-modal').classList.remove('active');
     }
 
-    // --- IDE PLAYGROUND LOGICA ---
+    // --- EXECUÇÃO DA IDE COM LED NEON ---
     function runFreeIDE() {
       const code = document.getElementById('free-ide-code').innerText;
       const terminal = document.getElementById('free-ide-terminal');
-      const img = document.getElementById('arduino-3d');
-      const svgLed = document.getElementById('svg-led-light');
+      const glow = document.getElementById('svg-led-glow');
       const dot = document.getElementById('led-dot-indicator');
       const status = document.getElementById('free-mcu-status');
 
-      terminal.innerText = '[COMPILER]: Compilando arquivo C++...\n[UPLOADER]: Gravando no microcontrolador...\n[HARDWARE]: Sinal enviado para o Pino 13.\n[SERIAL]: Executando loop() sem erros.';
+      terminal.innerText = '[COMPILER]: Compilando código C++...\n[UPLOADER]: Gravando no microcontrolador...\n[HARDWARE]: Sinal enviado para o Pino 13.\n[SERIAL]: Executando loop() em tempo real.';
 
       if (code.includes('HIGH')) {
-        if (img) img.classList.add('active');
-        if (svgLed) svgLed.setAttribute('fill', '#10b981');
+        if (glow) glow.classList.add('active');
         dot.classList.add('active');
         status.innerText = 'Pino 13: HIGH (5V)';
         status.style.color = '#10b981';
       } else {
-        if (img) img.classList.remove('active');
-        if (svgLed) svgLed.setAttribute('fill', '#374151');
+        if (glow) glow.classList.remove('active');
         dot.classList.remove('active');
         status.innerText = 'Pino 13: LOW (0V)';
         status.style.color = 'var(--text-muted)';
@@ -916,17 +941,14 @@ void loop() {
     }
 
     function resetFreeIDE() {
-      const img = document.getElementById('arduino-3d');
-      const svgLed = document.getElementById('svg-led-light');
-      if (img) img.classList.remove('active');
-      if (svgLed) svgLed.setAttribute('fill', '#374151');
+      const glow = document.getElementById('svg-led-glow');
+      if (glow) glow.classList.remove('active');
       document.getElementById('led-dot-indicator').classList.remove('active');
       document.getElementById('free-mcu-status').innerText = 'Pino 13: LOW (0V)';
       document.getElementById('free-mcu-status').style.color = 'var(--text-muted)';
       document.getElementById('free-ide-terminal').innerText = '[SYSTEM]: Memória reiniciada.';
     }
 
-    // --- SWITCH DE TELAS ---
     function switchView(viewId, btn) {
       document.querySelectorAll('main > section').forEach(s => s.classList.add('hidden'));
       document.getElementById(`view-${viewId}`).classList.remove('hidden');
@@ -935,7 +957,6 @@ void loop() {
       if (btn) btn.classList.add('active');
     }
 
-    // --- CONQUISTAS ---
     const badgesData = [
       { id: 'b1', name: 'Primeiro Compilador', desc: 'Escreveu seu primeiro programa em C++' },
       { id: 'b2', name: 'Engenheiro de Hardware', desc: 'Acendeu um LED via sinal digital' },
