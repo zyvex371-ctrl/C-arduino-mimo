@@ -271,7 +271,7 @@
     }
 
     .step-title { font-size: 1.4rem; font-weight: 800; line-height: 1.3; margin-bottom: 12px; }
-    .step-text { font-size: 1rem; color: var(--text-main); line-height: 1.6; margin-bottom: 20px; }
+    .step-text { font-size: 1rem; color: var(--text-main); line-height: 1.6; margin-bottom: 20px; white-space: pre-line; }
 
     .code-snippet {
       background: var(--editor-bg);
@@ -398,7 +398,7 @@
     .feedback-title { font-weight: 800; font-size: 1.15rem; display: flex; align-items: center; gap: 8px; }
     .feedback-text { font-size: 0.92rem; opacity: 0.95; line-height: 1.5; }
 
-    /* --- IDE & HARDWARE REALISTA (PRESERVADO) --- */
+    /* --- IDE & HARDWARE REALISTA --- */
     .ide-window {
       width: 100%; min-height: 580px;
       background: var(--panel-bg);
@@ -648,7 +648,7 @@ void loop() {
       <div class="lesson-progress-container">
         <div class="lesson-progress-fill" id="lesson-progress-fill"></div>
       </div>
-      <div class="step-counter" id="step-counter">1/10</div>
+      <div class="step-counter" id="step-counter">1/12</div>
     </div>
 
     <div class="lesson-body" id="lesson-body">
@@ -740,7 +740,7 @@ void loop() {
       }
     }
 
-    // --- ESTRUTURA DE CURSO E AULAS DECLARATIVAS (DECLARATIVE MIMO STEPS) ---
+    // --- ESTRUTURA DE CURSO COM 12 ETAPAS EXATAS POR LIÇÃO ---
     const modulesData = [
       {
         id: 'mod1',
@@ -752,75 +752,111 @@ void loop() {
             title: '01. Variáveis e Números em C++',
             tag: 'C++ Básico',
             steps: [
+              // ETAPAS 1 A 4: ENSINANDO O CONCEITO COMPLETO
               {
                 type: 'info',
-                badge: 'Introdução',
-                title: 'O que é uma variável?',
-                text: 'Uma variável é como uma caixa com um nome na memória do computador. Ela serve para guardar informações que podem mudar ao longo do tempo.',
+                badge: '1/4 Conceito',
+                title: 'O que é uma Variável?',
+                text: 'Uma variável é como uma caixa com nome na memória do computador.\nEla serve para guardar informações que o seu programa precisa usar.',
                 code: 'int idade = 11;'
               },
               {
                 type: 'info',
-                badge: 'Anatomia',
-                title: 'Entendendo cada parte',
-                text: 'Para criar uma caixa de números inteiros em C++, usamos a seguinte estrutura:\n\n• int → Define o tipo (Número Inteiro)\n• idade → É o nome da caixa\n• 11 → É o valor guardado',
+                badge: '2/4 Conceito',
+                title: 'Estrutura e Tipos (int)',
+                text: 'Para guardar números inteiros em C++, usamos a palavra "int".\n\n• int → indica o tipo (número inteiro)\n• idade → é o nome da variável\n• 11 → é o valor armazenado',
                 code: 'int idade = 11;'
               },
+              {
+                type: 'info',
+                badge: '3/4 Conceito',
+                title: 'Atribuindo Valores (=)',
+                text: 'O sinal de igual (=) no C++ serve para GUARDAR o valor dentro da caixa.\nE lembre-se: toda linha em C++ deve terminar com ponto-e-vírgula (;).',
+                code: 'int pontos = 50;'
+              },
+              {
+                type: 'info',
+                badge: '4/4 Conceito',
+                title: 'Mudando o Valor',
+                text: 'Como o próprio nome diz, uma variável pode ter seu valor alterado a qualquer momento durante a execução!',
+                code: 'int nivel = 1;\nnivel = 2; // Agora nivel vale 2'
+              },
+              
+              // ETAPAS 5 A 11: PRATICANDO
               {
                 type: 'quiz',
-                badge: 'Verificação',
-                title: 'Qual parte define o TIPO da variável?',
-                text: 'Observe a linha de código abaixo:',
-                code: 'int velocidade = 80;',
-                options: ['int', 'velocidade', '80', '='],
+                badge: 'Questão 5/12',
+                title: 'Qual palavra define um número inteiro?',
+                text: 'Escolha o tipo correto usado em C++:',
+                options: ['int', 'number', 'box', 'integer'],
                 correct: 0,
-                explanation: 'A palavra-chave "int" vem do inglês integer e define que a variável guardará um número inteiro.'
+                explanation: 'Usamos a palavra-chave "int" para criar variáveis de números inteiros.'
               },
               {
                 type: 'fill_blank',
-                badge: 'Praticar',
+                badge: 'Questão 6/12',
                 title: 'Complete a declaração',
-                text: 'Crie uma variável de número inteiro chamada "pino" que guarda o valor 13:',
+                text: 'Crie uma variável chamada "pino" que guarde o valor 13:',
                 codeTemplate: '___ pino = 13;',
                 correctAnswer: 'int',
-                explanation: 'Usamos "int" no início para indicar que a variável é do tipo inteiro.'
-              },
-              {
-                type: 'blocks',
-                badge: 'Organizar',
-                title: 'Monte o código na ordem correta',
-                text: 'Organize os blocos para declarar a variável "brilho" com o valor 255:',
-                available: ['255;', '=', 'brilho', 'int'],
-                correctOrder: ['int', 'brilho', '=', '255;'],
-                explanation: 'Em C++, a ordem correta é: tipo + nome + igual + valor e ponto-e-vírgula (;).'
+                explanation: 'A palavra "int" deve vir antes do nome da variável.'
               },
               {
                 type: 'true_false',
-                badge: 'Conceito',
+                badge: 'Questão 7/12',
                 title: 'Verdadeiro ou Falso',
-                text: 'O valor guardado dentro de uma variável pode ser alterado durante a execução do programa.',
+                text: 'Toda linha de comando em C++ precisa terminar com ponto-e-vírgula (;).',
                 options: ['Verdadeiro', 'Falso'],
                 correct: 0,
-                explanation: 'Exato! Por isso se chama "variável" — seu valor pode variar ao longo do tempo.'
+                explanation: 'Exato! O ponto-e-vírgula indica ao compilador que a instrução terminou.'
+              },
+              {
+                type: 'blocks',
+                badge: 'Questão 8/12',
+                title: 'Monte a variável na ordem',
+                text: 'Organize os blocos para declarar a variável "velocidade" igual a 100:',
+                available: ['100;', '=', 'int', 'velocidade'],
+                correctOrder: ['int', 'velocidade', '=', '100;'],
+                explanation: 'A ordem correta é: tipo + nome + igual + valor e ponto-e-vírgula (;).'
               },
               {
                 type: 'output_quiz',
-                badge: 'Resultado',
-                title: 'Qual será o valor final?',
-                text: 'Analise o que acontece com a variável abaixo:',
-                code: 'int nivel = 5;\nnivel = 10;',
-                options: ['5', '10', '15', 'Erro'],
+                badge: 'Questão 9/12',
+                title: 'Qual será o valor da variável?',
+                text: 'Veja o código abaixo:',
+                code: 'int vida = 3;\nvida = 5;',
+                options: ['3', '5', '8', 'Erro'],
                 correct: 1,
-                explanation: 'A segunda linha substitui o valor 5 anterior pelo novo valor 10.'
+                explanation: 'A segunda linha substitui o valor 3 antigo pelo novo valor 5.'
               },
               {
+                type: 'quiz',
+                badge: 'Questão 10/12',
+                title: 'O que o símbolo = faz em C++?',
+                text: 'Selecione a função do sinal de igual:',
+                options: ['Guarda um valor na variável', 'Compara se dois valores são iguais', 'Apaga a variável', 'Soma dois números'],
+                correct: 0,
+                explanation: 'O sinal de igual (=) é o operador de atribuição de valores.'
+              },
+              {
+                type: 'fill_blank',
+                badge: 'Questão 11/12',
+                title: 'Ajustando o valor',
+                text: 'Complete o código para guardar o valor 255 na variável brilho:',
+                codeTemplate: 'int brilho ___ 255;',
+                correctAnswer: '=',
+                explanation: 'O operador = é essencial para atribuir um valor.'
+              },
+              
+              // ETAPA 12: DESAFIO FINAL
+              {
                 type: 'code_challenge',
-                badge: 'Desafio Final',
-                title: 'Desafio do Desenvolvedor',
-                text: 'Digite a linha de código completa para criar a variável chamada "velocidade" com o valor 100:',
-                placeholder: 'int velocidade = 100;',
-                correctKeywords: ['int', 'velocidade', '=', '100;'],
-                explanation: 'Perfeito! Você aprendeu a declarar variáveis em C++.'
+                badge: 'Desafio Final (12/12)',
+                title: 'Crie sua primeira variável!',
+                text: 'Digite o código completo para criar a variável "score" com o valor 100:',
+                placeholder: 'int score = 100;',
+                correctKeywords: ['int', 'score', '=', '100;'],
+                explanation: 'Parabéns! Você concluiu todas as 12 etapas da lição com sucesso!'
               }
             ]
           }
@@ -836,60 +872,108 @@ void loop() {
             title: '02. Configurando Saídas com pinMode()',
             tag: 'Arduino',
             steps: [
+              // ETAPAS 1 A 4: ENSINANDO O CONCEITO
               {
                 type: 'info',
-                badge: 'Hardware',
-                title: 'Pinos Digitais',
-                text: 'O Arduino possui pinos digitais que podem enviar ou receber energia. Para usá-los, primeiro precisamos dizer à placa o que o pino fará.',
+                badge: '1/4 Conceito',
+                title: 'Pinos do Arduino',
+                text: 'O Arduino possui pinos digitais numerados.\nEles podem funcionar enviando energia ou lendo sensores.',
                 code: 'pinMode(13, OUTPUT);'
               },
               {
+                type: 'info',
+                badge: '2/4 Conceito',
+                title: 'A Função pinMode()',
+                text: 'Usamos a função pinMode() dentro de setup() para avisar à placa como um pino específico será utilizado.',
+                code: 'void setup() {\n  pinMode(13, OUTPUT);\n}'
+              },
+              {
+                type: 'info',
+                badge: '3/4 Conceito',
+                title: 'O que é OUTPUT?',
+                text: 'A palavra OUTPUT avisa que o pino vai ENVIAR 5 Volts de energia elétrica para componentes como LEDs e Buzzer.',
+                code: 'pinMode(13, OUTPUT);'
+              },
+              {
+                type: 'info',
+                badge: '4/4 Conceito',
+                title: 'Sintaxe Completa',
+                text: 'A sintaxe recebe dois parâmetros dentro dos parênteses:\n1. O número do pino\n2. O modo (OUTPUT ou INPUT)',
+                code: 'pinMode(13, OUTPUT);'
+              },
+
+              // ETAPAS 5 A 11: PRATICANDO
+              {
                 type: 'quiz',
-                badge: 'Comando',
-                title: 'Qual função configura o modo de um pino?',
-                options: ['pinMode()', 'digitalWrite()', 'setup()', 'setPin()'],
+                badge: 'Questão 5/12',
+                title: 'Qual função configura o modo do pino?',
+                options: ['pinMode()', 'digitalWrite()', 'setup()', 'start()'],
                 correct: 0,
-                explanation: 'A função pinMode() é usada para definir se um pino será ENTRADA (INPUT) ou SAÍDA (OUTPUT).'
+                explanation: 'pinMode() é o comando que estabelece a função do pino.'
               },
               {
                 type: 'fill_blank',
-                badge: 'Completar',
-                title: 'Configure o Pino 13 como Saída',
-                text: 'Complete o código para definir o pino 13 como saída de energia:',
+                badge: 'Questão 6/12',
+                title: 'Configure como Saída',
+                text: 'Complete o código para definir o pino 13 como saída:',
                 codeTemplate: 'pinMode(13, ___);',
                 correctAnswer: 'OUTPUT',
-                explanation: 'OUTPUT indica que o pino vai enviar eletricidade (por exemplo, para acender um LED).'
+                explanation: 'OUTPUT significa saída de corrente elétrica.'
+              },
+              {
+                type: 'true_false',
+                badge: 'Questão 7/12',
+                title: 'Verdadeiro ou Falso',
+                text: 'A palavra OUTPUT precisa ser escrita em letras MAIÚSCULAS no C++ do Arduino.',
+                options: ['Verdadeiro', 'Falso'],
+                correct: 0,
+                explanation: 'O C++ é case-sensitive! OUTPUT em minúsculas causará erro.'
               },
               {
                 type: 'blocks',
-                badge: 'Organizar',
-                title: 'Monte o comando completo',
-                text: 'Organize os blocos para configurar o pino 13 como saída:',
+                badge: 'Questão 8/12',
+                title: 'Monte a função na ordem',
+                text: 'Organize os blocos do comando:',
                 available: ['OUTPUT);', '13,', 'pinMode('],
                 correctOrder: ['pinMode(', '13,', 'OUTPUT);'],
-                explanation: 'Sintaxe: pinMode( numeroDoPino , MODO );'
-              }
-            ]
-          },
-          {
-            id: 'l3',
-            title: '03. Acendendo LEDs com digitalWrite()',
-            tag: 'Eletrônica',
-            steps: [
-              {
-                type: 'info',
-                badge: 'Energia',
-                title: 'HIGH e LOW',
-                text: 'Para LIGAR os 5V de um pino usamos HIGH. Para DESLIGAR (0V) usamos LOW.',
-                code: 'digitalWrite(13, HIGH); // Liga\ndigitalWrite(13, LOW);  // Desliga'
+                explanation: 'pinMode( numeroDoPino , MODO );'
               },
               {
                 type: 'quiz',
-                badge: 'Prática',
-                title: 'Qual valor envia 5 Volt para acender um LED?',
-                options: ['HIGH', 'LOW', 'ON', 'START'],
+                badge: 'Questão 9/12',
+                title: 'Onde o pinMode() geralmente é escrito?',
+                options: ['Dentro de void setup()', 'Dentro de void loop()', 'Fora do código', 'Em um arquivo separado'],
                 correct: 0,
-                explanation: 'HIGH ativa os 5 Volts de energia no pino digital.'
+                explanation: 'O setup() roda apenas uma vez no início da placa.'
+              },
+              {
+                type: 'fill_blank',
+                badge: 'Questão 10/12',
+                title: 'Definindo o número do pino',
+                text: 'Configure o pino 12 como saída:',
+                codeTemplate: 'pinMode(___, OUTPUT);',
+                correctAnswer: '12',
+                explanation: 'Colocamos o número do pino desejado no primeiro argumento.'
+              },
+              {
+                type: 'true_false',
+                badge: 'Questão 11/12',
+                title: 'Verdadeiro ou Falso',
+                text: 'Um pino configurado como OUTPUT pode acender um LED conectado a ele.',
+                options: ['Verdadeiro', 'Falso'],
+                correct: 0,
+                explanation: 'Sim, pois ele enviará eletricidade para o LED.'
+              },
+
+              // ETAPA 12: DESAFIO FINAL
+              {
+                type: 'code_challenge',
+                badge: 'Desafio Final (12/12)',
+                title: 'Escreva a configuração!',
+                text: 'Digite o comando completo para configurar o pino 13 como OUTPUT:',
+                placeholder: 'pinMode(13, OUTPUT);',
+                correctKeywords: ['pinMode', '13', 'OUTPUT'],
+                explanation: 'Perfeito! Você dominou a configuração de pinos no Arduino!'
               }
             ]
           }
@@ -996,7 +1080,7 @@ void loop() {
         html += `<div class="code-snippet">${step.code}</div>`;
       }
 
-      // RENDERIZAR WIDGET CONFORME O TIPO DE INTERAÇÃO
+      // RENDERIZAR WIDGET CONFORME O TIPO
       if (step.type === 'info') {
         btn.innerText = 'Continuar';
       } else if (step.type === 'quiz' || step.type === 'output_quiz' || step.type === 'true_false') {
