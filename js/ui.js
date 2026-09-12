@@ -77,7 +77,10 @@ const UI = {
       });
 
       modHtml += `</div></div>`;
-      if (container) container.innerHTML += modHtml;
+      
+      // Dashboard exibe apenas o primeiro módulo ou resumo rápido se desejado, 
+      // mas na Trilha (fullContainer) exibe tudo completo.
+      if (container && mod.id === 'mod1') container.innerHTML += modHtml;
       if (fullContainer) fullContainer.innerHTML += modHtml;
     });
   },
@@ -177,9 +180,7 @@ const UI = {
     } else if (step.type === 'code_challenge') {
       btn.innerText = 'Verificar';
       html += `<div class="fill-input-area">`;
-      if (step.referenceCode) {
-        html += `<div class="typing-reference">${step.referenceCode}</div>`;
-      }
+      // A referência visual foi removida daqui propositalmente para evitar que apenas copiem o código acima.
       html += `<input type="text" id="challenge-input" class="inline-code-input" placeholder="Digite o código aqui..." autocomplete="off" oninput="Exercises.checkInputState()"></div>`;
     } else if (step.type === 'quiz' || step.type === 'true_false' || step.type === 'output_quiz') {
       btn.innerText = 'Verificar';
