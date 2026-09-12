@@ -3,28 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ArduinoGo — Plataforma de C++ & Robótica</title>
+  <title>ArduinoGo — Aprenda C++ & Robótica Passo a Passo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <style>
     :root {
-      --bg-dark: #090d16;
-      --panel-bg: #111827;
-      --panel-border: #1f2937;
-      --panel-hover: #374151;
-      --primary: #10b981;
-      --primary-glow: rgba(16, 185, 129, 0.4);
-      --secondary: #06b6d4;
-      --secondary-glow: rgba(6, 182, 212, 0.25);
+      --bg-dark: #070a12;
+      --panel-bg: #0f172a;
+      --panel-border: #1e293b;
+      --panel-hover: #334155;
+      
+      /* IDENTIDADE CIANO/AZUL */
+      --primary: #06b6d4;
+      --primary-hover: #0891b2;
+      --primary-glow: rgba(6, 182, 212, 0.35);
+      --secondary: #38bdf8;
+      --secondary-glow: rgba(56, 189, 248, 0.25);
+      
       --accent: #f59e0b;
       --danger: #ef4444;
-      --text-main: #f3f4f6;
-      --text-muted: #9ca3af;
-      --editor-bg: #030712;
-      --editor-sidebar: #0b0f19;
-      --block-bg: #1f2937;
+      --success: #10b981;
+      
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --editor-bg: #020617;
+      --editor-sidebar: #090d16;
+      --block-bg: #1e293b;
     }
 
     * {
@@ -67,27 +73,27 @@
     }
 
     .brand-icon {
-      width: 38px; height: 38px;
-      background: linear-gradient(135deg, var(--secondary), var(--primary));
-      border-radius: 10px;
+      width: 40px; height: 40px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-radius: 12px;
       display: flex; align-items: center; justify-content: center;
-      color: #000; font-weight: 800; font-size: 1.1rem;
-      box-shadow: 0 0 15px var(--secondary-glow);
+      color: #020617; font-weight: 800; font-size: 1.2rem;
+      box-shadow: 0 0 18px var(--primary-glow);
     }
 
     .brand-title {
-      font-size: 1.1rem; font-weight: 800; letter-spacing: -0.5px;
+      font-size: 1.15rem; font-weight: 800; letter-spacing: -0.5px;
       background: linear-gradient(135deg, #fff, var(--text-muted));
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
 
-    .nav-list { display: flex; flex-direction: column; gap: 6px; list-style: none; }
+    .nav-list { display: flex; flex-direction: column; gap: 8px; list-style: none; }
     .nav-item button {
       width: 100%;
       background: none; border: none;
       color: var(--text-muted);
-      padding: 12px 14px; border-radius: 10px;
-      font-weight: 600; font-size: 0.9rem;
+      padding: 12px 14px; border-radius: 12px;
+      font-weight: 700; font-size: 0.9rem;
       display: flex; align-items: center; gap: 12px;
       cursor: pointer; transition: all 0.2s ease;
       text-align: left;
@@ -95,10 +101,10 @@
 
     .nav-item button:hover { background: var(--panel-border); color: #fff; }
     .nav-item button.active {
-      background: rgba(6, 182, 212, 0.12);
-      color: var(--secondary);
-      border: 1px solid rgba(6, 182, 212, 0.3);
-      box-shadow: 0 0 12px var(--secondary-glow);
+      background: rgba(6, 182, 212, 0.15);
+      color: var(--primary);
+      border: 1px solid rgba(6, 182, 212, 0.35);
+      box-shadow: 0 0 15px var(--primary-glow);
     }
 
     /* --- LAYOUT PRINCIPAL --- */
@@ -111,7 +117,7 @@
 
     header {
       height: 64px;
-      background: rgba(17, 24, 39, 0.85);
+      background: rgba(15, 23, 42, 0.85);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--panel-border);
       position: sticky; top: 0; z-index: 40;
@@ -124,23 +130,23 @@
       background: var(--editor-bg);
       border: 1px solid var(--panel-border);
       padding: 6px 14px; border-radius: 20px;
-      font-size: 0.85rem; font-weight: 700;
+      font-size: 0.85rem; font-weight: 800;
       display: flex; align-items: center; gap: 6px;
     }
 
-    .status-badge.xp { color: var(--secondary); border-color: rgba(6, 182, 212, 0.4); }
+    .status-badge.xp { color: var(--secondary); border-color: rgba(56, 189, 248, 0.4); }
     .status-badge.streak { color: var(--accent); border-color: rgba(245, 158, 11, 0.4); }
     .status-badge.hearts { color: var(--danger); border-color: rgba(239, 68, 68, 0.4); }
 
-    main { padding: 28px; flex: 1; max-width: 1200px; width: 100%; margin: 0 auto; }
+    main { padding: 28px; flex: 1; max-width: 1000px; width: 100%; margin: 0 auto; }
 
-    /* --- DASHBOARD HERO --- */
+    /* --- DASHBOARD HERO & MÓDULOS --- */
     .dash-hero {
-      background: linear-gradient(135deg, rgba(17, 24, 39, 0.9), rgba(9, 13, 22, 0.9)), radial-gradient(circle at top right, rgba(6, 182, 212, 0.15), transparent 60%);
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(7, 10, 18, 0.9)), radial-gradient(circle at top right, rgba(6, 182, 212, 0.2), transparent 60%);
       border: 1px solid var(--panel-border);
-      border-radius: 16px; padding: 28px;
+      border-radius: 20px; padding: 28px;
       margin-bottom: 28px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
     }
 
     .dash-hero h1 { font-size: 1.6rem; font-weight: 800; margin-bottom: 6px; }
@@ -152,30 +158,247 @@
       border: 1px solid var(--panel-border);
       display: flex; margin-bottom: 8px;
     }
-    .overall-fill { height: 100%; background: linear-gradient(90deg, var(--secondary), var(--primary)); transition: width 0.4s ease; }
+    .overall-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); transition: width 0.4s ease; }
 
     .section-title-head { font-size: 1.2rem; font-weight: 800; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
-    
-    .lessons-tree { display: flex; flex-direction: column; gap: 12px; }
 
-    .lesson-node {
+    .module-card {
       background: var(--panel-bg);
       border: 1px solid var(--panel-border);
-      border-radius: 12px; padding: 16px 20px;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .module-header {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--secondary);
+      margin-bottom: 4px;
+    }
+
+    .module-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .lessons-tree { display: flex; flex-direction: column; gap: 10px; }
+
+    .lesson-node {
+      background: var(--editor-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: 12px; padding: 14px 18px;
       display: flex; align-items: center; justify-content: space-between;
       transition: all 0.2s ease;
     }
 
-    .lesson-node.unlocked { cursor: pointer; border-color: rgba(16, 185, 129, 0.4); }
-    .lesson-node.unlocked:hover { background: rgba(16, 185, 129, 0.05); transform: translateX(4px); }
-    .lesson-node.completed { border-color: rgba(6, 182, 212, 0.4); background: rgba(6, 182, 212, 0.05); }
+    .lesson-node.unlocked { cursor: pointer; border-color: rgba(6, 182, 212, 0.4); }
+    .lesson-node.unlocked:hover { background: rgba(6, 182, 212, 0.08); transform: translateX(4px); }
+    .lesson-node.completed { border-color: rgba(56, 189, 248, 0.4); background: rgba(56, 189, 248, 0.05); }
     .lesson-node.locked { opacity: 0.4; filter: grayscale(1); cursor: not-allowed; }
 
-    .node-left { display: flex; align-items: center; gap: 14px; }
-    .node-tag { font-family: 'Fira Code', monospace; font-size: 0.75rem; background: var(--editor-bg); padding: 4px 8px; border-radius: 6px; border: 1px solid var(--panel-border); color: var(--secondary); }
-    .node-title { font-weight: 700; font-size: 0.95rem; }
+    .node-left { display: flex; align-items: center; gap: 12px; }
+    .node-tag { font-family: 'Fira Code', monospace; font-size: 0.75rem; background: var(--panel-bg); padding: 4px 8px; border-radius: 6px; border: 1px solid var(--panel-border); color: var(--primary); }
+    .node-title { font-weight: 700; font-size: 0.92rem; }
 
-    /* --- JANELA IDE --- */
+    /* --- OVERLAY DA EXPERIÊNCIA DE LIÇÃO (ESTILO MIMO) --- */
+    .lesson-screen-overlay {
+      position: fixed; inset: 0;
+      background: var(--bg-dark);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .lesson-header {
+      height: 64px;
+      background: var(--panel-bg);
+      border-bottom: 1px solid var(--panel-border);
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .btn-close-lesson {
+      background: none; border: none;
+      color: var(--text-muted); font-size: 1.2rem;
+      cursor: pointer; padding: 6px;
+    }
+
+    .lesson-progress-container {
+      flex: 1;
+      height: 10px;
+      background: var(--editor-bg);
+      border-radius: 5px;
+      overflow: hidden;
+      border: 1px solid var(--panel-border);
+    }
+
+    .lesson-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .step-counter {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .lesson-body {
+      flex: 1;
+      max-width: 680px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 30px 20px 120px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      overflow-y: auto;
+    }
+
+    .step-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(6, 182, 212, 0.15); color: var(--primary);
+      font-size: 0.75rem; font-weight: 800; padding: 4px 10px;
+      border-radius: 12px; width: fit-content; text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .step-title { font-size: 1.4rem; font-weight: 800; line-height: 1.3; margin-bottom: 12px; }
+    .step-text { font-size: 1rem; color: var(--text-main); line-height: 1.6; margin-bottom: 20px; }
+
+    .code-snippet {
+      background: var(--editor-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: 14px;
+      padding: 16px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.9rem;
+      color: var(--secondary);
+      white-space: pre-wrap;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+
+    /* WIDGETS DE INTERAÇÃO */
+    .options-stack { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+    .option-card {
+      background: var(--panel-bg);
+      border: 2px solid var(--panel-border);
+      color: var(--text-main);
+      padding: 16px 20px;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .option-card:hover { border-color: rgba(6, 182, 212, 0.5); }
+    .option-card.selected {
+      border-color: var(--primary);
+      background: rgba(6, 182, 212, 0.12);
+      box-shadow: 0 0 15px var(--primary-glow);
+    }
+
+    .fill-input-area {
+      background: var(--editor-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: 14px;
+      padding: 18px;
+      font-family: 'Fira Code', monospace;
+      font-size: 1rem;
+      line-height: 1.8;
+      margin-top: 10px;
+    }
+
+    .inline-code-input {
+      background: var(--panel-bg);
+      border: 2px solid var(--primary);
+      color: var(--secondary);
+      font-family: 'Fira Code', monospace;
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 8px;
+      outline: none;
+      width: 140px;
+      text-align: center;
+    }
+
+    .blocks-container {
+      display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px;
+    }
+
+    .code-block-btn {
+      background: var(--block-bg);
+      border: 1px solid var(--panel-border);
+      color: var(--text-main);
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-family: 'Fira Code', monospace;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .answer-drop-zone {
+      min-height: 56px;
+      background: var(--editor-bg);
+      border: 2px dashed var(--panel-border);
+      border-radius: 12px;
+      padding: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .lesson-footer-bar {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      height: 84px; background: var(--panel-bg);
+      border-top: 1px solid var(--panel-border);
+      padding: 0 20px;
+      display: flex; align-items: center; justify-content: center;
+      z-index: 105;
+    }
+
+    .btn-action-primary {
+      width: 100%; max-width: 640px;
+      height: 52px; background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+      color: #020617; font-weight: 800; font-size: 1rem;
+      border: none; border-radius: 14px; cursor: pointer;
+      box-shadow: 0 0 20px var(--primary-glow);
+      transition: all 0.2s ease;
+    }
+    .btn-action-primary:hover { filter: brightness(1.1); transform: translateY(-1px); }
+
+    /* SHEET DE FEEDBACK IMEDIATO */
+    .feedback-sheet {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      padding: 24px 20px 28px 20px;
+      border-top-left-radius: 24px; border-top-right-radius: 24px;
+      display: none; flex-direction: column; gap: 12px;
+      align-items: center; z-index: 110;
+      animation: slideUp 0.25s ease-out;
+    }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+    .feedback-sheet.correct { background: #064e3b; border-top: 3px solid var(--success); display: flex; }
+    .feedback-sheet.wrong { background: #7f1d1d; border-top: 3px solid var(--danger); display: flex; }
+
+    .feedback-content { width: 100%; max-width: 640px; display: flex; flex-direction: column; gap: 8px; }
+    .feedback-title { font-weight: 800; font-size: 1.15rem; display: flex; align-items: center; gap: 8px; }
+    .feedback-text { font-size: 0.92rem; opacity: 0.95; line-height: 1.5; }
+
+    /* --- IDE & HARDWARE REALISTA (PRESERVADO) --- */
     .ide-window {
       width: 100%; min-height: 580px;
       background: var(--panel-bg);
@@ -196,12 +419,9 @@
     .ide-dot.yellow { background: #f59e0b; }
     .ide-dot.green { background: #10b981; }
 
-    .ide-title { font-family: 'Fira Code', monospace; font-size: 0.85rem; color: var(--text-muted); }
-
     .ide-body { flex: 1; display: grid; grid-template-columns: 1fr 340px; overflow: hidden; }
-
     .editor-pane { display: flex; flex-direction: column; background: var(--editor-bg); border-right: 1px solid var(--panel-border); }
-    .editor-topbar { padding: 10px 16px; background: #0b0f19; border-bottom: 1px solid var(--panel-border); display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--text-muted); font-family: 'Fira Code', monospace; }
+    .editor-topbar { padding: 10px 16px; background: #090d16; border-bottom: 1px solid var(--panel-border); display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--text-muted); font-family: 'Fira Code', monospace; }
 
     .code-area-wrapper { flex: 1; display: flex; overflow: auto; padding: 14px 0; font-family: 'Fira Code', monospace; font-size: 0.9rem; line-height: 1.6; }
     .line-numbers { padding: 0 14px; color: #4b5563; text-align: right; user-select: none; border-right: 1px solid rgba(255,255,255,0.05); }
@@ -212,88 +432,37 @@
     .sim-card-3d {
       background: var(--editor-bg);
       border: 1px solid var(--panel-border);
-      border-radius: 16px;
-      padding: 18px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
+      border-radius: 16px; padding: 18px;
+      display: flex; flex-direction: column; align-items: center; gap: 12px;
     }
 
-    /* CONTAINER E POSICIONAMENTO DO LED SOBRE A FOTO */
-    .mcu-image-wrapper {
-      position: relative;
-      width: 100%;
-      max-width: 220px;
-      margin: 0 auto;
-    }
+    .mcu-image-wrapper { position: relative; width: 100%; max-width: 220px; margin: 0 auto; }
+    .arduino-real-img { width: 100%; height: auto; border-radius: 14px; display: block; filter: brightness(0.85); transition: filter 0.3s ease; }
+    .arduino-real-img.active { filter: brightness(1.05); }
 
-    .arduino-real-img {
-      width: 100%;
-      height: auto;
-      border-radius: 14px;
-      display: block;
-      filter: brightness(0.85); /* Fica levemente apagado quando desligado */
-      transition: filter 0.3s ease;
-    }
-
-    .arduino-real-img.active {
-      filter: brightness(1.05); /* Ganha vida quando o código executa */
-    }
-
-    /* LÂMPADA NEON POSICIONADA EXATAMENTE NO LED DA FOTO */
     .led-on-picture {
-      position: absolute;
-      top: 28%;
-      left: 53.5%;
+      position: absolute; top: 28%; left: 53.5%;
       transform: translate(-50%, -50%);
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      background: rgba(16, 185, 129, 0);
-      pointer-events: none;
-      transition: all 0.3s ease;
+      width: 16px; height: 16px; border-radius: 50%;
+      background: rgba(16, 185, 129, 0); pointer-events: none; transition: all 0.3s ease;
     }
-
-    /* EFEITO DE LUZ INTENSA QUANDO O LED ACENDE */
     .led-on-picture.active {
       background: #4ade80;
-      box-shadow: 
-        0 0 8px #22c55e,
-        0 0 18px #10b981,
-        0 0 35px #10b981,
-        0 0 50px #059669;
+      box-shadow: 0 0 8px #22c55e, 0 0 18px #10b981, 0 0 35px #10b981;
     }
 
     .led-status-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--panel-bg);
-      border: 1px solid var(--panel-border);
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: var(--text-muted);
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--panel-bg); border: 1px solid var(--panel-border);
+      padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; color: var(--text-muted);
     }
-
-    .led-dot {
-      width: 10px; height: 10px;
-      border-radius: 50%;
-      background: #374151;
-      transition: all 0.3s ease;
-    }
-
-    .led-dot.active {
-      background: #10b981;
-      box-shadow: 0 0 12px #10b981, 0 0 24px #10b981;
-    }
+    .led-dot { width: 10px; height: 10px; border-radius: 50%; background: #374151; transition: all 0.3s ease; }
+    .led-dot.active { background: #10b981; box-shadow: 0 0 12px #10b981; }
 
     .terminal-box {
       background: #000; border: 1px solid var(--panel-border);
       border-radius: 8px; padding: 12px; font-family: 'Fira Code', monospace;
-      font-size: 0.78rem; color: #4ade80; height: 120px; overflow-y: auto; text-align: left;
+      font-size: 0.78rem; color: #38bdf8; height: 120px; overflow-y: auto; text-align: left;
     }
 
     .ide-footer {
@@ -303,100 +472,28 @@
     }
 
     .btn-btn {
-      padding: 10px 20px; border-radius: 8px; font-weight: 700; font-size: 0.85rem;
-      border: none; cursor: pointer; display: flex; align-items: center; gap: 8px;
-      transition: all 0.2s ease;
+      padding: 10px 20px; border-radius: 10px; font-weight: 700; font-size: 0.85rem;
+      border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s ease;
     }
-
-    .btn-exec { background: var(--primary); color: #000; box-shadow: 0 0 15px var(--primary-glow); }
+    .btn-exec { background: var(--primary); color: #020617; box-shadow: 0 0 15px var(--primary-glow); }
     .btn-exec:hover { filter: brightness(1.1); transform: translateY(-1px); }
     .btn-sec { background: var(--panel-border); color: var(--text-main); }
 
-    /* --- MODAL DE AULAS MIMO --- */
-    .modal-overlay {
-      position: fixed; inset: 0; background: rgba(3, 7, 18, 0.92);
-      backdrop-filter: blur(10px); z-index: 100;
-      display: none; align-items: center; justify-content: center; padding: 20px;
-    }
-    .modal-overlay.active { display: flex; }
-
-    .lesson-slide-card {
-      width: 100%; max-width: 600px;
-      background: var(--panel-bg);
-      border: 1px solid var(--panel-border);
-      border-radius: 20px; padding: 24px;
-      display: flex; flex-direction: column; gap: 18px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.7);
-    }
-
-    .slide-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: rgba(6, 182, 212, 0.15); color: var(--secondary);
-      font-size: 0.75rem; font-weight: 800; padding: 4px 10px; border-radius: 12px; width: fit-content; text-transform: uppercase;
-    }
-
-    .slide-title { font-size: 1.25rem; font-weight: 800; line-height: 1.3; }
-    .slide-text { font-size: 0.95rem; color: var(--text-main); line-height: 1.6; }
-
-    .code-box {
-      background: var(--editor-bg); border: 1px solid var(--panel-border);
-      padding: 16px; border-radius: 12px; font-family: 'Fira Code', monospace;
-      font-size: 0.88rem; color: #38bdf8; white-space: pre-wrap; line-height: 1.5;
-    }
-
-    .answer-zone {
-      min-height: 52px; background: var(--editor-bg);
-      border: 2px dashed var(--panel-border); border-radius: 12px;
-      padding: 10px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
-    }
-
-    .blocks-palette { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
-    .code-block-btn {
-      background: var(--block-bg); border: 1px solid var(--panel-border);
-      color: var(--text-main); padding: 10px 14px; border-radius: 10px;
-      font-family: 'Fira Code', monospace; font-weight: 600; font-size: 0.88rem; cursor: pointer;
-    }
-
-    .options-grid { display: flex; flex-direction: column; gap: 10px; }
-    .option-btn {
-      background: var(--editor-bg); border: 1px solid var(--panel-border);
-      color: var(--text-main); padding: 14px 16px; border-radius: 12px;
-      font-weight: 700; font-size: 0.92rem; text-align: left; cursor: pointer;
-    }
-    .option-btn.selected { border-color: var(--secondary); background: rgba(6, 182, 212, 0.15); }
-
-    .feedback-sheet {
-      position: fixed; bottom: 0; left: 0; right: 0; padding: 20px;
-      border-top-left-radius: 20px; border-top-right-radius: 20px;
-      display: none; flex-direction: column; gap: 10px;
-      animation: slideUp 0.25s ease; z-index: 110;
-    }
-    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-
-    .feedback-sheet.correct { background: #064e3b; border-top: 3px solid var(--primary); display: flex; }
-    .feedback-sheet.wrong { background: #7f1d1d; border-top: 3px solid var(--danger); display: flex; }
-
-    /* --- PROJETOS & BADGES --- */
+    /* PROJETOS & BADGES */
     .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
-    .project-card {
-      background: var(--panel-bg); border: 1px solid var(--panel-border);
-      border-radius: 14px; overflow: hidden; display: flex; flex-direction: column;
-      transition: all 0.2s ease;
-    }
-    .project-card:hover { border-color: var(--secondary); transform: translateY(-4px); }
+    .project-card { background: var(--panel-bg); border: 1px solid var(--panel-border); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; }
     .project-img { height: 130px; background: radial-gradient(circle at center, rgba(6,182,212,0.15), transparent), var(--editor-bg); display: flex; align-items: center; justify-content: center; border-bottom: 1px solid var(--panel-border); }
     .project-body { padding: 18px; flex: 1; display: flex; flex-direction: column; }
     .project-title { font-weight: 800; font-size: 1rem; margin-bottom: 6px; }
     .project-desc { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 16px; flex: 1; }
 
-    /* --- NAVIGATION MOBILE --- */
     .mobile-nav {
       display: none; position: fixed; bottom: 0; left: 0; right: 0;
       height: 60px; background: var(--panel-bg); border-top: 1px solid var(--panel-border);
       z-index: 50; justify-content: space-around; align-items: center;
     }
     .mobile-btn { background: none; border: none; color: var(--text-muted); font-size: 0.75rem; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; }
-    .mobile-btn.active { color: var(--secondary); }
+    .mobile-btn.active { color: var(--primary); }
 
     @media (max-width: 850px) {
       aside { display: none; }
@@ -417,13 +514,13 @@
       <div class="brand-icon">⚡</div>
       <div>
         <div class="brand-title">ArduinoGo</div>
-        <div style="font-size: 0.7rem; color: var(--text-muted); font-family: 'Fira Code', monospace;">IDE & LAB 3D</div>
+        <div style="font-size: 0.7rem; color: var(--text-muted); font-family: 'Fira Code', monospace;">MIMO LAB 3D</div>
       </div>
     </div>
 
     <ul class="nav-list">
       <li class="nav-item"><button class="active" onclick="switchView('dashboard', this)"><span>🏠</span> Início</button></li>
-      <li class="nav-item"><button onclick="switchView('curriculum', this)"><span>💻</span> C++ & Arduino</button></li>
+      <li class="nav-item"><button onclick="switchView('curriculum', this)"><span>💻</span> Trilha de C++</button></li>
       <li class="nav-item"><button onclick="switchView('ide', this)"><span>🔧</span> IDE Playground</button></li>
       <li class="nav-item"><button onclick="switchView('projects', this)"><span>🧩</span> Projetos</button></li>
       <li class="nav-item"><button onclick="switchView('badges', this)"><span>🏆</span> Conquistas</button></li>
@@ -433,7 +530,7 @@
   <div class="app-container">
     <header>
       <div style="font-weight: 700; font-size: 0.9rem; color: var(--text-muted);">
-        Hardware & Software Lab
+        Plataforma Interativa de C++ e Robótica
       </div>
       <div class="header-status">
         <div class="status-badge xp">⚡ <span id="user-xp">160</span> XP</div>
@@ -446,9 +543,9 @@
       <section id="view-dashboard">
         <div class="dash-hero">
           <h1>Olá, Desenvolvedor 👋</h1>
-          <p>Continue aprendendo C++ e construindo seus robôs.</p>
+          <p>Aprenda programação e eletrônica em pequenos passos interativos.</p>
           <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px;">
-            <span>PROGRESSO DA TRILHA</span>
+            <span>PROGRESSO GERAL</span>
             <span id="dash-pct-text">0% Concluído</span>
           </div>
           <div class="overall-progress-bar">
@@ -456,17 +553,17 @@
           </div>
         </div>
 
-        <div class="section-title-head">🚀 Próximas Aulas</div>
-        <div class="lessons-tree" id="dash-lessons-preview"></div>
+        <div class="section-title-head">🚀 Seus Módulos de Aprendizado</div>
+        <div id="modules-container"></div>
       </section>
 
       <section id="view-curriculum" class="hidden">
-        <div class="section-title-head">🔧 Trilha de C++ e Robótica</div>
-        <div class="lessons-tree" id="full-curriculum-list"></div>
+        <div class="section-title-head">🔧 Trilha Completa de C++ & Robótica</div>
+        <div id="full-curriculum-container"></div>
       </section>
 
       <section id="view-ide" class="hidden">
-        <div class="section-title-head">🔧 IDE Playground — Teste Livre</div>
+        <div class="section-title-head">🔧 IDE Playground — Laboratório Livre</div>
         <div class="ide-window">
           <div class="ide-header">
             <div class="ide-dots"><div class="ide-dot red"></div><div class="ide-dot yellow"></div><div class="ide-dot green"></div></div>
@@ -545,42 +642,40 @@ void loop() {
     </main>
   </div>
 
-  <div class="modal-overlay" id="lesson-modal">
-    <div class="lesson-slide-card">
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <span class="slide-badge" id="slide-badge">CONCEITO</span>
-        <button style="background:none; border:none; color:var(--text-muted); font-size:1.2rem; cursor:pointer;" onclick="closeLessonModal()">✕</button>
+  <div class="lesson-screen-overlay hidden" id="lesson-screen">
+    <div class="lesson-header">
+      <button class="btn-close-lesson" onclick="exitLesson()">✕</button>
+      <div class="lesson-progress-container">
+        <div class="lesson-progress-fill" id="lesson-progress-fill"></div>
+      </div>
+      <div class="step-counter" id="step-counter">1/10</div>
+    </div>
+
+    <div class="lesson-body" id="lesson-body">
       </div>
 
-      <div class="slide-title" id="slide-title">Carregando...</div>
-      <div class="slide-text" id="slide-text"></div>
-      <div class="code-box hidden" id="slide-code"></div>
-
-      <div class="options-grid hidden" id="slide-quiz-options"></div>
-      <div class="hidden" id="slide-blocks-area">
-        <div class="answer-zone" id="answer-zone"></div>
-        <div class="blocks-palette" id="blocks-palette"></div>
-      </div>
-
-      <button class="btn-btn btn-exec" style="width:100%; justify-content:center; padding:14px; margin-top:10px;" id="btn-slide-action" onclick="checkSlideAnswer()">Continuar</button>
+    <div class="lesson-footer-bar">
+      <button class="btn-action-primary" id="btn-step-action" onclick="handleStepAction()">Continuar</button>
     </div>
 
     <div class="feedback-sheet" id="feedback-sheet">
-      <div style="font-weight:800; font-size:1.1rem;" id="fb-title"></div>
-      <div style="font-size:0.9rem; opacity:0.9;" id="fb-text"></div>
-      <button class="btn-btn" style="background:#fff; color:#000; justify-content:center; margin-top:6px;" onclick="advanceSlide()">Continuar ▶</button>
+      <div class="feedback-content">
+        <div class="feedback-title" id="fb-title"></div>
+        <div class="feedback-text" id="fb-text"></div>
+        <button class="btn-action-primary" style="margin-top:8px; background:#fff; color:#020617;" onclick="nextStep()">Avançar ▶</button>
+      </div>
     </div>
   </div>
 
   <nav class="mobile-nav">
     <button class="mobile-btn active" onclick="switchView('dashboard', this)"><span>🏠</span>Início</button>
-    <button class="mobile-btn" onclick="switchView('curriculum', this)"><span>💻</span>Aulas</button>
+    <button class="mobile-btn" onclick="switchView('curriculum', this)"><span>💻</span>Trilha</button>
     <button class="mobile-btn" onclick="switchView('ide', this)"><span>🔧</span>IDE</button>
     <button class="mobile-btn" onclick="switchView('projects', this)"><span>🧩</span>Projetos</button>
   </nav>
 
   <script>
-    // --- ESTADO & PERSISTÊNCIA ---
+    // --- ESTADO DA APLICAÇÃO ---
     let state = {
       xp: 160,
       streak: 1,
@@ -611,16 +706,18 @@ void loop() {
       document.getElementById('user-streak').innerText = state.streak;
       document.getElementById('user-hearts').innerText = state.hearts;
       
-      const totalLessons = lessonsData.length;
+      let totalLessons = 0;
+      modulesData.forEach(m => totalLessons += m.lessons.length);
       const pct = Math.round((state.completedLessons.length / totalLessons) * 100) || 0;
+      
       document.getElementById('dash-pct-text').innerText = pct + '% Concluído';
       document.getElementById('dash-pct-fill').style.width = pct + '%';
 
-      renderCurriculum();
+      renderModules();
       renderBadges();
     }
 
-    // --- SINTETIZADOR DE ÁUDIO ---
+    // --- SINTETIZADOR DE ÁUDIO NATIVO ---
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     function playSound(type) {
       if (audioCtx.state === 'suspended') audioCtx.resume();
@@ -643,250 +740,390 @@ void loop() {
       }
     }
 
-    // --- AULAS ---
-    const lessonsData = [
+    // --- ESTRUTURA DE CURSO E AULAS DECLARATIVAS (DECLARATIVE MIMO STEPS) ---
+    const modulesData = [
       {
-        id: 'l1', title: '01. Variáveis e Números em C++', tag: 'C++ Básico',
-        slides: [
+        id: 'mod1',
+        title: 'Módulo 1: Conhecendo o C++',
+        desc: 'Aprenda como o computador armazena dados na memória.',
+        lessons: [
           {
-            type: 'info', badge: 'Conceito',
-            title: 'Caixas de Memória (Variáveis)',
-            text: 'Uma variável é uma caixa com nome para guardar informações. Para guardar números inteiros em C++, usamos a palavra int.',
-            code: 'int pinoLed = 13;'
-          },
-          {
-            type: 'quiz', badge: 'Perguntas',
-            title: 'Qual palavra-chave cria uma variável de número inteiro?',
-            options: ['int', 'box', 'var', 'number'], correct: 0,
-            explanation: 'Em C++, a palavra "int" define um número inteiro.'
-          },
-          {
-            type: 'blocks', badge: 'Montar Código',
-            title: 'Monte o código para criar a variável pinoLed igual a 13:',
-            available: ['13;', '=', 'int', 'pinoLed'],
-            correctOrder: ['int', 'pinoLed', '=', '13;'],
-            explanation: 'A ordem correta é: tipo + nome + igual + valor e ponto-e-vírgula.'
+            id: 'l1',
+            title: '01. Variáveis e Números em C++',
+            tag: 'C++ Básico',
+            steps: [
+              {
+                type: 'info',
+                badge: 'Introdução',
+                title: 'O que é uma variável?',
+                text: 'Uma variável é como uma caixa com um nome na memória do computador. Ela serve para guardar informações que podem mudar ao longo do tempo.',
+                code: 'int idade = 11;'
+              },
+              {
+                type: 'info',
+                badge: 'Anatomia',
+                title: 'Entendendo cada parte',
+                text: 'Para criar uma caixa de números inteiros em C++, usamos a seguinte estrutura:\n\n• int → Define o tipo (Número Inteiro)\n• idade → É o nome da caixa\n• 11 → É o valor guardado',
+                code: 'int idade = 11;'
+              },
+              {
+                type: 'quiz',
+                badge: 'Verificação',
+                title: 'Qual parte define o TIPO da variável?',
+                text: 'Observe a linha de código abaixo:',
+                code: 'int velocidade = 80;',
+                options: ['int', 'velocidade', '80', '='],
+                correct: 0,
+                explanation: 'A palavra-chave "int" vem do inglês integer e define que a variável guardará um número inteiro.'
+              },
+              {
+                type: 'fill_blank',
+                badge: 'Praticar',
+                title: 'Complete a declaração',
+                text: 'Crie uma variável de número inteiro chamada "pino" que guarda o valor 13:',
+                codeTemplate: '___ pino = 13;',
+                correctAnswer: 'int',
+                explanation: 'Usamos "int" no início para indicar que a variável é do tipo inteiro.'
+              },
+              {
+                type: 'blocks',
+                badge: 'Organizar',
+                title: 'Monte o código na ordem correta',
+                text: 'Organize os blocos para declarar a variável "brilho" com o valor 255:',
+                available: ['255;', '=', 'brilho', 'int'],
+                correctOrder: ['int', 'brilho', '=', '255;'],
+                explanation: 'Em C++, a ordem correta é: tipo + nome + igual + valor e ponto-e-vírgula (;).'
+              },
+              {
+                type: 'true_false',
+                badge: 'Conceito',
+                title: 'Verdadeiro ou Falso',
+                text: 'O valor guardado dentro de uma variável pode ser alterado durante a execução do programa.',
+                options: ['Verdadeiro', 'Falso'],
+                correct: 0,
+                explanation: 'Exato! Por isso se chama "variável" — seu valor pode variar ao longo do tempo.'
+              },
+              {
+                type: 'output_quiz',
+                badge: 'Resultado',
+                title: 'Qual será o valor final?',
+                text: 'Analise o que acontece com a variável abaixo:',
+                code: 'int nivel = 5;\nnivel = 10;',
+                options: ['5', '10', '15', 'Erro'],
+                correct: 1,
+                explanation: 'A segunda linha substitui o valor 5 anterior pelo novo valor 10.'
+              },
+              {
+                type: 'code_challenge',
+                badge: 'Desafio Final',
+                title: 'Desafio do Desenvolvedor',
+                text: 'Digite a linha de código completa para criar a variável chamada "velocidade" com o valor 100:',
+                placeholder: 'int velocidade = 100;',
+                correctKeywords: ['int', 'velocidade', '=', '100;'],
+                explanation: 'Perfeito! Você aprendeu a declarar variáveis em C++.'
+              }
+            ]
           }
         ]
       },
       {
-        id: 'l2', title: '02. Configurando Saídas com pinMode()', tag: 'Arduino',
-        slides: [
+        id: 'mod2',
+        title: 'Módulo 2: Pinos Digitais & Robótica',
+        desc: 'Controle o envio de energia no Arduino.',
+        lessons: [
           {
-            type: 'info', badge: 'Entrada e Saída',
-            title: 'Avisando a Placa',
-            text: 'O comando pinMode() avisa ao Arduino se um pino vai ENVIAR energia (OUTPUT) para um LED ou RECEBER dados (INPUT).',
-            code: 'pinMode(13, OUTPUT);'
+            id: 'l2',
+            title: '02. Configurando Saídas com pinMode()',
+            tag: 'Arduino',
+            steps: [
+              {
+                type: 'info',
+                badge: 'Hardware',
+                title: 'Pinos Digitais',
+                text: 'O Arduino possui pinos digitais que podem enviar ou receber energia. Para usá-los, primeiro precisamos dizer à placa o que o pino fará.',
+                code: 'pinMode(13, OUTPUT);'
+              },
+              {
+                type: 'quiz',
+                badge: 'Comando',
+                title: 'Qual função configura o modo de um pino?',
+                options: ['pinMode()', 'digitalWrite()', 'setup()', 'setPin()'],
+                correct: 0,
+                explanation: 'A função pinMode() é usada para definir se um pino será ENTRADA (INPUT) ou SAÍDA (OUTPUT).'
+              },
+              {
+                type: 'fill_blank',
+                badge: 'Completar',
+                title: 'Configure o Pino 13 como Saída',
+                text: 'Complete o código para definir o pino 13 como saída de energia:',
+                codeTemplate: 'pinMode(13, ___);',
+                correctAnswer: 'OUTPUT',
+                explanation: 'OUTPUT indica que o pino vai enviar eletricidade (por exemplo, para acender um LED).'
+              },
+              {
+                type: 'blocks',
+                badge: 'Organizar',
+                title: 'Monte o comando completo',
+                text: 'Organize os blocos para configurar o pino 13 como saída:',
+                available: ['OUTPUT);', '13,', 'pinMode('],
+                correctOrder: ['pinMode(', '13,', 'OUTPUT);'],
+                explanation: 'Sintaxe: pinMode( numeroDoPino , MODO );'
+              }
+            ]
           },
           {
-            type: 'blocks', badge: 'Prática',
-            title: 'Monte o comando para configurar o pino 13 como SAÍDA:',
-            available: ['OUTPUT);', '13,', 'pinMode('],
-            correctOrder: ['pinMode(', '13,', 'OUTPUT);'],
-            explanation: 'Usamos pinMode(pino, OUTPUT); para definir saídas de energia.'
-          }
-        ]
-      },
-      {
-        id: 'l3', title: '03. Acendendo LEDs com digitalWrite()', tag: 'Eletrônica',
-        slides: [
-          {
-            type: 'info', badge: 'Ativando Energia',
-            title: 'HIGH e LOW',
-            text: 'Usamos digitalWrite() com HIGH para enviar 5V de energia (LIGAR) ou LOW para cortar a energia para 0V (DESLIGAR).',
-            code: 'digitalWrite(13, HIGH); // Liga o LED'
-          },
-          {
-            type: 'quiz', badge: 'Quiz Rápido',
-            title: 'Qual valor envia 5 Volt de energia para LIGAR o pino?',
-            options: ['HIGH', 'LOW', 'START', 'ON'], correct: 0,
-            explanation: 'HIGH envia os 5V de eletricidade.'
+            id: 'l3',
+            title: '03. Acendendo LEDs com digitalWrite()',
+            tag: 'Eletrônica',
+            steps: [
+              {
+                type: 'info',
+                badge: 'Energia',
+                title: 'HIGH e LOW',
+                text: 'Para LIGAR os 5V de um pino usamos HIGH. Para DESLIGAR (0V) usamos LOW.',
+                code: 'digitalWrite(13, HIGH); // Liga\ndigitalWrite(13, LOW);  // Desliga'
+              },
+              {
+                type: 'quiz',
+                badge: 'Prática',
+                title: 'Qual valor envia 5 Volt para acender um LED?',
+                options: ['HIGH', 'LOW', 'ON', 'START'],
+                correct: 0,
+                explanation: 'HIGH ativa os 5 Volts de energia no pino digital.'
+              }
+            ]
           }
         ]
       }
     ];
 
-    function renderCurriculum() {
-      const preview = document.getElementById('dash-lessons-preview');
-      const full = document.getElementById('full-curriculum-list');
-      if (!preview || !full) return;
+    // --- RENDERIZAÇÃO DE MÓDULOS E TRILHA ---
+    function renderModules() {
+      const container = document.getElementById('modules-container');
+      const fullContainer = document.getElementById('full-curriculum-container');
+      if (!container) return;
 
-      preview.innerHTML = ''; full.innerHTML = '';
-      let prevDone = true;
+      container.innerHTML = '';
+      if (fullContainer) fullContainer.innerHTML = '';
 
-      lessonsData.forEach((item) => {
-        const isDone = state.completedLessons.includes(item.id);
-        const isUnlocked = isDone || prevDone;
+      let prevLessonDone = true;
 
-        let statusClass = 'locked';
-        let statusIcon = '🔒';
-
-        if (isDone) { statusClass = 'completed'; statusIcon = '✅'; }
-        else if (isUnlocked) { statusClass = 'unlocked'; statusIcon = '▶ Começar'; }
-
-        const action = isUnlocked ? `onclick="startLessonModal('${item.id}')"` : '';
-
-        const html = `
-          <div class="lesson-node ${statusClass}" ${action}>
-            <div class="node-left">
-              <span class="node-tag">${item.tag}</span>
-              <span class="node-title">${item.title}</span>
-            </div>
-            <span style="font-size:0.85rem; font-weight:700;">${statusIcon}</span>
-          </div>
+      modulesData.forEach(mod => {
+        let modHtml = `
+          <div class="module-card">
+            <div class="module-header">${mod.title}</div>
+            <div class="module-desc">${mod.desc}</div>
+            <div class="lessons-tree">
         `;
 
-        full.innerHTML += html;
-        if (preview.children.length < 2) preview.innerHTML += html;
+        mod.lessons.forEach(lesson => {
+          const isDone = state.completedLessons.includes(lesson.id);
+          const isUnlocked = isDone || prevLessonDone;
 
-        prevDone = isDone;
+          let statusClass = 'locked';
+          let statusIcon = '🔒';
+
+          if (isDone) { statusClass = 'completed'; statusIcon = '✅ Concluída'; }
+          else if (isUnlocked) { statusClass = 'unlocked'; statusIcon = '▶ Começar'; }
+
+          const clickAction = isUnlocked ? `onclick="startLesson('${lesson.id}')"` : '';
+
+          modHtml += `
+            <div class="lesson-node ${statusClass}" ${clickAction}>
+              <div class="node-left">
+                <span class="node-tag">${lesson.tag}</span>
+                <span class="node-title">${lesson.title}</span>
+              </div>
+              <span style="font-size:0.85rem; font-weight:800;">${statusIcon}</span>
+            </div>
+          `;
+
+          prevLessonDone = isDone;
+        });
+
+        modHtml += `</div></div>`;
+        container.innerHTML += modHtml;
+        if (fullContainer) fullContainer.innerHTML += modHtml;
       });
     }
 
-    let currentLesson = null;
-    let currentSlideIdx = 0;
-    let selectedQuizIdx = null;
+    // --- ENGINE DE LIÇÃO EM MICRO-ETAPAS (ESTILO MIMO) ---
+    let activeLesson = null;
+    let currentStepIdx = 0;
+    let selectedOptionIdx = null;
     let userPlacedBlocks = [];
 
-    function startLessonModal(id) {
-      currentLesson = lessonsData.find(l => l.id === id);
-      if (!currentLesson) return;
+    function startLesson(lessonId) {
+      for (const mod of modulesData) {
+        const found = mod.lessons.find(l => l.id === lessonId);
+        if (found) { activeLesson = found; break; }
+      }
+      if (!activeLesson) return;
 
-      currentSlideIdx = 0;
-      document.getElementById('lesson-modal').classList.add('active');
-      showSlide();
+      currentStepIdx = 0;
+      document.getElementById('lesson-screen').classList.remove('hidden');
+      renderCurrentStep();
     }
 
-    function showSlide() {
-      const slide = currentLesson.slides[currentSlideIdx];
-      selectedQuizIdx = null;
-      userPlacedBlocks = [];
+    function exitLesson() {
+      document.getElementById('lesson-screen').classList.add('hidden');
       document.getElementById('feedback-sheet').className = 'feedback-sheet';
+    }
 
-      document.getElementById('slide-badge').innerText = slide.badge;
-      document.getElementById('slide-title').innerText = slide.title;
-      document.getElementById('slide-text').innerText = slide.text || '';
+    function renderCurrentStep() {
+      const step = activeLesson.steps[currentStepIdx];
+      const body = document.getElementById('lesson-body');
+      const btn = document.getElementById('btn-step-action');
+      const sheet = document.getElementById('feedback-sheet');
+      
+      sheet.className = 'feedback-sheet';
+      selectedOptionIdx = null;
+      userPlacedBlocks = [];
 
-      const codeBox = document.getElementById('slide-code');
-      if (slide.code) {
-        codeBox.innerText = slide.code;
-        codeBox.classList.remove('hidden');
-      } else {
-        codeBox.classList.add('hidden');
+      // Progresso
+      const totalSteps = activeLesson.steps.length;
+      const pct = Math.round(((currentStepIdx + 1) / totalSteps) * 100);
+      document.getElementById('lesson-progress-fill').style.width = pct + '%';
+      document.getElementById('step-counter').innerText = `${currentStepIdx + 1}/${totalSteps}`;
+
+      let html = `
+        <span class="step-badge">${step.badge || 'Aprender'}</span>
+        <div class="step-title">${step.title}</div>
+        <div class="step-text">${step.text}</div>
+      `;
+
+      if (step.code) {
+        html += `<div class="code-snippet">${step.code}</div>`;
       }
 
-      const quizGrid = document.getElementById('slide-quiz-options');
-      const blocksArea = document.getElementById('slide-blocks-area');
-      const btnAction = document.getElementById('btn-slide-action');
+      // RENDERIZAR WIDGET CONFORME O TIPO DE INTERAÇÃO
+      if (step.type === 'info') {
+        btn.innerText = 'Continuar';
+      } else if (step.type === 'quiz' || step.type === 'output_quiz' || step.type === 'true_false') {
+        btn.innerText = 'Verificar';
+        html += `<div class="options-stack">`;
+        step.options.forEach((opt, idx) => {
+          html += `<button class="option-card" onclick="selectOption(${idx}, this)">${opt}</button>`;
+        });
+        html += `</div>`;
+      } else if (step.type === 'fill_blank') {
+        btn.innerText = 'Verificar';
+        const templateWithInput = step.codeTemplate.replace('___', `<input type="text" id="blank-input" class="inline-code-input" placeholder="?" autocomplete="off">`);
+        html += `<div class="fill-input-area">${templateWithInput}</div>`;
+      } else if (step.type === 'blocks') {
+        btn.innerText = 'Verificar';
+        html += `
+          <div class="answer-drop-zone" id="drop-zone"></div>
+          <div class="blocks-container" id="blocks-palette"></div>
+        `;
+      } else if (step.type === 'code_challenge') {
+        btn.innerText = 'Verificar';
+        html += `
+          <div class="fill-input-area">
+            <input type="text" id="challenge-input" class="inline-code-input" style="width:100%; text-align:left;" placeholder="${step.placeholder}" autocomplete="off">
+          </div>
+        `;
+      }
 
-      quizGrid.classList.add('hidden');
-      blocksArea.classList.add('hidden');
+      body.innerHTML = html;
 
-      if (slide.type === 'info') {
-        btnAction.innerText = 'Continuar';
-      } else if (slide.type === 'quiz') {
-        btnAction.innerText = 'Verificar';
-        quizGrid.classList.remove('hidden');
-        quizGrid.innerHTML = slide.options.map((opt, i) => `
-          <button class="option-btn" onclick="selectQuiz(${i}, this)">${opt}</button>
-        `).join('');
-      } else if (slide.type === 'blocks') {
-        btnAction.innerText = 'Verificar';
-        blocksArea.classList.remove('hidden');
-        renderBlocksPalette(slide.available);
+      if (step.type === 'blocks') {
+        renderBlocksWidget(step.available);
       }
     }
 
-    function selectQuiz(idx, btn) {
-      selectedQuizIdx = idx;
-      document.querySelectorAll('#slide-quiz-options .option-btn').forEach(b => b.classList.remove('selected'));
+    function selectOption(idx, btn) {
+      selectedOptionIdx = idx;
+      document.querySelectorAll('.option-card').forEach(b => b.classList.remove('selected'));
       btn.classList.add('selected');
     }
 
-    function renderBlocksPalette(available) {
+    function renderBlocksWidget(available) {
       const palette = document.getElementById('blocks-palette');
+      const dropZone = document.getElementById('drop-zone');
+      if (!palette || !dropZone) return;
+
       palette.innerHTML = '';
       available.forEach(text => {
         if (!userPlacedBlocks.includes(text)) {
           const b = document.createElement('button');
           b.className = 'code-block-btn';
           b.innerText = text;
-          b.onclick = () => { userPlacedBlocks.push(text); renderBlocksPalette(available); };
+          b.onclick = () => { userPlacedBlocks.push(text); renderBlocksWidget(available); };
           palette.appendChild(b);
         }
       });
-      renderAnswerZone(available);
-    }
 
-    function renderAnswerZone(available) {
-      const zone = document.getElementById('answer-zone');
-      zone.innerHTML = '';
+      dropZone.innerHTML = '';
       userPlacedBlocks.forEach((text, i) => {
         const b = document.createElement('button');
         b.className = 'code-block-btn';
-        b.style.borderColor = 'var(--secondary)';
+        b.style.borderColor = 'var(--primary)';
         b.innerText = text;
-        b.onclick = () => { userPlacedBlocks.splice(i, 1); renderBlocksPalette(available); };
-        zone.appendChild(b);
+        b.onclick = () => { userPlacedBlocks.splice(i, 1); renderBlocksWidget(available); };
+        dropZone.appendChild(b);
       });
     }
 
-    function checkSlideAnswer() {
-      const slide = currentLesson.slides[currentSlideIdx];
+    function handleStepAction() {
+      const step = activeLesson.steps[currentStepIdx];
       const sheet = document.getElementById('feedback-sheet');
 
-      if (slide.type === 'info') { advanceSlide(); return; }
+      if (step.type === 'info') {
+        nextStep();
+        return;
+      }
 
       let isCorrect = false;
 
-      if (slide.type === 'quiz') {
-        if (selectedQuizIdx === null) return;
-        isCorrect = selectedQuizIdx === slide.correct;
-      } else if (slide.type === 'blocks') {
-        isCorrect = userPlacedBlocks.join('') === slide.correctOrder.join('');
+      if (step.type === 'quiz' || step.type === 'output_quiz' || step.type === 'true_false') {
+        if (selectedOptionIdx === null) return;
+        isCorrect = selectedOptionIdx === step.correct;
+      } else if (step.type === 'fill_blank') {
+        const val = document.getElementById('blank-input').value.trim();
+        isCorrect = val.toLowerCase() === step.correctAnswer.toLowerCase();
+      } else if (step.type === 'blocks') {
+        isCorrect = userPlacedBlocks.join('') === step.correctOrder.join('');
+      } else if (step.type === 'code_challenge') {
+        const val = document.getElementById('challenge-input').value.trim();
+        isCorrect = step.correctKeywords.every(k => val.includes(k));
       }
 
       if (isCorrect) {
         playSound('correct');
         sheet.className = 'feedback-sheet correct';
-        document.getElementById('fb-title').innerText = '🎉 Excelente!';
-        document.getElementById('fb-text').innerText = slide.explanation || 'Você acertou!';
+        document.getElementById('fb-title').innerHTML = '✓ Excelente!';
+        document.getElementById('fb-text').innerText = step.explanation || 'Você compreendeu o conceito!';
         state.xp += 10;
       } else {
         playSound('wrong');
         sheet.className = 'feedback-sheet wrong';
-        document.getElementById('fb-title').innerText = '❌ Ops, não foi dessa vez!';
-        document.getElementById('fb-text').innerText = slide.explanation || 'Revise a ordem dos elementos!';
+        document.getElementById('fb-title').innerHTML = '✕ Vamos revisar!';
+        document.getElementById('fb-text').innerText = step.explanation || 'Confira os detalhes e tente novamente.';
         state.hearts = Math.max(0, state.hearts - 1);
       }
       saveState();
     }
 
-    function advanceSlide() {
-      currentSlideIdx++;
-      document.getElementById('feedback-sheet').className = 'feedback-sheet';
-
-      if (currentSlideIdx < currentLesson.slides.length && state.hearts > 0) {
-        showSlide();
+    function nextStep() {
+      currentStepIdx++;
+      if (currentStepIdx < activeLesson.steps.length && state.hearts > 0) {
+        renderCurrentStep();
       } else {
         if (state.hearts > 0) {
-          if (!state.completedLessons.includes(currentLesson.id)) {
-            state.completedLessons.push(currentLesson.id);
+          if (!state.completedLessons.includes(activeLesson.id)) {
+            state.completedLessons.push(activeLesson.id);
           }
           saveState();
         } else {
           state.hearts = 5;
           saveState();
         }
-        closeLessonModal();
+        exitLesson();
       }
     }
 
-    function closeLessonModal() {
-      document.getElementById('lesson-modal').classList.remove('active');
-    }
-
-    // --- ACENDE O LED DA PRÓPRIA FOTO NA IDE ---
+    // --- SIMULADOR IDE REALISTA ---
     function runFreeIDE() {
       const code = document.getElementById('free-ide-code').innerText;
       const terminal = document.getElementById('free-ide-terminal');
@@ -895,7 +1132,7 @@ void loop() {
       const dot = document.getElementById('led-dot-indicator');
       const status = document.getElementById('free-mcu-status');
 
-      terminal.innerText = '[COMPILER]: Compilando código C++...\n[UPLOADER]: Gravando no microcontrolador...\n[HARDWARE]: Sinal enviado para o Pino 13.\n[SERIAL]: Executando loop() em tempo real.';
+      terminal.innerText = '[COMPILER]: Compilando arquivo C++...\n[UPLOADER]: Gravando no microcontrolador...\n[HARDWARE]: Sinal enviado para o Pino 13.\n[SERIAL]: Executando loop() em tempo real.';
 
       if (code.includes('HIGH')) {
         if (img) img.classList.add('active');
@@ -923,6 +1160,7 @@ void loop() {
       document.getElementById('free-ide-terminal').innerText = '[SYSTEM]: Memória reiniciada.';
     }
 
+    // --- NAVEGAÇÃO ENTRE TELAS ---
     function switchView(viewId, btn) {
       document.querySelectorAll('main > section').forEach(s => s.classList.add('hidden'));
       document.getElementById(`view-${viewId}`).classList.remove('hidden');
@@ -931,10 +1169,11 @@ void loop() {
       if (btn) btn.classList.add('active');
     }
 
+    // --- BADGES ---
     const badgesData = [
-      { id: 'b1', name: 'Primeiro Compilador', desc: 'Escreveu seu primeiro programa em C++' },
-      { id: 'b2', name: 'Engenheiro de Hardware', desc: 'Acendeu um LED via sinal digital' },
-      { id: 'b3', name: 'Mestre da Robótica', desc: 'Controlou um Servo Motor SG90' }
+      { id: 'b1', name: 'Primeiro Compilador', desc: 'Completou a primeira lição de C++' },
+      { id: 'b2', name: 'Engenheiro de Hardware', desc: 'Configurou um pino digital com sucesso' },
+      { id: 'b3', name: 'Mestre da Robótica', desc: 'Completou o módulo de saídas digitais' }
     ];
 
     function renderBadges() {
@@ -950,7 +1189,7 @@ void loop() {
               <div style="font-size:2rem; margin-bottom:10px;">🏆</div>
               <div class="project-title">${b.name}</div>
               <div class="project-desc">${b.desc}</div>
-              <div style="font-size:0.8rem; font-weight:700; color:${isUnlocked ? 'var(--primary)' : 'var(--text-muted)'}">
+              <div style="font-size:0.8rem; font-weight:800; color:${isUnlocked ? 'var(--primary)' : 'var(--text-muted)'}">
                 ${isUnlocked ? 'DESBLOQUEADO' : 'BLOQUEADO'}
               </div>
             </div>
