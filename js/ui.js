@@ -1,3 +1,19 @@
+const GlossaryTerms = {
+  "pinMode": { title: "pinMode()", desc: "Função nativa do Arduino para configurar o modo de trabalho de um pino digital (se vai enviar energia como OUTPUT ou ler como INPUT)." },
+  "digitalWrite": { title: "digitalWrite()", desc: "Comando que envia um sinal digital de 5V (HIGH) ou 0V (LOW) para um pino." },
+  "analogRead": { title: "analogRead()", desc: "Lê o valor de uma porta analógica (A0 a A5), retornando uma escala numérica de 0 a 1023." },
+  "int": { title: "int (Inteiro)", desc: "Tipo de dado reservado em C++ para armazenar números inteiros na memória do microcontrolador." },
+  "if": { title: "if (Condicional)", desc: "Estrutura de decisão que executa um bloco de código apenas se a condição entre parênteses for verdadeira." },
+  "for": { title: "for (Laço)", desc: "Estrutura de repetição controlada usada para executar um bloco de código várias vezes em sequência." },
+  "HIGH": { title: "HIGH (Ligado)", desc: "Representa sinal elétrico ativo (5 Volts), usado para ligar LEDs, motores e buzzers." },
+  "LOW": { title: "LOW (Desligado)", desc: "Representa ausência de sinal elétrico (0 Volts), usado para desligar componentes." },
+  "OUTPUT": { title: "OUTPUT (Saída)", desc: "Modo de pino configurado para ENVIAR eletricidade para um componente externo." },
+  "INPUT": { title: "INPUT (Entrada)", desc: "Modo de pino configurado para RECEBER dados ou sinais de sensores e botões." },
+  "Serial.println": { title: "Serial.println()", desc: "Envia mensagens ou valores para o Monitor Serial do computador com quebra de linha." },
+  "void setup": { title: "void setup()", desc: "Bloco de execução obrigatório que roda apenas uma vez quando a placa é ligada ou resetada." },
+  "void loop": { title: "void loop()", desc: "Bloco de execução contínua que repete suas instruções infinitamente enquanto houver energia." }
+};
+
 const UI = {
   audioCtx: new (window.AudioContext || window.webkitAudioContext)(),
 
@@ -20,6 +36,38 @@ const UI = {
       gain.gain.exponentialRampToValueAtTime(0.01, this.audioCtx.currentTime + 0.4);
       osc.start(); osc.stop(this.audioCtx.currentTime + 0.4);
     }
+  },
+
+  formatTextWithGlossary(text) {
+    if (!text) return '';
+    let formatted = text;
+    Object.keys(GlossaryTerms).forEach(term => {
+      const regex = new RegExp(`\\b(${term})\\b`, 'g');
+      formatted = formatted.replace(regex, `<span class="interactive-term" onclick="UI.showGlossary('${term}')">$1</span>`);
+    });
+    return formatted;
+  },
+
+  showGlossary(termKey) {
+    const term = GlossaryTerms[termKey];
+    if (!term) return;
+    
+    const existing = document.getElementById('glossary-modal');
+    if (existing) existing.remove();
+
+    const overlay = document.createElement('div');
+    overlay.className = 'glossary-popover-overlay';
+    overlay.id = 'glossary-modal';
+    overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+
+    overlay.innerHTML = `
+      <div class="glossary-card">
+        <div class="glossary-title">${term.title}</div>
+        <div class="glossary-desc">${term.desc}</div>
+        <button class="btn-action-primary" style="height: 40px; font-size: 0.9rem;" onclick="document.getElementById('glossary-modal').remove()">Entendi</button>
+      </div>
+    `;
+    document.body.appendChild(overlay);
   },
 
   switchView(viewId, btn) {
@@ -77,9 +125,6 @@ const UI = {
       });
 
       modHtml += `</div></div>`;
-      
-      // Dashboard exibe apenas o primeiro módulo ou resumo rápido se desejado, 
-      // mas na Trilha (fullContainer) exibe tudo completo.
       if (container && mod.id === 'mod1') container.innerHTML += modHtml;
       if (fullContainer) fullContainer.innerHTML += modHtml;
     });
@@ -138,27 +183,27 @@ const UI = {
     document.getElementById('step-counter').innerText = `ETAPA ${Exercises.currentStepIdx + 1} DE ${totalSteps}`;
 
     let html = `
-      <span class="step-badge ${step.badgeType || 'type-info'}">${step.badge || 'Aprender'}</span>
-      <div class="step-title">${step.title}</div>
-      <div class="step-text">${step.text || ''}</div>
+      <span class="step-badge">${step.badge || 'Aprender'}</span>
+      <div class="step-title">${this.formatTextWithGlossary(step.title)}</div>
+      <div class="step-text">${this.formatTextWithGlossary(step.text || '')}</div>
     `;
 
     if (step.code) {
-      html += `<div class="code-snippet">${step.code}</div>`;
+      html += `<div class="code-snippet">${this.formatTextWithGlossary(step.code)}</div>`;
     }
 
     if (step.type === 'interactive_anatomy') {
       btn.innerText = 'Entendi →';
       html += `<div class="interactive-anatomy-area"><div class="anatomy-code-line">`;
       step.tokens.forEach((t, idx) => {
-        html += `<span class="anatomy-token" onclick="UI.selectAnatomyToken(${idx})">${t.label}</span>`;
+        html += `<span class="interactive-term" onclick="UI.selectAnatomyToken(${idx})">${t.label}</span>`;
       });
       html += `</div>`;
       step.tokens.forEach((t, idx) => {
         html += `
           <div class="anatomy-explanation-box" id="anat-exp-${idx}">
             <div class="anatomy-exp-title">${t.expTitle}</div>
-            <div class="anatomy-exp-text">${t.expText}</div>
+            <div class="anatomy-exp-text">${this.formatTextWithGlossary(t.expText)}</div>
           </div>
         `;
       });
@@ -180,13 +225,12 @@ const UI = {
     } else if (step.type === 'code_challenge') {
       btn.innerText = 'Verificar';
       html += `<div class="fill-input-area">`;
-      // A referência visual foi removida daqui propositalmente para evitar que apenas copiem o código acima.
       html += `<input type="text" id="challenge-input" class="inline-code-input" placeholder="Digite o código aqui..." autocomplete="off" oninput="Exercises.checkInputState()"></div>`;
     } else if (step.type === 'quiz' || step.type === 'true_false' || step.type === 'output_quiz') {
       btn.innerText = 'Verificar';
       html += `<div class="options-stack">`;
       step.options.forEach((opt, idx) => {
-        html += `<button class="option-card" onclick="Exercises.selectOption(${idx}, this)">${opt}</button>`;
+        html += `<button class="option-card" onclick="Exercises.selectOption(${idx}, this)">${this.formatTextWithGlossary(opt)}</button>`;
       });
       html += `</div>`;
     } else if (step.type === 'intro' || step.type === 'explanation') {
@@ -197,10 +241,9 @@ const UI = {
   },
 
   selectAnatomyToken(idx) {
-    document.querySelectorAll('.anatomy-token').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.interactive-term').forEach(el => el.classList.remove('active'));
     document.querySelectorAll('.anatomy-explanation-box').forEach(el => el.classList.remove('show'));
     
-    document.querySelectorAll('.anatomy-token')[idx].classList.add('active');
     document.getElementById(`anat-exp-${idx}`).classList.add('show');
   },
 
@@ -212,7 +255,7 @@ const UI = {
 
     let learnedHtml = '';
     if (lesson.learnedConcepts) {
-      lesson.learnedConcepts.forEach(c => { learnedHtml += `<li class="learned-item">✓ ${c}</li>`; });
+      lesson.learnedConcepts.forEach(c => { learnedHtml += `<li class="learned-item">✓ ${this.formatTextWithGlossary(c)}</li>`; });
     }
 
     const nextTarget = Progress.getNextUncompletedLesson();
