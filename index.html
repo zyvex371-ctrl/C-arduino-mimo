@@ -46,25 +46,27 @@
     <main>
       <!-- DASHBOARD -->
       <section id="view-dashboard">
-        <div class="dash-hero">
-          <h1>Olá, Desenvolvedor 👋</h1>
-          <p>Aprenda programação e eletrônica em pequenos passos interativos.</p>
-          <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px;">
-            <span>PROGRESSO GERAL</span>
+        <!-- ÁREA CONTINUE DE ONDE PAROU -->
+        <div class="resume-hero" id="resume-banner">
+          <div style="font-size: 0.75rem; font-weight: 800; color: var(--primary); letter-spacing: 1px; text-transform: uppercase;">Continue de Onde Parou</div>
+          <h2 id="resume-title" style="font-size: 1.3rem; margin: 4px 0 8px 0;">01. Variáveis e Números em C++</h2>
+          <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px; color: var(--text-muted);">
+            <span id="resume-sub">Módulo 1: Conhecendo o C++</span>
             <span id="dash-pct-text">0% Concluído</span>
           </div>
           <div class="overall-progress-bar">
             <div class="overall-fill" id="dash-pct-fill" style="width: 0%;"></div>
           </div>
+          <button class="btn-action-primary" style="margin-top: 14px; height: 44px; width: fit-content; padding: 0 24px;" id="btn-resume-action">Continuar lição →</button>
         </div>
 
-        <div class="section-title-head">🚀 Seus Módulos de Aprendizado</div>
+        <div class="section-title-head">🚀 Trilha Principal de Aprendizado</div>
         <div id="modules-container"></div>
       </section>
 
       <!-- TRILHA DEDICADA -->
       <section id="view-curriculum" class="hidden">
-        <div class="section-title-head">🔧 Trilha Completa de C++ & Robótica</div>
+        <div class="section-title-head">💻 Trilha Completa de C++ & Robótica</div>
         <div id="full-curriculum-container"></div>
       </section>
 
@@ -178,7 +180,7 @@ void loop() {
     </div>
   </div>
 
-  <!-- TELA DE CONCLUSÃO (FORA DO FLUXO DA LIÇÃO) -->
+  <!-- TELA DE CONCLUSÃO INDEPENDENTE (OUT OF STEP COUNT) -->
   <div class="lesson-screen-overlay hidden" id="completion-screen">
     <div class="completion-container" id="completion-container"></div>
   </div>
