@@ -1,17 +1,17 @@
 const GlossaryTerms = {
-  "pinMode": { title: "pinMode()", desc: "Função nativa do Arduino para configurar o modo de trabalho de um pino digital (se vai enviar energia como OUTPUT ou ler como INPUT)." },
+  "pinMode": { title: "pinMode()", desc: "Função nativa do Arduino para configurar o modo de trabalho de um pino digital (OUTPUT ou INPUT)." },
   "digitalWrite": { title: "digitalWrite()", desc: "Comando que envia um sinal digital de 5V (HIGH) ou 0V (LOW) para um pino." },
   "analogRead": { title: "analogRead()", desc: "Lê o valor de uma porta analógica (A0 a A5), retornando uma escala numérica de 0 a 1023." },
-  "int": { title: "int (Inteiro)", desc: "Tipo de dado reservado em C++ para armazenar números inteiros na memória do microcontrolador." },
-  "if": { title: "if (Condicional)", desc: "Estrutura de decisão que executa um bloco de código apenas se a condição entre parênteses for verdadeira." },
-  "for": { title: "for (Laço)", desc: "Estrutura de repetição controlada usada para executar um bloco de código várias vezes em sequência." },
-  "HIGH": { title: "HIGH (Ligado)", desc: "Representa sinal elétrico ativo (5 Volts), usado para ligar LEDs, motores e buzzers." },
-  "LOW": { title: "LOW (Desligado)", desc: "Representa ausência de sinal elétrico (0 Volts), usado para desligar componentes." },
-  "OUTPUT": { title: "OUTPUT (Saída)", desc: "Modo de pino configurado para ENVIAR eletricidade para um componente externo." },
-  "INPUT": { title: "INPUT (Entrada)", desc: "Modo de pino configurado para RECEBER dados ou sinais de sensores e botões." },
-  "Serial.println": { title: "Serial.println()", desc: "Envia mensagens ou valores para o Monitor Serial do computador com quebra de linha." },
-  "void setup": { title: "void setup()", desc: "Bloco de execução obrigatório que roda apenas uma vez quando a placa é ligada ou resetada." },
-  "void loop": { title: "void loop()", desc: "Bloco de execução contínua que repete suas instruções infinitamente enquanto houver energia." }
+  "int": { title: "int (Inteiro)", desc: "Tipo de dado reservado em C++ para armazenar números inteiros na memória." },
+  "if": { title: "if (Condicional)", desc: "Estrutura de decisão que executa código apenas se a condição for verdadeira." },
+  "for": { title: "for (Laço)", desc: "Estrutura de repetição controlada para executar código várias vezes em sequência." },
+  "HIGH": { title: "HIGH (Ligado)", desc: "Sinal elétrico ativo (5 Volts) para ligar componentes." },
+  "LOW": { title: "LOW (Desligado)", desc: "Ausência de sinal elétrico (0 Volts) para desligar componentes." },
+  "OUTPUT": { title: "OUTPUT (Saída)", desc: "Configura o pino para ENVIAR eletricidade." },
+  "INPUT": { title: "INPUT (Entrada)", desc: "Configura o pino para RECEBER dados de sensores." },
+  "Serial.println": { title: "Serial.println()", desc: "Envia dados para o Monitor Serial do computador com quebra de linha." },
+  "void setup": { title: "void setup()", desc: "Bloco executado uma única vez ao ligar a placa." },
+  "void loop": { title: "void loop()", desc: "Bloco executado de forma contínua e infinita." }
 };
 
 const UI = {
@@ -43,7 +43,8 @@ const UI = {
     let formatted = text;
     Object.keys(GlossaryTerms).forEach(term => {
       const regex = new RegExp(`\\b(${term})\\b`, 'g');
-      formatted = formatted.replace(regex, `<span class="interactive-term" onclick="UI.showGlossary('${term}')">$1</span>`);
+      // O termo é estritamente informativo e não afeta o fluxo de respostas
+      formatted = formatted.replace(regex, `<span class="interactive-term" onclick="event.stopPropagation(); UI.showGlossary('${term}')">$1</span>`);
     });
     return formatted;
   },
