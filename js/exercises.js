@@ -88,11 +88,17 @@ const Exercises = {
       this.correctAnswersCount++;
     } else {
       UI.playSound('wrong');
+      Progress.decrementHeart(); // Reduz vida mas NUNCA expulsa da aula
+      
       sheet.className = 'feedback-sheet wrong';
-      document.getElementById('fb-title').innerHTML = '✕ Quase lá!';
-      document.getElementById('fb-text').innerText = `Dica: ${step.explanation || 'Revise a instrução e tente novamente com atenção.'}`;
+      document.getElementById('fb-title').innerHTML = '✕ Ainda não!';
+      
+      let msg = step.explanation || 'Revise o conceito e tente novamente.';
+      if (Progress.state.hearts === 0) {
+        msg += ' (Você ficou sem vidas, mas pode continuar aprendendo!)';
+      }
+      document.getElementById('fb-text').innerText = msg;
       fbBtn.innerText = 'Tentar novamente';
-      Progress.decrementHeart();
     }
   },
 
@@ -108,18 +114,11 @@ const Exercises = {
   advanceToNextStep() {
     this.currentStepIdx++;
     if (this.currentStepIdx < this.activeLesson.steps.length) {
-      if (Progress.state.hearts > 0) {
-        UI.renderCurrentStep();
-      } else {
-        Progress.resetHearts();
-        UI.exitLesson();
-      }
+      UI.renderCurrentStep();
     } else {
-      if (Progress.state.hearts > 0) {
-        Progress.addXP(100);
-        Progress.completeLesson(this.activeLesson.id);
-        UI.showCompletionScreen(this.activeLesson, this.correctAnswersCount, this.activeLesson.steps.length);
-      }
+      Progress.addXP(100);
+      Progress.completeLesson(this.activeLesson.id);
+      UI.showCompletionScreen(this.activeLesson, this.correctAnswersCount, this.activeLesson.steps.length);
     }
   }
 };
