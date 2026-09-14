@@ -8,23 +8,22 @@ const Exercises = {
   isCurrentStepCorrect: false,
   correctAnswersCount: 0,
 
-  // Quantidade de atividades que realmente possuem resposta.
   assessedActivitiesCount: 0,
+  assessedStepIndices: [],
 
-  // Termos já explorados na anatomia interativa.
   activeAnatomyTokens: [],
 
 
-  /*
-   * ==========================================================
-   * INICIAR LIÇÃO
-   * ==========================================================
-   */
+  /* ==========================================================
+     INICIAR LIÇÃO
+  ========================================================== */
 
   startLesson(lessonId) {
+
     let foundLesson = null;
 
     for (const module of LessonsData) {
+
       const found =
         module.lessons.find(
           lesson => lesson.id === lessonId
@@ -36,82 +35,157 @@ const Exercises = {
       }
     }
 
+
     if (!foundLesson) {
+
       console.error(
-        'Lição não encontrada:',
+        "Lição não encontrada:",
         lessonId
       );
+
       return;
     }
 
-    this.activeLesson = foundLesson;
 
-    this.currentStepIdx = 0;
+    /* ----------------------------------------------------------
+       RESET COMPLETO DA LIÇÃO
+    ---------------------------------------------------------- */
 
-    this.selectedOptionIdx = null;
-    this.selectedSlotChip = null;
+    this.activeLesson =
+      foundLesson;
 
-    this.isCurrentStepCorrect = false;
-    this.correctAnswersCount = 0;
-    this.assessedActivitiesCount = 0;
+    this.currentStepIdx =
+      0;
 
-    this.activeAnatomyTokens = [];
+    this.selectedOptionIdx =
+      null;
 
+    this.selectedSlotChip =
+      null;
+
+    this.isCurrentStepCorrect =
+      false;
+
+    this.correctAnswersCount =
+      0;
+
+    this.assessedActivitiesCount =
+      0;
+
+    this.assessedStepIndices =
+      [];
+
+    this.activeAnatomyTokens =
+      [];
+
+
+    /* ----------------------------------------------------------
+       REMOVE ESTADOS TEMPORÁRIOS DAS ETAPAS
+       
+       Isso evita que uma etapa fique marcada como respondida
+       quando o usuário abre a mesma lição novamente.
+    ---------------------------------------------------------- */
+
+    if (
+      Array.isArray(
+        foundLesson.steps
+      )
+    ) {
+
+      foundLesson.steps.forEach(
+        step => {
+
+          delete step._countedAsAssessed;
+          delete step._answeredCorrectly;
+
+        }
+      );
+    }
+
+
+    /* ----------------------------------------------------------
+       FECHA TELA DE CONCLUSÃO
+    ---------------------------------------------------------- */
 
     const completionScreen =
       document.getElementById(
-        'completion-screen'
+        "completion-screen"
       );
 
     const lessonScreen =
       document.getElementById(
-        'lesson-screen'
+        "lesson-screen"
       );
+
 
     if (completionScreen) {
+
       completionScreen.classList.add(
-        'hidden'
+        "hidden"
       );
     }
+
 
     if (lessonScreen) {
+
       lessonScreen.classList.remove(
-        'hidden'
+        "hidden"
       );
     }
 
 
-    UI.renderCurrentStep();
+    /* ----------------------------------------------------------
+       RENDERIZA PRIMEIRA ETAPA
+    ---------------------------------------------------------- */
+
+    if (
+      typeof UI.renderCurrentStep ===
+      "function"
+    ) {
+
+      UI.renderCurrentStep();
+
+    } else {
+
+      console.error(
+        "UI.renderCurrentStep() não está disponível."
+      );
+    }
   },
 
 
-  /*
-   * ==========================================================
-   * SELECIONAR ALTERNATIVA
-   * ==========================================================
-   */
+  /* ==========================================================
+     SELECIONAR ALTERNATIVA
+  ========================================================== */
 
   selectOption(
     index,
     buttonElement
   ) {
 
-    /*
-     * Se já existe feedback aberto,
-     * não permite mudar a resposta.
-     */
     const feedback =
       document.getElementById(
-        'feedback-sheet'
+        "feedback-sheet"
       );
+
+
+    /*
+     * Se existe feedback aberto,
+     * não permite alterar a resposta.
+     */
 
     if (
       feedback &&
       (
-        feedback.classList.contains('correct') ||
-        feedback.classList.contains('wrong')
+        feedback.classList.contains(
+          "correct"
+        ) ||
+        feedback.classList.contains(
+          "wrong"
+        )
       )
     ) {
+
       return;
     }
 
@@ -122,40 +196,44 @@ const Exercises = {
 
     document
       .querySelectorAll(
-        '.option-card'
+        ".option-card"
       )
       .forEach(button => {
+
         button.classList.remove(
-          'selected'
+          "selected"
         );
       });
 
 
     if (buttonElement) {
+
       buttonElement.classList.add(
-        'selected'
+        "selected"
       );
     }
 
 
     const actionButton =
       document.getElementById(
-        'btn-step-action'
+        "btn-step-action"
       );
 
+
     if (actionButton) {
-      actionButton.disabled = false;
+
+      actionButton.disabled =
+        false;
+
       actionButton.innerText =
-        'Verificar';
+        "Verificar";
     }
   },
 
 
-  /*
-   * ==========================================================
-   * SELECIONAR CHIP
-   * ==========================================================
-   */
+  /* ==========================================================
+     SELECIONAR CHIP
+  ========================================================== */
 
   selectSlotChip(
     chipValue,
@@ -164,87 +242,100 @@ const Exercises = {
 
     const feedback =
       document.getElementById(
-        'feedback-sheet'
+        "feedback-sheet"
       );
+
 
     if (
       feedback &&
       (
-        feedback.classList.contains('correct') ||
-        feedback.classList.contains('wrong')
+        feedback.classList.contains(
+          "correct"
+        ) ||
+        feedback.classList.contains(
+          "wrong"
+        )
       )
     ) {
+
       return;
     }
 
 
     this.selectedSlotChip =
-      chipValue;
+      String(chipValue);
 
 
     document
       .querySelectorAll(
-        '.chip-btn'
+        ".chip-btn"
       )
       .forEach(button => {
+
         button.classList.remove(
-          'selected'
+          "selected"
         );
       });
 
 
     if (buttonElement) {
+
       buttonElement.classList.add(
-        'selected'
+        "selected"
       );
     }
 
 
     const slot =
       document.getElementById(
-        'active-slot'
+        "active-slot"
       );
 
+
     if (slot) {
+
       slot.innerText =
-        chipValue;
+        String(chipValue);
 
       slot.classList.add(
-        'filled'
+        "filled"
       );
     }
 
 
     const actionButton =
       document.getElementById(
-        'btn-step-action'
+        "btn-step-action"
       );
 
+
     if (actionButton) {
-      actionButton.disabled = false;
+
+      actionButton.disabled =
+        false;
+
       actionButton.innerText =
-        'Verificar';
+        "Verificar";
     }
   },
 
 
-  /*
-   * ==========================================================
-   * INPUT DO DESAFIO
-   * ==========================================================
-   */
+  /* ==========================================================
+     INPUT DE CÓDIGO
+  ========================================================== */
 
   checkInputState() {
 
     const button =
       document.getElementById(
-        'btn-step-action'
+        "btn-step-action"
       );
 
     const input =
       document.getElementById(
-        'challenge-input'
+        "challenge-input"
       );
+
 
     if (!button || !input) {
       return;
@@ -257,20 +348,23 @@ const Exercises = {
 
     button.disabled =
       !hasText;
+
+
+    if (hasText) {
+
+      button.innerText =
+        "Verificar";
+    }
   },
 
 
-  /*
-   * ==========================================================
-   * PULAR
-   * ==========================================================
-   */
+  /* ==========================================================
+     PULAR ETAPA
+  ========================================================== */
 
   skipStep() {
 
-    if (
-      !this.activeLesson
-    ) {
+    if (!this.activeLesson) {
       return;
     }
 
@@ -280,31 +374,28 @@ const Exercises = {
         this.currentStepIdx
       ];
 
+
     if (!step) {
       return;
     }
 
 
     /*
-     * Etapas de explicação/anatomia
-     * não podem ser puladas.
+     * Etapas educativas não podem ser puladas.
      */
+
     if (
       [
-        'intro',
-        'explanation',
-        'interactive_anatomy'
+        "intro",
+        "explanation",
+        "interactive_anatomy"
       ].includes(step.type)
     ) {
+
       return;
     }
 
 
-    /*
-     * Pular não conta como acerto.
-     *
-     * Também não tira vida.
-     */
     this.isCurrentStepCorrect =
       false;
 
@@ -313,17 +404,13 @@ const Exercises = {
   },
 
 
-  /*
-   * ==========================================================
-   * VERIFICAR ETAPA
-   * ==========================================================
-   */
+  /* ==========================================================
+     BOTÃO PRINCIPAL DA ETAPA
+  ========================================================== */
 
   handleStepAction() {
 
-    if (
-      !this.activeLesson
-    ) {
+    if (!this.activeLesson) {
       return;
     }
 
@@ -333,45 +420,51 @@ const Exercises = {
         this.currentStepIdx
       ];
 
+
     if (!step) {
       return;
     }
 
 
-    /*
-     * Etapas puramente educativas.
-     */
+    /* ----------------------------------------------------------
+       INTRO / EXPLICAÇÃO
+    ---------------------------------------------------------- */
+
     if (
       [
-        'intro',
-        'explanation'
+        "intro",
+        "explanation"
       ].includes(step.type)
     ) {
+
       this.advanceToNextStep();
+
       return;
     }
 
 
-    /*
-     * Anatomia precisa ser explorada
-     * antes de continuar.
-     */
+    /* ----------------------------------------------------------
+       ANATOMIA INTERATIVA
+    ---------------------------------------------------------- */
+
     if (
       step.type ===
-      'interactive_anatomy'
+      "interactive_anatomy"
     ) {
 
       const allExplored =
-        Array.isArray(
-          step.tokens
-        ) &&
+        Array.isArray(step.tokens) &&
+        step.tokens.length > 0 &&
         step.tokens.every(
           (_, index) =>
-            this.activeAnatomyTokens.includes(
-              index
-            )
+            this.activeAnatomyTokens
+              .includes(index)
         );
 
+
+      /*
+       * Ainda não explorou todos os elementos.
+       */
 
       if (!allExplored) {
         return;
@@ -381,90 +474,126 @@ const Exercises = {
       this.isCurrentStepCorrect =
         true;
 
+
+      /*
+       * Só conta a atividade uma vez.
+       */
+
+      if (
+        !this.assessedStepIndices
+          .includes(
+            this.currentStepIdx
+          )
+      ) {
+
+        this.assessedStepIndices.push(
+          this.currentStepIdx
+        );
+
+        this.assessedActivitiesCount++;
+      }
+
+
       this.showCorrectFeedback(
         step
       );
+
 
       return;
     }
 
 
-    /*
-     * A partir daqui temos atividades
-     * avaliativas.
-     */
-    let answered = false;
+    /* ----------------------------------------------------------
+       DEMAIS EXERCÍCIOS
+    ---------------------------------------------------------- */
+
+    let answered =
+      false;
+
 
     this.isCurrentStepCorrect =
       false;
 
 
-    /*
-     * ======================================================
-     * SLOT
-     * ======================================================
-     */
+    /* ----------------------------------------------------------
+       SLOT
+    ---------------------------------------------------------- */
 
     if (
       step.type ===
-      'interactive_slot'
+      "interactive_slot"
     ) {
 
       if (
-        this.selectedSlotChip === null
+        this.selectedSlotChip ===
+        null
       ) {
+
         return;
       }
 
-      answered = true;
+
+      answered =
+        true;
+
 
       this.isCurrentStepCorrect =
-        this.selectedSlotChip ===
-        step.correctAnswer;
+        String(
+          this.selectedSlotChip
+        ) ===
+        String(
+          step.correctAnswer
+        );
     }
 
 
-    /*
-     * ======================================================
-     * QUIZ
-     * ======================================================
-     */
+    /* ----------------------------------------------------------
+       QUIZ
+    ---------------------------------------------------------- */
 
     else if (
-      step.type === 'quiz' ||
-      step.type === 'output_quiz' ||
-      step.type === 'true_false'
+      step.type === "quiz" ||
+      step.type === "output_quiz" ||
+      step.type === "true_false"
     ) {
 
       if (
-        this.selectedOptionIdx === null
+        this.selectedOptionIdx ===
+        null
       ) {
+
         return;
       }
 
-      answered = true;
+
+      answered =
+        true;
+
 
       this.isCurrentStepCorrect =
-        this.selectedOptionIdx ===
-        step.correct;
+        Number(
+          this.selectedOptionIdx
+        ) ===
+        Number(
+          step.correct
+        );
     }
 
 
-    /*
-     * ======================================================
-     * DESAFIO DE CÓDIGO
-     * ======================================================
-     */
+    /* ----------------------------------------------------------
+       DESAFIO DE CÓDIGO
+    ---------------------------------------------------------- */
 
     else if (
       step.type ===
-      'code_challenge'
+      "code_challenge"
     ) {
 
       const input =
         document.getElementById(
-          'challenge-input'
+          "challenge-input"
         );
+
 
       if (!input) {
         return;
@@ -481,20 +610,14 @@ const Exercises = {
         return;
       }
 
-      answered = true;
 
+      answered =
+        true;
 
-      /*
-       * Método preferencial:
-       * correctAnswer
-       *
-       * Método compatível:
-       * correctKeywords
-       */
 
       if (
         typeof step.correctAnswer ===
-        'string'
+        "string"
       ) {
 
         this.isCurrentStepCorrect =
@@ -504,6 +627,7 @@ const Exercises = {
           );
 
       }
+
 
       else if (
         Array.isArray(
@@ -523,25 +647,23 @@ const Exercises = {
 
       }
 
+
       else {
 
-        /*
-         * Sem regra de validação,
-         * não aprovamos automaticamente.
-         */
         this.isCurrentStepCorrect =
           false;
       }
     }
 
 
-    /*
-     * Tipo desconhecido.
-     */
+    /* ----------------------------------------------------------
+       TIPO DESCONHECIDO
+    ---------------------------------------------------------- */
+
     else {
 
       console.warn(
-        'Tipo de exercício não reconhecido:',
+        "Tipo de exercício não reconhecido:",
         step.type
       );
 
@@ -554,29 +676,28 @@ const Exercises = {
     }
 
 
-    /*
-     * Conta a atividade somente uma vez
-     * como atividade avaliada.
-     *
-     * Uma tentativa errada + outra correta
-     * continua sendo UMA atividade.
-     */
+    /* ----------------------------------------------------------
+       CONTAR ATIVIDADE APENAS UMA VEZ
+    ---------------------------------------------------------- */
+
     if (
-      !step._countedAsAssessed
+      !this.assessedStepIndices
+        .includes(
+          this.currentStepIdx
+        )
     ) {
 
-      step._countedAsAssessed =
-        true;
+      this.assessedStepIndices.push(
+        this.currentStepIdx
+      );
 
       this.assessedActivitiesCount++;
     }
 
 
-    /*
-     * ======================================================
-     * CORRETO
-     * ======================================================
-     */
+    /* ----------------------------------------------------------
+       RESULTADO
+    ---------------------------------------------------------- */
 
     if (
       this.isCurrentStepCorrect
@@ -584,20 +705,14 @@ const Exercises = {
 
       this.correctAnswersCount++;
 
+      step._answeredCorrectly =
+        true;
+
       this.showCorrectFeedback(
         step
       );
 
-    }
-
-
-    /*
-     * ======================================================
-     * ERRADO
-     * ======================================================
-     */
-
-    else {
+    } else {
 
       this.showWrongFeedback(
         step
@@ -606,48 +721,50 @@ const Exercises = {
   },
 
 
-  /*
-   * ==========================================================
-   * NORMALIZAR CÓDIGO
-   * ==========================================================
-   */
+  /* ==========================================================
+     NORMALIZAR CÓDIGO
+  ========================================================== */
 
   normalizeCode(value) {
 
-    return String(value || '')
+    return String(value || "")
       .trim()
-      .replace(/\s+/g, ' ')
-      .replace(/\s*([(),;=+\-*/<>])\s*/g, '$1')
+      .replace(
+        /\s+/g,
+        " "
+      )
+      .replace(
+        /\s*([(),;=+\-*/<>])\s*/g,
+        "$1"
+      )
       .toLowerCase();
   },
 
 
-  /*
-   * ==========================================================
-   * FEEDBACK CORRETO
-   * ==========================================================
-   */
+  /* ==========================================================
+     FEEDBACK CORRETO
+  ========================================================== */
 
   showCorrectFeedback(step) {
 
     const sheet =
       document.getElementById(
-        'feedback-sheet'
+        "feedback-sheet"
       );
 
     const title =
       document.getElementById(
-        'fb-title'
+        "fb-title"
       );
 
     const text =
       document.getElementById(
-        'fb-text'
+        "fb-text"
       );
 
     const button =
       document.getElementById(
-        'btn-feedback-action'
+        "btn-feedback-action"
       );
 
 
@@ -656,16 +773,27 @@ const Exercises = {
     }
 
 
-    UI.playSound('correct');
+    UI.playSound(
+      "correct"
+    );
 
 
     sheet.className =
-      'feedback-sheet correct';
+      "feedback-sheet correct";
+
+
+    /*
+     * Feedback aberto deve ficar acima da aula.
+     */
+
+    sheet.style.pointerEvents =
+      "auto";
 
 
     if (title) {
+
       title.innerText =
-        '✓ Perfeito!';
+        "✓ Perfeito!";
     }
 
 
@@ -673,43 +801,42 @@ const Exercises = {
 
       text.innerText =
         step.explanation ||
-        'Você acertou o conceito!';
+        "Você acertou o conceito!";
     }
 
 
     if (button) {
+
       button.innerText =
-        'Continuar';
+        "Continuar";
     }
   },
 
 
-  /*
-   * ==========================================================
-   * FEEDBACK ERRADO
-   * ==========================================================
-   */
+  /* ==========================================================
+     FEEDBACK ERRADO
+  ========================================================== */
 
   showWrongFeedback(step) {
 
     const sheet =
       document.getElementById(
-        'feedback-sheet'
+        "feedback-sheet"
       );
 
     const title =
       document.getElementById(
-        'fb-title'
+        "fb-title"
       );
 
     const text =
       document.getElementById(
-        'fb-text'
+        "fb-text"
       );
 
     const button =
       document.getElementById(
-        'btn-feedback-action'
+        "btn-feedback-action"
       );
 
 
@@ -718,22 +845,37 @@ const Exercises = {
     }
 
 
-    UI.playSound('wrong');
+    UI.playSound(
+      "wrong"
+    );
 
 
     /*
-     * Perde uma vida, mas a lição continua.
+     * Perder uma vida NÃO expulsa o usuário
+     * da lição.
      */
-    Progress.decrementHeart();
+
+    if (
+      typeof Progress.decrementHeart ===
+      "function"
+    ) {
+
+      Progress.decrementHeart();
+    }
 
 
     sheet.className =
-      'feedback-sheet wrong';
+      "feedback-sheet wrong";
+
+
+    sheet.style.pointerEvents =
+      "auto";
 
 
     if (title) {
+
       title.innerText =
-        '✕ Ainda não!';
+        "✕ Ainda não!";
     }
 
 
@@ -742,48 +884,50 @@ const Exercises = {
       text.innerText =
         step.wrongExplanation ||
         step.explanation ||
-        'Revise o conceito e tente novamente.';
+        "Revise o conceito e tente novamente.";
     }
 
 
     if (button) {
+
       button.innerText =
-        'Tentar novamente';
+        "Tentar novamente";
     }
   },
 
 
-  /*
-   * ==========================================================
-   * BOTÃO DO FEEDBACK
-   * ==========================================================
-   */
+  /* ==========================================================
+     AÇÃO DO FEEDBACK
+  ========================================================== */
 
   handleFeedbackAction() {
 
     const sheet =
       document.getElementById(
-        'feedback-sheet'
+        "feedback-sheet"
       );
 
+
+    /*
+     * RESPOSTA ERRADA
+     *
+     * Fecha o feedback e permite tentar
+     * a mesma questão novamente.
+     */
 
     if (
       !this.isCurrentStepCorrect
     ) {
 
-      /*
-       * ERRADO:
-       *
-       * fecha feedback
-       * recria exercício
-       * permite tentar novamente
-       *
-       * NÃO avança.
-       */
       if (sheet) {
+
         sheet.className =
-          'feedback-sheet';
+          "feedback-sheet";
+
+        sheet.style.pointerEvents =
+          "none";
       }
+
 
       this.selectedOptionIdx =
         null;
@@ -791,19 +935,24 @@ const Exercises = {
       this.selectedSlotChip =
         null;
 
+
       UI.renderCurrentStep();
 
       return;
     }
 
 
-    /*
-     * CORRETO:
-     * agora sim avança.
-     */
+    /* ----------------------------------------------------------
+       RESPOSTA CORRETA
+    ---------------------------------------------------------- */
+
     if (sheet) {
+
       sheet.className =
-        'feedback-sheet';
+        "feedback-sheet";
+
+      sheet.style.pointerEvents =
+        "none";
     }
 
 
@@ -811,23 +960,23 @@ const Exercises = {
   },
 
 
-  /*
-   * ==========================================================
-   * AVANÇAR
-   * ==========================================================
-   */
+  /* ==========================================================
+     AVANÇAR
+  ========================================================== */
 
   advanceToNextStep() {
 
-    if (
-      !this.activeLesson
-    ) {
+    if (!this.activeLesson) {
       return;
     }
 
 
     this.currentStepIdx++;
 
+
+    /* ----------------------------------------------------------
+       AINDA HÁ ETAPAS
+    ---------------------------------------------------------- */
 
     if (
       this.currentStepIdx <
@@ -846,36 +995,54 @@ const Exercises = {
       this.activeAnatomyTokens =
         [];
 
+
       UI.renderCurrentStep();
 
       return;
     }
 
 
-    /*
-     * ======================================================
-     * LIÇÃO TERMINADA
-     * ======================================================
-     */
+    /* ----------------------------------------------------------
+       LIÇÃO TERMINOU
+    ---------------------------------------------------------- */
 
     const lessonId =
       this.activeLesson.id;
 
 
     /*
-     * XP é dado UMA vez ao terminar.
+     * XP da conclusão.
      */
-    Progress.addXP(100);
 
-    Progress.completeLesson(
-      lessonId
-    );
+    if (
+      typeof Progress.addXP ===
+      "function"
+    ) {
+
+      Progress.addXP(100);
+    }
+
+
+    /*
+     * Marca a lição como concluída.
+     */
+
+    if (
+      typeof Progress.completeLesson ===
+      "function"
+    ) {
+
+      Progress.completeLesson(
+        lessonId
+      );
+    }
 
 
     /*
      * Mostra a tela de conclusão
-     * fora da contagem de etapas.
+     * fora da lição.
      */
+
     UI.showCompletionScreen(
       this.activeLesson,
       this.correctAnswersCount,
