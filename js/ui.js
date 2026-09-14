@@ -1,102 +1,97 @@
 const GlossaryTerms = {
-  pinMode: {
-    title: 'pinMode()',
-    desc: 'Configura um pino do Arduino como entrada ou saída. No UNO R3, por exemplo, você pode usar OUTPUT para controlar um LED.'
+  "pinMode": {
+    title: "pinMode()",
+    desc: "Função usada para configurar um pino como entrada ou saída. Exemplo: pinMode(13, OUTPUT)."
   },
 
-  digitalWrite: {
-    title: 'digitalWrite()',
-    desc: 'Coloca um pino digital em nível HIGH ou LOW. No Arduino UNO R3, isso normalmente corresponde a aproximadamente 5 V ou 0 V.'
+  "digitalWrite": {
+    title: "digitalWrite()",
+    desc: "Envia um nível lógico HIGH ou LOW para um pino digital."
   },
 
-  analogRead: {
-    title: 'analogRead()',
-    desc: 'Lê uma entrada analógica. No UNO R3, a leitura normalmente vai de 0 a 1023.'
+  "analogRead": {
+    title: "analogRead()",
+    desc: "Lê um valor de uma entrada analógica. No Arduino UNO R3, a leitura normalmente vai de 0 a 1023."
   },
 
-  digitalRead: {
-    title: 'digitalRead()',
-    desc: 'Lê o estado lógico de um pino digital e retorna HIGH ou LOW.'
+  "int": {
+    title: "int",
+    desc: "Tipo de dado usado para armazenar números inteiros, como 10, 25 ou 100."
   },
 
-  int: {
-    title: 'int',
-    desc: 'Tipo de dado usado para armazenar números inteiros, como 0, 10, 100 ou -5.'
+  "if": {
+    title: "if",
+    desc: "Estrutura de decisão. O código dentro dela é executado quando uma condição é verdadeira."
   },
 
-  float: {
-    title: 'float',
-    desc: 'Tipo de dado usado para armazenar números que podem ter casas decimais, como 3.14 ou 25.5.'
+  "for": {
+    title: "for",
+    desc: "Estrutura usada para repetir um trecho de código várias vezes."
   },
 
-  if: {
-    title: 'if',
-    desc: 'Estrutura de decisão. O código dentro dela é executado quando a condição é verdadeira.'
+  "HIGH": {
+    title: "HIGH",
+    desc: "Representa um nível lógico alto. No Arduino UNO R3, corresponde normalmente a aproximadamente 5 V."
   },
 
-  for: {
-    title: 'for',
-    desc: 'Estrutura de repetição usada para executar um bloco de código várias vezes.'
+  "LOW": {
+    title: "LOW",
+    desc: "Representa um nível lógico baixo, normalmente aproximadamente 0 V no Arduino UNO R3."
   },
 
-  HIGH: {
-    title: 'HIGH',
-    desc: 'Representa um nível lógico alto. No Arduino UNO R3, uma saída HIGH normalmente fica próxima de 5 V.'
+  "OUTPUT": {
+    title: "OUTPUT",
+    desc: "Configura um pino para enviar um sinal elétrico."
   },
 
-  LOW: {
-    title: 'LOW',
-    desc: 'Representa um nível lógico baixo. No Arduino UNO R3, uma saída LOW normalmente fica próxima de 0 V.'
+  "INPUT": {
+    title: "INPUT",
+    desc: "Configura um pino para receber informações de sensores ou outros componentes."
   },
 
-  OUTPUT: {
-    title: 'OUTPUT',
-    desc: 'Configura um pino para funcionar como saída, permitindo que o Arduino controle um sinal elétrico.'
+  "Serial.println": {
+    title: "Serial.println()",
+    desc: "Envia uma informação para o Monitor Serial e pula para a próxima linha."
   },
 
-  INPUT: {
-    title: 'INPUT',
-    desc: 'Configura um pino para funcionar como entrada, permitindo que o Arduino leia um sinal.'
+  "void setup": {
+    title: "void setup()",
+    desc: "Função executada uma vez quando o Arduino é ligado ou reiniciado."
   },
 
-  'Serial.println': {
-    title: 'Serial.println()',
-    desc: 'Envia uma mensagem ou valor para o Monitor Serial e adiciona uma quebra de linha depois.'
+  "void loop": {
+    title: "void loop()",
+    desc: "Função executada repetidamente enquanto o Arduino estiver funcionando."
   },
 
-  'void setup': {
-    title: 'void setup()',
-    desc: 'Função executada uma vez quando o Arduino inicia ou é reiniciado.'
+  "digitalRead": {
+    title: "digitalRead()",
+    desc: "Lê o estado lógico de um pino digital e retorna HIGH ou LOW."
   },
 
-  'void loop': {
-    title: 'void loop()',
-    desc: 'Função executada repetidamente enquanto o Arduino estiver funcionando.'
+  "delay": {
+    title: "delay()",
+    desc: "Pausa a execução do programa durante uma quantidade de milissegundos."
   },
 
-  delay: {
-    title: 'delay()',
-    desc: 'Pausa a execução do programa durante um determinado número de milissegundos.'
+  "float": {
+    title: "float",
+    desc: "Tipo de dado usado para armazenar números que podem ter casas decimais."
   },
 
-  Servo: {
-    title: 'Servo',
-    desc: 'Objeto usado pela biblioteca Servo para controlar servomotores.'
+  "Servo": {
+    title: "Servo",
+    desc: "Componente que permite controlar a posição de um eixo usando um sinal de controle."
   },
 
-  attach: {
-    title: 'attach()',
-    desc: 'Liga um objeto Servo a um pino específico do Arduino.'
+  "attach": {
+    title: "attach()",
+    desc: "Liga um objeto Servo a um pino do Arduino para que ele possa ser controlado."
   },
 
-  write: {
-    title: 'write()',
-    desc: 'Envia uma posição para um servomotor. Em muitos servos comuns, os valores ficam aproximadamente entre 0 e 180 graus.'
-  },
-
-  A0: {
-    title: 'A0',
-    desc: 'Uma das entradas analógicas disponíveis no Arduino UNO R3.'
+  "write": {
+    title: "write()",
+    desc: "Define a posição desejada de um servo."
   }
 };
 
@@ -105,647 +100,712 @@ const UI = {
 
   audioCtx: null,
 
-  /*
-   * ==========================================================
-   * ÁUDIO
-   * ==========================================================
-   */
-
   getAudioContext() {
-    if (this.audioCtx) {
-      return this.audioCtx;
+    if (!this.audioCtx) {
+      const AudioContextClass =
+        window.AudioContext || window.webkitAudioContext;
+
+      if (AudioContextClass) {
+        this.audioCtx = new AudioContextClass();
+      }
     }
-
-    const AudioContext =
-      window.AudioContext ||
-      window.webkitAudioContext;
-
-    if (!AudioContext) {
-      return null;
-    }
-
-    this.audioCtx = new AudioContext();
 
     return this.audioCtx;
   },
 
+
   playSound(type) {
-    const ctx = this.getAudioContext();
+    try {
+      const audioCtx = this.getAudioContext();
 
-    if (!ctx) {
-      return;
-    }
+      if (!audioCtx) return;
 
-    if (ctx.state === 'suspended') {
-      ctx.resume();
-    }
+      if (audioCtx.state === "suspended") {
+        audioCtx.resume();
+      }
 
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
 
-    osc.connect(gain);
-    gain.connect(ctx.destination);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
 
-    if (type === 'correct') {
+      if (type === "correct") {
 
-      osc.frequency.setValueAtTime(
-        523.25,
-        ctx.currentTime
-      );
+        osc.frequency.setValueAtTime(
+          523.25,
+          audioCtx.currentTime
+        );
 
-      osc.frequency.setValueAtTime(
-        659.25,
-        ctx.currentTime + 0.1
-      );
+        osc.frequency.setValueAtTime(
+          659.25,
+          audioCtx.currentTime + 0.1
+        );
 
-      gain.gain.setValueAtTime(
-        0.2,
-        ctx.currentTime
-      );
+        gain.gain.setValueAtTime(
+          0.2,
+          audioCtx.currentTime
+        );
 
-      gain.gain.exponentialRampToValueAtTime(
-        0.01,
-        ctx.currentTime + 0.3
-      );
+        gain.gain.exponentialRampToValueAtTime(
+          0.01,
+          audioCtx.currentTime + 0.3
+        );
 
-      osc.start();
-      osc.stop(
-        ctx.currentTime + 0.3
-      );
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.3);
 
-    } else {
+      } else {
 
-      osc.frequency.setValueAtTime(
-        220,
-        ctx.currentTime
-      );
+        osc.frequency.setValueAtTime(
+          220,
+          audioCtx.currentTime
+        );
 
-      osc.frequency.setValueAtTime(
-        164.81,
-        ctx.currentTime + 0.15
-      );
+        osc.frequency.setValueAtTime(
+          164.81,
+          audioCtx.currentTime + 0.15
+        );
 
-      gain.gain.setValueAtTime(
-        0.3,
-        ctx.currentTime
-      );
+        gain.gain.setValueAtTime(
+          0.25,
+          audioCtx.currentTime
+        );
 
-      gain.gain.exponentialRampToValueAtTime(
-        0.01,
-        ctx.currentTime + 0.4
-      );
+        gain.gain.exponentialRampToValueAtTime(
+          0.01,
+          audioCtx.currentTime + 0.4
+        );
 
-      osc.start();
-      osc.stop(
-        ctx.currentTime + 0.4
-      );
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.4);
+      }
+
+    } catch (error) {
+      console.warn("Áudio indisponível:", error);
     }
   },
 
 
   /*
-   * ==========================================================
+   * ============================================================
    * GLOSSÁRIO
-   * ==========================================================
+   * ============================================================
+   *
+   * IMPORTANTE:
+   * Nunca fazemos replace diretamente no HTML gerado.
+   *
+   * Primeiro substituímos os termos por marcadores seguros.
+   * Depois transformamos os marcadores em HTML.
+   *
+   * Isso impede que o glossário processe:
+   * - seus próprios atributos HTML
+   * - onclick
+   * - JavaScript
+   * - outras tags
+   * - código já transformado
    */
 
+
   escapeHtml(value) {
-    return String(value ?? '')
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#039;');
+    if (value === null || value === undefined) {
+      return "";
+    }
+
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
   },
 
 
   formatTextWithGlossary(text) {
+
     if (!text) {
-      return '';
+      return "";
     }
 
-    let result =
-      this.escapeHtml(text);
+    let source = String(text);
 
     /*
-     * Termos maiores primeiro.
-     *
-     * Isso evita situações como:
-     * Serial.println
-     * sendo quebrado por outros termos.
+     * Protege temporariamente cada termo encontrado.
+     * Assim um termo nunca será processado novamente.
      */
-    const terms =
-      Object.keys(GlossaryTerms)
-        .sort((a, b) => b.length - a.length);
 
-    terms.forEach(term => {
+    const protectedTerms = [];
 
-      const escapedTerm =
-        this.escapeHtml(term);
+    const sortedTerms = Object.keys(GlossaryTerms)
+      .sort((a, b) => b.length - a.length);
 
-      /*
-       * Escapa caracteres especiais de regex.
-       */
-      const regexTerm =
-        escapedTerm.replace(
-          /[.*+?^${}()|[\]\\]/g,
-          '\\$&'
-        );
+    sortedTerms.forEach((term, index) => {
 
-      const regex =
-        new RegExp(
-          `(?<![\\w])(${regexTerm})(?![\\w])`,
-          'g'
-        );
+      const escapedTerm = term.replace(
+        /[.*+?^${}()|[\]\\]/g,
+        "\\$&"
+      );
 
-      result =
-        result.replace(
+      const marker = `___ARDUINO_GO_GLOSSARY_${index}___`;
+
+      const regex = new RegExp(
+        `(^|[^A-Za-z0-9_])(${escapedTerm})(?=$|[^A-Za-z0-9_])`,
+        "g"
+      );
+
+      if (regex.test(source)) {
+
+        source = source.replace(
           regex,
-          `<span class="interactive-term"
-                 role="button"
-                 tabindex="0"
-                 data-glossary-term="${this.escapeHtml(term)}"
-                 onclick="event.stopPropagation(); UI.showGlossary('${this.escapeJsString(term)}')"
-                 onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();UI.showGlossary('${this.escapeJsString(term)}')}"
-          >$1</span>`
+          `$1${marker}`
         );
+
+        protectedTerms.push({
+          marker,
+          term,
+          label: term
+        });
+      }
     });
+
+
+    /*
+     * Escapamos o texto depois de encontrar os termos.
+     * Isso evita que qualquer HTML digitado pelo conteúdo
+     * seja interpretado como HTML real.
+     */
+
+    let result = this.escapeHtml(source);
+
+
+    /*
+     * Recoloca os termos como elementos interativos.
+     */
+
+    protectedTerms.forEach(item => {
+
+      const safeMarker = this.escapeHtml(item.marker);
+      const safeLabel = this.escapeHtml(item.label);
+      const safeKey = encodeURIComponent(item.term);
+
+      result = result.replace(
+        safeMarker,
+        `<button
+          type="button"
+          class="interactive-term"
+          data-glossary-term="${safeKey}"
+          onclick="event.preventDefault(); event.stopPropagation(); UI.showGlossaryEncoded('${safeKey}')"
+          onkeydown="if(event.key === 'Enter' || event.key === ' '){event.preventDefault();event.stopPropagation();UI.showGlossaryEncoded('${safeKey}')}"
+        >${safeLabel}</button>`
+      );
+    });
+
 
     return result;
   },
 
 
-  escapeJsString(value) {
-    return String(value)
-      .replace(/\\/g, '\\\\')
-      .replace(/'/g, "\\'");
+  /*
+   * Versão específica para código.
+   *
+   * O código continua sendo texto visual.
+   * O glossário pode destacar termos sem transformar
+   * caracteres do código em HTML executável.
+   */
+
+  formatCodeWithGlossary(code) {
+
+    if (!code) {
+      return "";
+    }
+
+    return this.formatTextWithGlossary(code);
+  },
+
+
+  showGlossaryEncoded(encodedKey) {
+
+    try {
+
+      const termKey = decodeURIComponent(encodedKey);
+
+      this.showGlossary(termKey);
+
+    } catch (error) {
+
+      console.warn(
+        "Erro ao abrir termo do glossário:",
+        error
+      );
+    }
   },
 
 
   showGlossary(termKey) {
 
-    const term =
-      GlossaryTerms[termKey];
+    const term = GlossaryTerms[termKey];
 
     if (!term) {
       return;
     }
 
-    const existing =
-      document.getElementById(
-        'glossary-modal'
-      );
+
+    const existing = document.getElementById(
+      "glossary-modal"
+    );
 
     if (existing) {
       existing.remove();
     }
 
-    const overlay =
-      document.createElement('div');
+
+    const overlay = document.createElement("div");
 
     overlay.className =
-      'glossary-popover-overlay';
+      "glossary-popover-overlay";
 
     overlay.id =
-      'glossary-modal';
+      "glossary-modal";
+
 
     overlay.setAttribute(
-      'role',
-      'dialog'
+      "role",
+      "dialog"
     );
 
     overlay.setAttribute(
-      'aria-modal',
-      'true'
+      "aria-modal",
+      "true"
     );
+
 
     overlay.onclick = (event) => {
 
-      if (
-        event.target === overlay
-      ) {
+      if (event.target === overlay) {
         overlay.remove();
       }
+
     };
 
-    overlay.innerHTML = `
-      <div class="glossary-card">
 
-        <div class="glossary-title">
-          ${this.escapeHtml(term.title)}
-        </div>
+    const card = document.createElement("div");
 
-        <div class="glossary-desc">
-          ${this.escapeHtml(term.desc)}
-        </div>
+    card.className =
+      "glossary-card";
 
-        <button
-          class="btn-action-primary"
-          style="height:40px;font-size:0.9rem;"
-          onclick="document.getElementById('glossary-modal')?.remove()"
-        >
-          Entendi
-        </button>
 
-      </div>
-    `;
+    const title = document.createElement("div");
+
+    title.className =
+      "glossary-title";
+
+    title.textContent =
+      term.title;
+
+
+    const description = document.createElement("div");
+
+    description.className =
+      "glossary-desc";
+
+    description.textContent =
+      term.desc;
+
+
+    const button = document.createElement("button");
+
+    button.className =
+      "btn-action-primary";
+
+    button.style.height =
+      "40px";
+
+    button.style.fontSize =
+      "0.9rem";
+
+    button.textContent =
+      "Entendi";
+
+
+    button.onclick = () => {
+      overlay.remove();
+    };
+
+
+    card.appendChild(title);
+    card.appendChild(description);
+    card.appendChild(button);
+
+    overlay.appendChild(card);
 
     document.body.appendChild(overlay);
 
-    const closeOnEscape = (event) => {
-      if (event.key === 'Escape') {
-        const modal =
-          document.getElementById(
-            'glossary-modal'
-          );
 
-        if (modal) {
-          modal.remove();
-        }
-
-        document.removeEventListener(
-          'keydown',
-          closeOnEscape
-        );
-      }
-    };
-
-    document.addEventListener(
-      'keydown',
-      closeOnEscape
-    );
+    setTimeout(() => {
+      button.focus();
+    }, 50);
   },
 
 
   /*
-   * ==========================================================
+   * ============================================================
    * NAVEGAÇÃO
-   * ==========================================================
+   * ============================================================
    */
 
   switchView(viewId, btn) {
 
     document
-      .querySelectorAll('main > section')
+      .querySelectorAll("main > section")
       .forEach(section => {
-        section.classList.add('hidden');
+        section.classList.add("hidden");
       });
 
+
     const target =
-      document.getElementById(
-        `view-${viewId}`
-      );
+      document.getElementById(`view-${viewId}`);
+
 
     if (target) {
-      target.classList.remove('hidden');
+      target.classList.remove("hidden");
     }
+
 
     document
       .querySelectorAll(
-        '.nav-item button, .mobile-btn'
+        ".nav-item button, .mobile-btn"
       )
       .forEach(button => {
-        button.classList.remove('active');
+        button.classList.remove("active");
       });
 
-    /*
-     * Marca também a navegação equivalente
-     * no desktop/mobile.
-     */
+
     if (btn) {
-      btn.classList.add('active');
+      btn.classList.add("active");
     }
-
-    const desktopButton =
-      document.getElementById(
-        `nav-${viewId === 'dashboard'
-          ? 'dash'
-          : viewId === 'curriculum'
-            ? 'curr'
-            : viewId === 'ide'
-              ? 'ide'
-              : viewId === 'projects'
-                ? 'proj'
-                : 'badge'}`
-      );
-
-    if (desktopButton) {
-      desktopButton.classList.add('active');
-    }
-
-    /*
-     * Fecha o lesson screen caso alguém navegue
-     * pela interface principal.
-     */
   },
 
 
   /*
-   * ==========================================================
-   * TRILHA
-   * ==========================================================
+   * ============================================================
+   * MÓDULOS E TRILHA
+   * ============================================================
    */
 
   renderModules() {
 
     const container =
       document.getElementById(
-        'modules-container'
+        "modules-container"
       );
 
     const fullContainer =
       document.getElementById(
-        'full-curriculum-container'
+        "full-curriculum-container"
       );
 
+
     if (container) {
-      container.innerHTML = '';
+      container.innerHTML = "";
     }
 
     if (fullContainer) {
-      fullContainer.innerHTML = '';
+      fullContainer.innerHTML = "";
     }
 
-    /*
-     * HOME:
-     *
-     * Mostra o módulo atual e o próximo módulo.
-     *
-     * Isso evita uma parede enorme de conteúdo,
-     * mas mantém a trilha visível.
-     */
 
-    let currentModuleIndex = 0;
-
-    for (
-      let i = 0;
-      i < LessonsData.length;
-      i++
+    if (
+      typeof LessonsData === "undefined" ||
+      typeof Progress === "undefined"
     ) {
+      return;
+    }
 
-      const hasIncomplete =
-        LessonsData[i].lessons.some(
-          lesson =>
-            !Progress.isLessonCompleted(
-              lesson.id
-            )
-        );
 
-      if (hasIncomplete) {
-        currentModuleIndex = i;
-        break;
-      }
+    LessonsData.forEach(module => {
+
+      const moduleHtml =
+        this.createModuleHtml(module);
+
+
+      /*
+       * Página inicial:
+       * mostra a trilha principal sem deixar
+       * a tela gigante e vazia.
+       */
 
       if (
-        i === LessonsData.length - 1
+        container &&
+        (
+          module.id === "mod1" ||
+          module.id === "mod2"
+        )
       ) {
-        currentModuleIndex = i;
+
+        container.innerHTML +=
+          moduleHtml;
       }
-    }
 
 
-    LessonsData.forEach(
-      (module, moduleIndex) => {
+      /*
+       * Trilha completa:
+       * mostra todos os módulos.
+       */
 
-        const moduleHtml =
-          this.createModuleHtml(
-            module,
-            moduleIndex
-          );
+      if (fullContainer) {
 
-        /*
-         * Curriculum recebe tudo.
-         */
-        if (fullContainer) {
-          fullContainer.innerHTML +=
-            moduleHtml;
-        }
-
-        /*
-         * Dashboard recebe:
-         * módulo atual + módulo seguinte.
-         */
-        if (
-          container &&
-          (
-            moduleIndex === currentModuleIndex ||
-            moduleIndex === currentModuleIndex + 1
-          )
-        ) {
-          container.innerHTML +=
-            moduleHtml;
-        }
+        fullContainer.innerHTML +=
+          moduleHtml;
       }
-    );
+
+    });
   },
 
 
-  createModuleHtml(module, moduleIndex) {
+  createModuleHtml(module) {
 
-    let lessonsHtml = '';
+    let html = `
+      <div class="module-card">
 
-    module.lessons.forEach(
-      (lesson) => {
+        <div class="module-header">
+          ${this.escapeHtml(module.title)}
+        </div>
 
-        const status =
+        <div class="module-desc">
+          ${this.escapeHtml(module.desc || "")}
+        </div>
+
+        <div class="lessons-tree">
+    `;
+
+
+    module.lessons.forEach((lesson, index) => {
+
+      let status =
+        "locked";
+
+      let actionText =
+        "🔒 Bloqueado";
+
+
+      if (
+        typeof Progress.getLessonStatus ===
+        "function"
+      ) {
+
+        status =
           Progress.getLessonStatus(
             lesson.id
           );
 
-        let statusClass =
-          'locked';
 
-        let actionText =
-          '🔒 Bloqueado';
-
-        if (status === 'completed') {
-
-          statusClass =
-            'completed';
+        if (status === "completed") {
 
           actionText =
-            '✓ Concluída';
+            "✓ Concluída";
 
-        } else if (status === 'unlocked') {
+        } else if (status === "in-progress") {
 
-          statusClass =
-            'unlocked';
-
-          /*
-           * Se existe progresso salvo de uma lição,
-           * o botão pode continuar.
-           *
-           * No momento, o sistema não possui persistência
-           * de etapa individual, então a entrada continua
-           * sendo segura como "Começar".
-           */
           actionText =
-            '▶ Começar';
+            "→ Continuar";
+
+        } else if (status === "unlocked") {
+
+          actionText =
+            "▶ Começar";
         }
 
-        const isClickable =
-          status !== 'locked';
+      } else {
 
-        const clickAction =
-          isClickable
-            ? `onclick="Exercises.startLesson('${this.escapeJsString(lesson.id)}')"`
-            : '';
+        const isDone =
+          Progress.state.completedLessons.includes(
+            lesson.id
+          );
 
-        lessonsHtml += `
-          <div
-            class="lesson-node ${statusClass}"
-            ${clickAction}
-            ${isClickable ? 'role="button" tabindex="0"' : ''}
-          >
+        status =
+          isDone
+            ? "completed"
+            : index === 0
+              ? "unlocked"
+              : "locked";
 
-            <div class="node-left">
 
-              <span class="node-tag">
-                ${this.escapeHtml(lesson.tag || '')}
-              </span>
+        actionText =
+          status === "completed"
+            ? "✓ Concluída"
+            : status === "unlocked"
+              ? "▶ Começar"
+              : "🔒 Bloqueado";
+      }
 
-              <span class="node-title">
-                ${this.escapeHtml(lesson.title || '')}
-              </span>
 
-            </div>
+      const unlocked =
+        status !== "locked";
 
-            <span
-              class="node-action"
-              style="color:${
-                status === 'completed'
-                  ? 'var(--success)'
-                  : status === 'unlocked'
-                    ? 'var(--primary)'
-                    : 'var(--text-muted)'
-              }"
-            >
-              ${actionText}
+
+      const action =
+        unlocked
+          ? `onclick="Exercises.startLesson('${lesson.id}')"`
+          : "";
+
+
+      html += `
+        <div
+          class="lesson-node ${status}"
+          ${action}
+          role="${unlocked ? "button" : "listitem"}"
+          ${unlocked ? 'tabindex="0"' : ""}
+          data-lesson-id="${this.escapeHtml(lesson.id)}"
+        >
+
+          <div class="node-left">
+
+            <span class="node-tag">
+              ${this.escapeHtml(lesson.tag || "")}
+            </span>
+
+            <span class="node-title">
+              ${this.escapeHtml(lesson.title)}
             </span>
 
           </div>
-        `;
-      }
-    );
 
-    return `
-      <div class="module-card">
+          <span
+            class="node-action"
+            style="color: ${
+              status === "completed"
+                ? "var(--success)"
+                : status !== "locked"
+                  ? "var(--primary)"
+                  : "var(--text-muted)"
+            }"
+          >
+            ${actionText}
+          </span>
 
-        <div class="module-header">
-          ${this.escapeHtml(module.title || '')}
         </div>
+      `;
+    });
 
-        <div class="module-desc">
-          ${this.escapeHtml(module.desc || '')}
+
+    html += `
         </div>
-
-        <div class="lessons-tree">
-          ${lessonsHtml}
-        </div>
-
       </div>
     `;
+
+
+    return html;
   },
 
 
   /*
-   * ==========================================================
+   * ============================================================
    * CONQUISTAS
-   * ==========================================================
+   * ============================================================
    */
 
   renderBadges() {
 
     const container =
       document.getElementById(
-        'badges-container'
+        "badges-container"
       );
+
 
     if (!container) {
       return;
     }
 
-    container.innerHTML = '';
+
+    container.innerHTML = "";
+
 
     const badgesData = [
+
       {
-        id: 'b1',
-        name: 'Primeiro Compilador',
-        desc: 'Completou a primeira lição de C++'
+        id: "b1",
+        name: "Primeiro Compilador",
+        desc: "Completou a primeira lição de C++"
       },
+
       {
-        id: 'b2',
-        name: 'Engenheiro de Hardware',
-        desc: 'Configurou um pino digital com sucesso'
+        id: "b2",
+        name: "Engenheiro de Hardware",
+        desc: "Configurou um pino digital com sucesso"
       },
+
       {
-        id: 'b3',
-        name: 'Mestre da Robótica',
-        desc: 'Completou o módulo de saídas digitais'
+        id: "b3",
+        name: "Mestre da Robótica",
+        desc: "Completou o módulo de saídas digitais"
       }
+
     ];
 
-    badgesData.forEach(
-      badge => {
 
-        const unlocked =
-          Progress.state.unlockedBadges.includes(
-            badge.id
-          );
+    badgesData.forEach(badge => {
 
-        container.innerHTML += `
-          <div
-            class="project-card"
-            style="opacity:${unlocked ? '1' : '0.4'}"
-          >
+      const isUnlocked =
+        Progress.state.unlockedBadges.includes(
+          badge.id
+        );
 
-            <div class="project-body">
 
-              <div
-                style="font-size:2rem;margin-bottom:10px;"
-              >
-                ${unlocked ? '🏆' : '🔒'}
-              </div>
+      container.innerHTML += `
+        <div
+          class="project-card"
+          style="opacity: ${isUnlocked ? "1" : "0.4"}"
+        >
 
-              <div class="project-title">
-                ${this.escapeHtml(badge.name)}
-              </div>
+          <div class="project-body">
 
-              <div class="project-desc">
-                ${this.escapeHtml(badge.desc)}
-              </div>
+            <div
+              style="
+                font-size:2rem;
+                margin-bottom:10px;
+              "
+            >
+              🏆
+            </div>
 
-              <div
-                style="
-                  font-size:0.8rem;
-                  font-weight:800;
-                  color:${
-                    unlocked
-                      ? 'var(--primary)'
-                      : 'var(--text-muted)'
-                  };
-                "
-              >
-                ${
-                  unlocked
-                    ? 'DESBLOQUEADO'
-                    : 'BLOQUEADO'
+            <div class="project-title">
+              ${this.escapeHtml(badge.name)}
+            </div>
+
+            <div class="project-desc">
+              ${this.escapeHtml(badge.desc)}
+            </div>
+
+            <div
+              style="
+                font-size:0.8rem;
+                font-weight:800;
+                color:${
+                  isUnlocked
+                    ? "var(--primary)"
+                    : "var(--text-muted)"
                 }
-              </div>
-
+              "
+            >
+              ${
+                isUnlocked
+                  ? "DESBLOQUEADO"
+                  : "BLOQUEADO"
+              }
             </div>
 
           </div>
-        `;
-      }
-    );
+
+        </div>
+      `;
+    });
   },
 
 
   /*
-   * ==========================================================
-   * LIÇÃO
-   * ==========================================================
+   * ============================================================
+   * ETAPA DA LIÇÃO
+   * ============================================================
    */
 
   renderCurrentStep() {
@@ -754,103 +814,115 @@ const UI = {
       !Exercises.activeLesson ||
       !Exercises.activeLesson.steps
     ) {
-      console.error(
-        'Nenhuma lição ativa.'
-      );
       return;
     }
+
 
     const step =
       Exercises.activeLesson.steps[
         Exercises.currentStepIdx
       ];
 
+
     if (!step) {
-      console.error(
-        'Etapa inexistente:',
-        Exercises.currentStepIdx
-      );
       return;
     }
+
 
     const body =
       document.getElementById(
-        'lesson-body'
+        "lesson-body"
       );
 
-    const button =
+    const btn =
       document.getElementById(
-        'btn-step-action'
+        "btn-step-action"
       );
 
-    const skipButton =
+    const skipBtn =
       document.getElementById(
-        'btn-skip-step'
+        "btn-skip-step"
       );
+
 
     const feedback =
       document.getElementById(
-        'feedback-sheet'
+        "feedback-sheet"
       );
 
-    if (!body || !button) {
+
+    if (!body || !btn || !skipBtn) {
       return;
     }
 
-    /*
-     * Fecha feedback antigo.
-     */
+
     if (feedback) {
       feedback.className =
-        'feedback-sheet';
+        "feedback-sheet";
     }
 
-    /*
-     * Reset visual da etapa.
-     *
-     * NÃO mexemos em vidas aqui.
-     */
-    Exercises.selectedOptionIdx = null;
-    Exercises.selectedSlotChip = null;
 
-    /*
-     * Reset de estado de anatomia.
-     */
-    Exercises.activeAnatomyTokens = [];
+    if (
+      "selectedOptionIdx" in Exercises
+    ) {
+      Exercises.selectedOptionIdx =
+        null;
+    }
 
-    button.disabled = true;
-    button.innerText = 'Verificar';
+
+    if (
+      "selectedSlotChip" in Exercises
+    ) {
+      Exercises.selectedSlotChip =
+        null;
+    }
+
+
+    if (
+      "activeAnatomyTokens" in Exercises
+    ) {
+      Exercises.activeAnatomyTokens =
+        [];
+    }
+
+
+    btn.disabled =
+      true;
+
 
     const informativeTypes = [
-      'intro',
-      'explanation',
-      'interactive_anatomy'
+      "intro",
+      "explanation",
+      "interactive_anatomy"
     ];
+
 
     const isInformative =
       informativeTypes.includes(
         step.type
       );
 
-    if (skipButton) {
 
-      if (isInformative) {
-        skipButton.classList.add(
-          'hidden'
-        );
-      } else {
-        skipButton.classList.remove(
-          'hidden'
-        );
-      }
+    if (isInformative) {
+
+      skipBtn.classList.add(
+        "hidden"
+      );
+
+      btn.disabled =
+        false;
+
+    } else {
+
+      skipBtn.classList.remove(
+        "hidden"
+      );
     }
 
 
-    /*
-     * PROGRESSO
-     */
     const totalSteps =
       Exercises.activeLesson.steps.length;
+
 
     const progress =
       Math.round(
@@ -860,54 +932,62 @@ const UI = {
         ) * 100
       );
 
+
     const progressFill =
       document.getElementById(
-        'lesson-progress-fill'
+        "lesson-progress-fill"
       );
 
+
+    const counter =
+      document.getElementById(
+        "step-counter"
+      );
+
+
     if (progressFill) {
+
       progressFill.style.width =
         `${progress}%`;
     }
 
-    const stepCounter =
-      document.getElementById(
-        'step-counter'
-      );
 
-    if (stepCounter) {
-      stepCounter.innerText =
-        `ETAPA ${Exercises.currentStepIdx + 1} DE ${totalSteps}`;
+    if (counter) {
+
+      counter.innerText =
+        `ETAPA ${
+          Exercises.currentStepIdx + 1
+        } DE ${totalSteps}`;
     }
 
 
-    /*
-     * CONTEÚDO BASE
-     */
     let html = `
+
       <span class="step-badge">
-        ${this.formatTextWithGlossary(
-          step.badge || 'Aprender'
+        ${this.escapeHtml(
+          step.badge || "Aprender"
         )}
       </span>
 
       <div class="step-title">
         ${this.formatTextWithGlossary(
-          step.title || ''
+          step.title || ""
         )}
       </div>
 
       <div class="step-text">
         ${this.formatTextWithGlossary(
-          step.text || ''
+          step.text || ""
         )}
       </div>
+
     `;
 
 
     /*
-     * CÓDIGO
+     * Código
      */
+
     if (step.code) {
 
       html += `
@@ -921,58 +1001,56 @@ const UI = {
 
 
     /*
-     * ======================================================
-     * ANATOMIA INTERATIVA
-     * ======================================================
+     * Anatomia interativa
      */
 
     if (
       step.type ===
-      'interactive_anatomy'
+      "interactive_anatomy"
     ) {
 
-      button.innerText =
-        'Explore os termos';
+      btn.innerText =
+        "Entendi →";
 
-      button.disabled =
-        true;
 
       html += `
-        <div class="interactive-anatomy-area">
+        <div
+          class="interactive-anatomy-area"
+        >
 
-          <div class="anatomy-code-line">
+          <div
+            class="anatomy-code-line"
+          >
       `;
+
 
       step.tokens.forEach(
         (token, index) => {
 
+          const safeLabel =
+            this.escapeHtml(
+              token.label
+            );
+
+
           html += `
-            <span
+            <button
+              type="button"
               class="interactive-term anatomy-token"
-              role="button"
-              tabindex="0"
-              id="anatomy-token-${index}"
-              onclick="
-                event.stopPropagation();
-                UI.selectAnatomyToken(${index});
-              "
-              onkeydown="
-                if(event.key==='Enter'||event.key===' '){
-                  event.preventDefault();
-                  event.stopPropagation();
-                  UI.selectAnatomyToken(${index});
-                }
-              "
+              onclick="event.preventDefault(); event.stopPropagation(); UI.selectAnatomyToken(${index})"
+              onkeydown="if(event.key === 'Enter' || event.key === ' '){event.preventDefault();event.stopPropagation();UI.selectAnatomyToken(${index})}"
             >
-              ${this.escapeHtml(token.label)}
-            </span>
+              ${safeLabel}
+            </button>
           `;
         }
       );
 
+
       html += `
           </div>
       `;
+
 
       step.tokens.forEach(
         (token, index) => {
@@ -983,15 +1061,19 @@ const UI = {
               id="anat-exp-${index}"
             >
 
-              <div class="anatomy-exp-title">
+              <div
+                class="anatomy-exp-title"
+              >
                 ${this.escapeHtml(
-                  token.expTitle || ''
+                  token.expTitle || ""
                 )}
               </div>
 
-              <div class="anatomy-exp-text">
+              <div
+                class="anatomy-exp-text"
+              >
                 ${this.formatTextWithGlossary(
-                  token.expText || ''
+                  token.expText || ""
                 )}
               </div>
 
@@ -1000,6 +1082,7 @@ const UI = {
         }
       );
 
+
       html += `
         </div>
       `;
@@ -1007,25 +1090,26 @@ const UI = {
 
 
     /*
-     * ======================================================
-     * SLOT INTERATIVO
-     * ======================================================
+     * Slot de código
      */
 
     else if (
       step.type ===
-      'interactive_slot'
+      "interactive_slot"
     ) {
 
-      button.innerText =
-        'Verificar';
+      btn.innerText =
+        "Verificar";
+
 
       html += `
-        <div class="code-slot-area">
+        <div
+          class="code-slot-area"
+        >
 
           <span>
-            ${this.formatCodeWithGlossary(
-              step.codeBefore || ''
+            ${this.escapeHtml(
+              step.codeBefore || ""
             )}
           </span>
 
@@ -1037,34 +1121,34 @@ const UI = {
           </span>
 
           <span>
-            ${this.formatCodeWithGlossary(
-              step.codeAfter || ''
+            ${this.escapeHtml(
+              step.codeAfter || ""
             )}
           </span>
 
         </div>
 
-        <div class="chip-palette">
+        <div
+          class="chip-palette"
+        >
       `;
+
 
       step.chips.forEach(
         chip => {
 
           html += `
             <button
+              type="button"
               class="chip-btn"
-              onclick="
-                Exercises.selectSlotChip(
-                  '${this.escapeJsString(chip)}',
-                  this
-                )
-              "
+              onclick="Exercises.selectSlotChip(${JSON.stringify(chip)}, this)"
             >
               ${this.escapeHtml(chip)}
             </button>
           `;
         }
       );
+
 
       html += `
         </div>
@@ -1073,21 +1157,22 @@ const UI = {
 
 
     /*
-     * ======================================================
-     * DESAFIO DE CÓDIGO
-     * ======================================================
+     * Digitação de código
      */
 
     else if (
       step.type ===
-      'code_challenge'
+      "code_challenge"
     ) {
 
-      button.innerText =
-        'Verificar';
+      btn.innerText =
+        "Verificar";
+
 
       html += `
-        <div class="fill-input-area">
+        <div
+          class="fill-input-area"
+        >
 
           <input
             type="text"
@@ -1106,36 +1191,34 @@ const UI = {
 
 
     /*
-     * ======================================================
-     * QUIZ
-     * ======================================================
+     * Questões
      */
 
     else if (
-      step.type === 'quiz' ||
-      step.type === 'true_false' ||
-      step.type === 'output_quiz'
+      step.type === "quiz" ||
+      step.type === "true_false" ||
+      step.type === "output_quiz"
     ) {
 
-      button.innerText =
-        'Verificar';
+      btn.innerText =
+        "Verificar";
+
 
       html += `
-        <div class="options-stack">
+        <div
+          class="options-stack"
+        >
       `;
+
 
       step.options.forEach(
         (option, index) => {
 
           html += `
             <button
+              type="button"
               class="option-card"
-              onclick="
-                Exercises.selectOption(
-                  ${index},
-                  this
-                )
-              "
+              onclick="Exercises.selectOption(${index}, this)"
             >
               ${this.formatTextWithGlossary(
                 option
@@ -1145,6 +1228,7 @@ const UI = {
         }
       );
 
+
       html += `
         </div>
       `;
@@ -1152,119 +1236,91 @@ const UI = {
 
 
     /*
-     * ======================================================
-     * INTRO / EXPLICAÇÃO
-     * ======================================================
+     * Explicações
      */
 
     else if (
-      step.type === 'intro' ||
-      step.type === 'explanation'
+      step.type === "intro" ||
+      step.type === "explanation"
     ) {
 
-      button.innerText =
-        'Continuar';
-
-      button.disabled =
-        false;
+      btn.innerText =
+        "Continuar";
     }
 
 
-    /*
-     * Renderiza tudo.
-     */
     body.innerHTML =
       html;
-
-
-    /*
-     * Foco automático no input quando existir.
-     */
-    const input =
-      document.getElementById(
-        'challenge-input'
-      );
-
-    if (input) {
-
-      setTimeout(() => {
-        input.focus();
-      }, 100);
-    }
   },
 
 
   /*
-   * ==========================================================
-   * CÓDIGO COM GLOSSÁRIO
-   * ==========================================================
-   *
-   * Mantém espaços e quebras de linha.
-   */
-
-  formatCodeWithGlossary(code) {
-
-    if (!code) {
-      return '';
-    }
-
-    return this.formatTextWithGlossary(
-      code
-    );
-  },
-
-
-  /*
-   * ==========================================================
+   * ============================================================
    * ANATOMIA
-   * ==========================================================
+   * ============================================================
    */
 
   selectAnatomyToken(index) {
 
-    if (
-      !Exercises.activeLesson ||
-      !Exercises.activeLesson.steps
-    ) {
-      return;
-    }
+    document
+      .querySelectorAll(
+        ".anatomy-token"
+      )
+      .forEach(token => {
 
-    const step =
-      Exercises.activeLesson.steps[
-        Exercises.currentStepIdx
-      ];
+        token.classList.remove(
+          "active"
+        );
+      });
 
-    if (
-      !step ||
-      step.type !== 'interactive_anatomy'
-    ) {
-      return;
-    }
+
+    document
+      .querySelectorAll(
+        ".anatomy-explanation-box"
+      )
+      .forEach(box => {
+
+        box.classList.remove(
+          "show"
+        );
+      });
+
 
     const token =
-      step.tokens[index];
+      document.querySelectorAll(
+        ".anatomy-token"
+      )[index];
 
-    if (!token) {
-      return;
+
+    const explanation =
+      document.getElementById(
+        `anat-exp-${index}`
+      );
+
+
+    if (token) {
+
+      token.classList.add(
+        "active"
+      );
     }
 
-    /*
-     * Inicializa o array caso o Exercises ainda
-     * não tenha criado.
-     */
-    if (
-      !Array.isArray(
-        Exercises.activeAnatomyTokens
-      )
-    ) {
-      Exercises.activeAnatomyTokens = [];
+
+    if (explanation) {
+
+      explanation.classList.add(
+        "show"
+      );
     }
 
+
     /*
-     * Registra que o aluno realmente explorou
-     * esse termo.
+     * Registra que o aluno realmente
+     * explorou este pedaço da anatomia.
      */
+
     if (
+      Exercises.activeAnatomyTokens &&
       !Exercises.activeAnatomyTokens.includes(
         index
       )
@@ -1277,89 +1333,46 @@ const UI = {
 
 
     /*
-     * Só mexe nos elementos da anatomia atual.
+     * Só libera "Entendi" depois que
+     * todos os elementos foram explorados.
      */
-    document
-      .querySelectorAll(
-        '.anatomy-token'
-      )
-      .forEach(element => {
-        element.classList.remove(
-          'active'
-        );
-      });
 
-    document
-      .querySelectorAll(
-        '.anatomy-explanation-box'
-      )
-      .forEach(element => {
-        element.classList.remove(
-          'show'
-        );
-      });
+    const step =
+      Exercises.activeLesson.steps[
+        Exercises.currentStepIdx
+      ];
 
 
-    const selectedToken =
+    const totalTokens =
+      step &&
+      step.tokens
+        ? step.tokens.length
+        : 0;
+
+
+    const actionButton =
       document.getElementById(
-        `anatomy-token-${index}`
+        "btn-step-action"
       );
 
-    const explanation =
-      document.getElementById(
-        `anat-exp-${index}`
-      );
 
-    if (selectedToken) {
-      selectedToken.classList.add(
-        'active'
-      );
-    }
+    if (
+      actionButton &&
+      totalTokens > 0 &&
+      Exercises.activeAnatomyTokens.length >=
+        totalTokens
+    ) {
 
-    if (explanation) {
-      explanation.classList.add(
-        'show'
-      );
-    }
-
-
-    /*
-     * Só libera o botão depois que TODOS
-     * os tokens foram explorados.
-     */
-    const allExplored =
-      step.tokens.every(
-        (_, tokenIndex) =>
-          Exercises.activeAnatomyTokens.includes(
-            tokenIndex
-          )
-      );
-
-    const button =
-      document.getElementById(
-        'btn-step-action'
-      );
-
-    if (button) {
-
-      button.disabled =
-        !allExplored;
-
-      if (allExplored) {
-        button.innerText =
-          'Entendi →';
-      } else {
-        button.innerText =
-          'Explore os termos';
-      }
+      actionButton.disabled =
+        false;
     }
   },
 
 
   /*
-   * ==========================================================
+   * ============================================================
    * CONCLUSÃO
-   * ==========================================================
+   * ============================================================
    */
 
   showCompletionScreen(
@@ -1370,18 +1383,21 @@ const UI = {
 
     const lessonScreen =
       document.getElementById(
-        'lesson-screen'
+        "lesson-screen"
       );
+
 
     const completionScreen =
       document.getElementById(
-        'completion-screen'
+        "completion-screen"
       );
+
 
     const container =
       document.getElementById(
-        'completion-container'
+        "completion-container"
       );
+
 
     if (
       !lessonScreen ||
@@ -1391,24 +1407,24 @@ const UI = {
       return;
     }
 
+
     lessonScreen.classList.add(
-      'hidden'
+      "hidden"
     );
+
 
     completionScreen.classList.remove(
-      'hidden'
+      "hidden"
     );
 
 
-    /*
-     * CONCEITOS APRENDIDOS
-     */
-    let learnedHtml = '';
+    let learnedHtml =
+      "";
+
 
     if (
-      Array.isArray(
-        lesson.learnedConcepts
-      )
+      lesson.learnedConcepts &&
+      lesson.learnedConcepts.length
     ) {
 
       lesson.learnedConcepts.forEach(
@@ -1416,37 +1432,42 @@ const UI = {
 
           learnedHtml += `
             <li class="learned-item">
-              ✓
-              ${this.formatTextWithGlossary(
+              ✓ ${this.formatTextWithGlossary(
                 concept
               )}
             </li>
           `;
         }
       );
-    }
 
-    if (!learnedHtml) {
+    } else {
 
       learnedHtml = `
         <li class="learned-item">
-          ✓ Conceitos praticados nesta lição
+          ✓ Você concluiu esta lição.
         </li>
       `;
     }
 
 
-    /*
-     * PRÓXIMA LIÇÃO
-     */
-    const nextTarget =
-      Progress.getNextUncompletedLesson();
+    let nextTarget = null;
+
+
+    if (
+      typeof Progress.getNextUncompletedLesson ===
+      "function"
+    ) {
+
+      nextTarget =
+        Progress.getNextUncompletedLesson();
+    }
+
 
     const nextLessonTitle =
       nextTarget &&
       nextTarget.lesson
         ? nextTarget.lesson.title
-        : 'Todas as trilhas concluídas!';
+        : "Todas as trilhas concluídas!";
 
 
     container.innerHTML = `
@@ -1461,7 +1482,7 @@ const UI = {
 
       <div class="completion-lesson-name">
         ${this.escapeHtml(
-          lesson.title || ''
+          lesson.title
         )}
       </div>
 
@@ -1488,7 +1509,7 @@ const UI = {
           </div>
 
           <div class="stat-lbl">
-            Atividades corretas
+            Atividades acertadas
           </div>
 
         </div>
@@ -1532,133 +1553,85 @@ const UI = {
       </div>
 
 
-      ${
-        nextTarget
-          ? `
-            <button
-              class="btn-action-primary"
-              style="margin-top:10px;"
-              onclick="
-                UI.startNextLessonFromCompletion(
-                  '${this.escapeJsString(
-                    nextTarget.lesson.id
-                  )}'
-                )
-              "
-            >
-              Próxima lição →
-            </button>
-
-            <button
-              class="btn-btn btn-sec"
-              style="margin-top:8px;width:100%;justify-content:center;"
-              onclick="UI.exitCompletionAndContinue()"
-            >
-              Voltar à trilha
-            </button>
-          `
-          : `
-            <button
-              class="btn-action-primary"
-              style="margin-top:10px;"
-              onclick="UI.exitCompletionAndContinue()"
-            >
-              Revisar trilha →
-            </button>
-          `
-      }
+      <button
+        class="btn-action-primary"
+        style="margin-top:10px;"
+        onclick="UI.exitCompletionAndContinue()"
+      >
+        Continuar trilha →
+      </button>
 
     `;
   },
 
 
-  startNextLessonFromCompletion(
-    lessonId
-  ) {
-
-    const completionScreen =
-      document.getElementById(
-        'completion-screen'
-      );
-
-    if (completionScreen) {
-      completionScreen.classList.add(
-        'hidden'
-      );
-    }
-
-    Exercises.startLesson(
-      lessonId
-    );
-  },
-
-
   exitCompletionAndContinue() {
 
-    const completionScreen =
+    const completion =
       document.getElementById(
-        'completion-screen'
+        "completion-screen"
       );
 
-    if (completionScreen) {
-      completionScreen.classList.add(
-        'hidden'
+
+    if (completion) {
+
+      completion.classList.add(
+        "hidden"
       );
     }
 
-    Progress.updateUI();
+
+    if (
+      typeof Progress !== "undefined"
+    ) {
+
+      Progress.updateUI();
+    }
+
 
     this.switchView(
-      'dashboard',
+      "dashboard",
       document.getElementById(
-        'nav-dash'
+        "nav-dash"
       )
     );
   },
 
 
-  /*
-   * ==========================================================
-   * SAIR DA LIÇÃO
-   * ==========================================================
-   */
-
   exitLesson() {
 
-    const lessonScreen =
+    const lesson =
       document.getElementById(
-        'lesson-screen'
+        "lesson-screen"
       );
+
 
     const feedback =
       document.getElementById(
-        'feedback-sheet'
+        "feedback-sheet"
       );
 
-    if (lessonScreen) {
-      lessonScreen.classList.add(
-        'hidden'
+
+    if (lesson) {
+
+      lesson.classList.add(
+        "hidden"
       );
     }
+
 
     if (feedback) {
+
       feedback.className =
-        'feedback-sheet';
+        "feedback-sheet";
     }
 
-    /*
-     * Remove estado visual de glossário,
-     * se ainda existir.
-     */
-    const glossary =
-      document.getElementById(
-        'glossary-modal'
-      );
 
-    if (glossary) {
-      glossary.remove();
+    if (
+      typeof Progress !== "undefined"
+    ) {
+
+      Progress.updateUI();
     }
-
-    Progress.updateUI();
   }
 };
